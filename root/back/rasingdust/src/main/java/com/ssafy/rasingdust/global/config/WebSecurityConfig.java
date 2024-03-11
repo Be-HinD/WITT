@@ -20,8 +20,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home").permitAll()   // 모든 사용자 접근 허용
-                        .anyRequest().authenticated()   // "/", "/home" 외에는 인증 된 유저만 접근 가능
+                        .requestMatchers("/*").permitAll()   // 모든 사용자 접근 허용
+                        .anyRequest().permitAll()   // "/", "/home" 외에는 인증 된 유저만 접근 가능
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
