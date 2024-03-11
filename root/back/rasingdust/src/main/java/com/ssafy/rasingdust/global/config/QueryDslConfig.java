@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.config;
+package com.ssafy.rasingdust.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

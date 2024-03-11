@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.config;
+package com.ssafy.rasingdust.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
