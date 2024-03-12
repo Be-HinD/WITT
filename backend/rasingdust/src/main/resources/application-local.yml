@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: ENC(z36k0b1b/AfJu4cWy+xQDf0P/b5T4DvjlkyUlz/IpSdDFjOGX23ng3ZeOrvW4P3V31FcRzXoagyaD3eJYYm3CVzZfM6O/E5muzih4pC0HIwklAS3HkolUQ==)
+    username: ENC(LUTCtJLqc+lZcOzKYAoPwg==)
+    password: ENC(KNbVzoEMOy6NFHEmtUFhMhTFTpsef8bH)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# Local DB PW Settings..
+# 상수 : ENC(eYpBIDT4rRgreECNkq9uaA==)
+# 정현 : ENC(KNbVzoEMOy6NFHEmtUFhMhTFTpsef8bH)
+
+jpa:
+  hibernate:
+    ddl-auto: create
+  show-sql: true
+  sql:
+    init:
+      mode: always
+# properties:
+# hibernate:
+# format_sql: true
+springdoc:
+  api-docs:
+    enabled: true
+    path: / api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html

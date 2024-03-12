@@ -28,6 +28,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.12'
 
+	//Jasypt
+	implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.5'
+
 	// Util
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
