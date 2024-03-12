@@ -1,0 +1,26 @@
+# MySQL
+spring:
+  datasource:
+    url: ENC(sn18skmYqJtM+aV0sebWmewWyYzhQ6ZicqEhS9OGml08Y2nBijxfKso3mqOrxPj+lBbZHmdnlEIvuKSN4tToT6gRtiuRRrQr8bqrUdLTTfN5UHLPEMAZ/9hDrll4Ue8x)
+    username: ENC(xqQCVTAfmYRmwZ9w2gdoSA==)
+    password: ENC(18LUnOaoJHQYsMpduiIKDn34Xxr57/7n)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# JPA
+jpa:
+  hibernate:
+    ddl-auto: create
+  show-sql: true
+  sql:
+    init:
+      mode: always
+# properties:
+# hibernate:
+# format_sql: true
+springdoc:
+  api-docs:
+    enabled: true
+    path: / api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
