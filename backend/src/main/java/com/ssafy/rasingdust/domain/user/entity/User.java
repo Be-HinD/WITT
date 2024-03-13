@@ -3,6 +3,7 @@ package com.ssafy.rasingdust.domain.user.entity;
 import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
 import com.ssafy.rasingdust.domain.follow.entity.Follow;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,12 @@ public class User {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private  String password;
+
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
 
@@ -36,6 +43,13 @@ public class User {
 
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
+
+    @Builder
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
 
     // 알람 테이블 연관
     // 내가 받은 알람 리스트만 있으면 됨. user.getReceiveAlarmList();

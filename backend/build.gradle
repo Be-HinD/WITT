@@ -49,6 +49,14 @@ dependencies {
 //  Temporary explicit version to fix Thymeleaf bug
 //	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 
+	//OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
