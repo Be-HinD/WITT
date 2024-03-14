@@ -2,14 +2,48 @@ server:
     port: 8081
     servlet:
         context-path: /api
-
----
-
-spring:
-    profiles:
-        active: dev
----
-
 spring:
     profiles:
         active: local
+        include: key
+
+springdoc:
+    api-docs:
+        enabled: true
+        path: / api-docs
+    swagger-ui:
+        enabled: true
+        path: /swagger-ui.html
+jpa:
+    hibernate:
+        ddl-auto: create
+    show-sql: true
+    sql:
+        init:
+            mode: always
+
+jwt:
+    issuer: ENC(14Ooqgf/y/yIGDkfqCyTKJy3LG9Fpb/d0SydS0en9673xiV1HfACnA==)
+    secret_key: ENC(7/o7yXVnICk0ep5F8NsM0MokqQtwmRYjDerggYrJ4OPZ4jnU8o7AjItfscf/bL/P)
+
+---
+spring:
+    config:
+        activate:
+            on-profile: local
+    datasource:
+        url: ${my-db.url}
+        username: ${my-db.username}
+        password: ${my-db.password}
+        driver-class-name: ${my-db.driver-class-name}
+
+---
+spring:
+    config:
+        activate:
+            on-profile: server
+    datasource:
+        url: ENC(sn18skmYqJtM+aV0sebWmewWyYzhQ6ZicqEhS9OGml08Y2nBijxfKso3mqOrxPj+lBbZHmdnlEIvuKSN4tToT6gRtiuRRrQr8bqrUdLTTfN5UHLPEMAZ/9hDrll4Ue8x)
+        username: ENC(xqQCVTAfmYRmwZ9w2gdoSA==)
+        password: ENC(18LUnOaoJHQYsMpduiIKDn34Xxr57/7n)
+        driver-class-name: com.mysql.cj.jdbc.Driver
