@@ -13,7 +13,7 @@
 
 ### 반영 브랜치
 
-feat/S10P22D103-17-signup -> master
+feat/S10P22D103-17/signup/FE -> develop
 
 ### 변경 사항
 
