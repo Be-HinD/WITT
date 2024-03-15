@@ -3,19 +3,25 @@ export default function Camera() {
 	const [streaming, setStreaming] = useState(false)
 	const [width, setWidth] = useState(window.innerWidth)
 	const [height, setHeight] = useState(0)
-	const videoRef = useRef(null)
-	const canvasRef = useRef(null)
+	const [isInitialized, setIsInitialized] = useState(false)
+	const [isTaken, setIsTaken] = useState(false)
+
+	const videoRef = useRef<HTMLVideoElement>(null)
+	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	useEffect(() => {
 		const initCamera = async () => {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					video: { facingMode: 'user' },
-					// video: {facingMode: {exact : 'environment' }} //후면
+					// video: { facingMode: { exact: 'environment' } }, //후면
 				})
-				videoRef.current.srcObject = stream
-				videoRef.current.play()
-				setStreaming(true)
+				if (videoRef && videoRef.current) {
+					videoRef.current.srcObject = stream
+					videoRef.current.play()
+					setStreaming(true)
+				}
+				setIsInitialized(true)
 			} catch (error) {
 				console.error('Error accessing camera:', error)
 			}
@@ -25,7 +31,7 @@ export default function Camera() {
 		}
 
 		return () => {
-			if (streaming) {
+			if (streaming && videoRef?.current?.srcObject instanceof MediaStream) {
 				videoRef.current.srcObject.getTracks().forEach((track) => track.stop())
 				setStreaming(false)
 			}
@@ -45,7 +51,7 @@ export default function Camera() {
 	}, [])
 
 	const handleCanPlay = () => {
-		if (!streaming) {
+		if (!streaming && videoRef.current) {
 			const video = videoRef.current
 			const aspectRatio = video.videoWidth / video.videoHeight
 			let newHeight = width / aspectRatio
@@ -59,15 +65,33 @@ export default function Camera() {
 	}
 
 	const captureImage = () => {
-		const canvas = canvasRef.current
-		const video = videoRef.current
-		const canvasContext = canvas.getContext('2d')
+		if (canvasRef.current && videoRef.current) {
+			const canvas = canvasRef.current
+			const video = videoRef.current
+			const canvasContext = canvas.getContext('2d')
 
-		canvas.width = width
-		canvas.height = height
-		canvasContext.drawImage(video, 0, 0, width, height)
+			canvas.width = width
+			canvas.height = height
+			canvasContext?.drawImage(video, 0, 0, width, height)
 
-		const data = canvas.toDataURL('image/png')
+			video.pause()
+			setIsTaken(true)
+
+			// const data = canvas.toDataURL('image/png')
+
+			// 촬영한 사진 저장하고 퀴즈 생성
+			// const saveImageAndGo = () => {
+
+			// }
+		}
+	}
+
+	// 사진을 다시 찍고 싶을 때
+	const replayVideo = () => {
+		setIsTaken(false)
+		if (videoRef?.current && isInitialized) {
+			videoRef.current.play()
+		}
 	}
 
 	return (
@@ -78,9 +102,24 @@ export default function Camera() {
 					<source src="" />
 				</video>
 			</div>
-			<button onClick={captureImage} className="w-10 h-10">
-				촬영
-			</button>
+			<div>
+				{!isTaken ? (
+					<button onClick={captureImage} className="w-10 h-10">
+						사진 찍기
+					</button>
+				) : (
+					<button onClick={replayVideo} className="w-10 h-10">
+						다시 찍기
+					</button>
+				)}
+			</div>
+			{/* <div>
+				{isTaken ? (
+					<button onClick={saveImageAndGo} className="w-10 h-10">
+						퀴즈 만들기
+					</button>
+				) : null}
+			</div> */}
 		</div>
 	)
 }
