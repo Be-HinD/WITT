@@ -10,7 +10,7 @@ spring:
 springdoc:
     api-docs:
         enabled: true
-        path: / api-docs
+        path: /api-docs
     swagger-ui:
         enabled: true
         path: /swagger-ui.html
@@ -43,7 +43,7 @@ spring:
         activate:
             on-profile: server
     datasource:
-        url: ENC(sn18skmYqJtM+aV0sebWmewWyYzhQ6ZicqEhS9OGml08Y2nBijxfKso3mqOrxPj+lBbZHmdnlEIvuKSN4tToT6gRtiuRRrQr8bqrUdLTTfN5UHLPEMAZ/9hDrll4Ue8x)
+        url: ENC(6zXYvK+4jGgwy+iw3uzbvv8DiKK6Q1OkH0NNXqJAP6Mk6JMhvy0a4sLofAY2+QV2Ds7fTyTWmKAb7a6GQo74ii+TwFO25BECG7WgqXj3B28AJES4Jwg16g==)
         username: ENC(xqQCVTAfmYRmwZ9w2gdoSA==)
         password: ENC(18LUnOaoJHQYsMpduiIKDn34Xxr57/7n)
         driver-class-name: com.mysql.cj.jdbc.Driver
