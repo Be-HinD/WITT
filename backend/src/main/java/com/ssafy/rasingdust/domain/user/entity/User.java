@@ -1,7 +1,6 @@
 package com.ssafy.rasingdust.domain.user.entity;
 
 import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
-import com.ssafy.rasingdust.domain.follow.entity.Follow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
