@@ -23,6 +23,7 @@ public class OAuth2UserCustomService extends
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws
         OAuth2AuthenticationException {
+        System.out.println("LoadUser 동작");
         // 요청을 바탕으로 유저 정보를 담은 객체를 반환
         OAuth2User oAuth2User = super.loadUser(userRequest);
         saveOrUpdate(oAuth2User);

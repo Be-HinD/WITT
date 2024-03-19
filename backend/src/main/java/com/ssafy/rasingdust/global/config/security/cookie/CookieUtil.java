@@ -12,6 +12,7 @@ import java.util.Base64;
 public class CookieUtil {
     // 요청값(이름, 값, 만료 기간)을 바탕으로 쿠키 생성
     public static void addCookies(HttpServletResponse response, String name, String value, int maxAge) {
+        System.out.println("쿠키생성");
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
@@ -49,6 +50,7 @@ public class CookieUtil {
                         Base64.getUrlDecoder().decode(cookie.getValue())
                 )
         );
+
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        try {
 //            String value = new String(Base64.getUrlDecoder().decode(cookie.getValue()));

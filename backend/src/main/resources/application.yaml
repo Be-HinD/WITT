@@ -3,9 +3,6 @@ server:
     servlet:
         context-path: /api
 spring:
-    profiles:
-        active: local
-        include: key
     security:
         oauth2:
             client:
@@ -15,7 +12,9 @@ spring:
                         client-secret: ENC(Dbf3O+LkXAoeSDEcui2R2TK1KZdyIYMRLEmuQEy0pRRDdLrfy5qonhqLlymIh2oN)
                         scope: profile_nickname
                         client-authentication-method: client_secret_post
-                        redirect-uri: http://localhost:8081/api/oauth/kakao/callback
+                        # 서버 환경에서 변경되어야함
+                        # redirect-uri: https://j10d103.p.ssafy.io/api/login/oauth2/code/kakao
+                        redirect-uri: ${my-db.redirect-uri}
                         authorization-grant-type: authorization_code
                         client-name: kakao
                 provider:
@@ -24,6 +23,17 @@ spring:
                         token-uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         user-name-attribute: id
+    profiles:
+        active: local
+        include: key
+    jpa:
+        hibernate:
+            ddl-auto: create
+        show-sql: true
+    sql:
+        init:
+            mode: always
+
 
 springdoc:
     api-docs:
@@ -32,13 +42,7 @@ springdoc:
     swagger-ui:
         enabled: true
         path: /swagger-ui.html
-jpa:
-    hibernate:
-        ddl-auto: create
-    show-sql: true
-    sql:
-        init:
-            mode: always
+
 
 jwt:
     issuer: ENC(14Ooqgf/y/yIGDkfqCyTKJy3LG9Fpb/d0SydS0en9673xiV1HfACnA==)
