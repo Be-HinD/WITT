@@ -2,7 +2,17 @@ package com.ssafy.rasingdust.domain.user.entity;
 
 import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
 import com.ssafy.rasingdust.domain.follow.entity.Follow;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +20,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,14 +32,11 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_name", nullable = false, unique = true)
+    @Column(name = "user_name", unique = true)
     private String userName;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private  String password;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
@@ -48,11 +50,25 @@ public class User implements UserDetails {
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
 
+    //    @Builder
+//    public User(String userName, String email, String password) {
+//        this.userName = userName;
+//        this.password = password;
+//    }
     @Builder
-    public User(String userName, String email, String password) {
+    public User(String userName, String password) {
         this.userName = userName;
-        this.email = email;
         this.password = password;
+    }
+
+//    @Builder
+//    public User(String email, String password) {
+//        this("None", email, password);
+//    }
+
+    @Builder
+    public User(String password) {
+        this("None", password);
     }
 
     // 알람 테이블 연관
