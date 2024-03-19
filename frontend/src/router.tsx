@@ -2,8 +2,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Quiz from './pages/Quiz'
-import CameraPage from './pages/Quiz/cameraPage'
-import SolveQuizPage from './pages/Quiz/solveQuiz'
+import CameraPage from './pages/Quiz/Camera'
+import SolveQuizPage from './pages/Quiz/SolveQuiz'
 
 const router = createBrowserRouter([
 	{
