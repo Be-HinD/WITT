@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.global.jwt;
+package com.ssafy.rasingdust.global.config.security.jwt;
 
 import com.ssafy.rasingdust.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
@@ -39,7 +39,8 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(user.getEmail())
+//                .setSubject(user.getEmail())
+                .setSubject(user.getUsername())
                 .claim("id", user.getId())
                 // 서명
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8))

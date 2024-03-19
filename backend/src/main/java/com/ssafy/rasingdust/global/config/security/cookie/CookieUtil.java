@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.global.cookie;
+package com.ssafy.rasingdust.global.config.security.cookie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
@@ -44,18 +44,26 @@ public class CookieUtil {
     // 쿠키를 역직렬화해 객체로 변환
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
         // 원문 SerializationUtils.deserialize가 deprecated 됨
-//        return cls.cast(
-//                SerializationUtils.deserialize(
-//                        Base64.getUrlDecoder().decode(cookie.getValue())
-//                )
-//        );
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String value = new String(Base64.getUrlDecoder().decode(cookie.getValue()));
-            return objectMapper.readValue(value, cls);
-        } catch (IOException e) {
-            throw new RuntimeException("역직렬화 중 오류 발생", e);
-        }
+        return cls.cast(
+                SerializationUtils.deserialize(
+                        Base64.getUrlDecoder().decode(cookie.getValue())
+                )
+        );
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            String value = new String(Base64.getUrlDecoder().decode(cookie.getValue()));
+//            return objectMapper.readValue(value, cls);
+//        } catch (IOException e) {
+//            throw new RuntimeException("역직렬화 중 오류 발생", e);
+//        }
 
+    }
+
+    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+
+        response.addCookie(cookie);
     }
 }

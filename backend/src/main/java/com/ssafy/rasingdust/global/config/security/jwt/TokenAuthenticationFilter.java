@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.global.jwt;
+package com.ssafy.rasingdust.global.config.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
