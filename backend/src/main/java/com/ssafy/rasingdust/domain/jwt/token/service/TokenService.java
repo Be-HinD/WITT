@@ -1,10 +1,9 @@
 package com.ssafy.rasingdust.domain.jwt.token.service;
 
-import com.ssafy.rasingdust.domain.jwt.refreshtoken.entity.RefreshToken;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.service.RefreshTokenService;
 import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.service.UserService;
-import com.ssafy.rasingdust.global.jwt.TokenProvider;
+import com.ssafy.rasingdust.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

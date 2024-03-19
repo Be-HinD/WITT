@@ -26,14 +26,11 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_name", nullable = false, unique = true)
+    @Column(name = "user_name", unique = true)
     private String userName;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private  String password;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
@@ -47,11 +44,25 @@ public class User implements UserDetails {
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
 
+    //    @Builder
+//    public User(String userName, String email, String password) {
+//        this.userName = userName;
+//        this.password = password;
+//    }
     @Builder
-    public User(String userName, String email, String password) {
+    public User(String userName, String password) {
         this.userName = userName;
-        this.email = email;
         this.password = password;
+    }
+
+//    @Builder
+//    public User(String email, String password) {
+//        this("None", email, password);
+//    }
+
+    @Builder
+    public User(String password) {
+        this("None", password);
     }
 
     // 알람 테이블 연관

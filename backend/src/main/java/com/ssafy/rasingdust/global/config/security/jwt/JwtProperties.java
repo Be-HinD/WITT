@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.global.jwt;
+package com.ssafy.rasingdust.global.config.security.jwt;
 
 import lombok.Getter;
 import lombok.Setter;
