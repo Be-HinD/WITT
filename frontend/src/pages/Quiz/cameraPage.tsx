@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-export default function Camera() {
+const CameraPage = () => {
 	const [streaming, setStreaming] = useState(false)
 	const [width, setWidth] = useState(window.innerWidth)
 	const [height, setHeight] = useState(0)
@@ -113,13 +113,9 @@ export default function Camera() {
 					</button>
 				)}
 			</div>
-			{/* <div>
-				{isTaken ? (
-					<button onClick={saveImageAndGo} className="w-10 h-10">
-						퀴즈 만들기
-					</button>
-				) : null}
-			</div> */}
+			<div>{isTaken ? <button>현재 사진으로 퀴즈 풀기</button> : null}</div>
 		</div>
 	)
 }
+
+export default CameraPage

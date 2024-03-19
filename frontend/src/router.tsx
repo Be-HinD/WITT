@@ -2,7 +2,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Quiz from './pages/Quiz'
-import Camera from './pages/Quiz/camera'
+import CameraPage from './pages/Quiz/cameraPage'
+import SolveQuizPage from './pages/Quiz/solveQuiz'
 
 const router = createBrowserRouter([
 	{
@@ -19,7 +20,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/quiz/camera',
-		element: <Camera />,
+		element: <CameraPage />,
+	},
+	{
+		path: '/quiz/solve',
+		element: <SolveQuizPage />,
 	},
 ])
 
