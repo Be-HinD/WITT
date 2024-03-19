@@ -1,4 +1,4 @@
-const resultModal = () => {
+const ResultModal = () => {
 	return (
 		<div>
 			<div>
@@ -13,4 +13,4 @@ const resultModal = () => {
 	)
 }
 
-export default resultModal
+export default ResultModal
