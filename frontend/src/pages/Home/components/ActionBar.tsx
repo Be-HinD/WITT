@@ -1,4 +1,3 @@
-import React from 'react'
 import heart from '../assets/love.svg'
 import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'

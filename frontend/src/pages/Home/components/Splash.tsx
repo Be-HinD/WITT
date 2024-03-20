@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import logo from '../assets/mainlogo.png'
 import login from '../assets/login.png'
 import Cloud from './Cloud'
@@ -53,7 +53,7 @@ function Splash() {
 	const [titleEffect, setTitleEffect] = useState(loginTitleClass)
 	const [logoEffect, setLogoEffect] = useState(logoStyleClass)
 	const [buttonEffect, setButtonEffect] = useState(buttonStyleClass)
-	const { isLogin, setIsLogin } = mainstate()
+	const { setIsLogin } = mainstate()
 
 	useEffect(() => {
 		const timer1 = setTimeout(() => {

@@ -1,4 +1,3 @@
-import React from 'react'
 import UserProfile from './UserProfile'
 import ActionBar from './ActionBar'
 import character from '../assets/tree.png'

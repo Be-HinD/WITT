@@ -1,4 +1,3 @@
-import React from 'react'
 import avatar from '../assets/avatar.gif'
 
 function UserProfile({ gauge = 0.7 }: { gauge?: number }) {
