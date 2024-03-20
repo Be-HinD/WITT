@@ -1,5 +1,18 @@
 version: '3'
 services:
+  frontend:
+    container_name: dust_frontend
+    image: dust_frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      # - $HOME/frontend:/app/dist/data
+      # - /home/ubuntu/nginx/sites/sites-enabled:/etc/nginx/sites-enabled
+    restart: unless-stopped
+    
   backend:
     container_name: dust_backend
     image: dust_backend
