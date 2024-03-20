@@ -3,7 +3,7 @@ const LoadingPage = () => {
 		<div>
 			<header>쓰레기 판별 중입니다...</header>
 			<body>
-				사진
+				<img src="" alt="" />
 				<div>progress bar</div>
 			</body>
 		</div>
