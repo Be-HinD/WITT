@@ -10,29 +10,36 @@ const CameraPage = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	useEffect(() => {
+		const videoCurObj = videoRef.current
+
 		const initCamera = async () => {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					video: { facingMode: 'user' },
 					// video: { facingMode: { exact: 'environment' } }, //후면
 				})
-				if (videoRef && videoRef.current) {
-					videoRef.current.srcObject = stream
-					videoRef.current.play()
+				if (videoRef && videoCurObj) {
+					videoCurObj.srcObject = stream
+					videoCurObj.play()
+
 					setStreaming(true)
 				}
+
 				setIsInitialized(true)
 			} catch (error) {
 				console.error('Error accessing camera:', error)
 			}
 		}
+
 		if (!streaming) {
 			initCamera()
 		}
 
 		return () => {
-			if (streaming && videoRef?.current?.srcObject instanceof MediaStream) {
-				videoRef.current.srcObject.getTracks().forEach((track) => track.stop())
+			console.log('언마운트')
+
+			if (streaming && videoCurObj?.srcObject instanceof MediaStream) {
+				videoCurObj.srcObject.getTracks().forEach((track) => track.stop())
 				setStreaming(false)
 			}
 		}
@@ -48,7 +55,7 @@ const CameraPage = () => {
 		return () => {
 			window.removeEventListener('resize', handleResize)
 		}
-	}, [])
+	}, [width])
 
 	const handleCanPlay = () => {
 		if (!streaming && videoRef.current) {
