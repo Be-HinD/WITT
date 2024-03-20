@@ -1,0 +1,14 @@
+version: '3'
+services:
+  backend:
+    container_name: dust_backend
+    image: dust_backend
+    ports:
+      - "8081:8081"
+    # volumes:
+
+    environment:
+    #   SPRING_JPA_HIBERNATE_DDL_AUTO: update
+        - SPRING_PROFILES_ACTIVE=server
+    
+    restart: unless-stopped
