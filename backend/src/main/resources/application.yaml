@@ -14,7 +14,7 @@ spring:
                         client-authentication-method: client_secret_post
                         # 서버 환경에서 변경되어야함
                         # redirect-uri: https://j10d103.p.ssafy.io/api/login/oauth2/code/kakao
-                        redirect-uri: ${my-db.redirect-uri}
+                        redirect-uri: ${redirect-uri}
                         authorization-grant-type: authorization_code
                         client-name: kakao
                 provider:
@@ -58,7 +58,7 @@ spring:
         username: ${my-db.username}
         password: ${my-db.password}
         driver-class-name: ${my-db.driver-class-name}
-
+redirect-uri: http://localhost:8081/api/login/oauth2/code/kakao
 ---
 spring:
     config:
@@ -69,3 +69,4 @@ spring:
         username: ENC(xqQCVTAfmYRmwZ9w2gdoSA==)
         password: ENC(18LUnOaoJHQYsMpduiIKDn34Xxr57/7n)
         driver-class-name: com.mysql.cj.jdbc.Driver
+redirect-uri: https://j10d103.p.ssafy.io:8081/api/login/oauth2/code/kakao
