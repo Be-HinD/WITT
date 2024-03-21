@@ -94,7 +94,7 @@ function Splash() {
 			<div className={titleEffect}>
 				{Cloud(20, 150)}
 				<div style={{ zIndex: '2' }}>WITT</div>
-			</div>
+			</div>         
 			{/* <div style={logoEffect}> */}
 			<div className={logoEffect}>
 				{Cloud(48, 250)}

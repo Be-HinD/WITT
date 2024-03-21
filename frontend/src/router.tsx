@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Quiz from './pages/Quiz'
 import CameraPage from './pages/Quiz/Camera'
 import SolveQuizPage from './pages/Quiz/solveQuiz'
+import Follow from './pages/Follow/index'
 
 const router = createBrowserRouter([
 	{
@@ -12,7 +13,16 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/',
-		element: <Home />,
+		children: [
+			{
+				index: true,
+				element: <Home />,
+			},
+			{
+				path: 'follow',
+				element: <Follow />,
+			},
+		],
 	},
 	{
 		path: '/quiz',
