@@ -4,7 +4,9 @@ import Login from './pages/Login'
 import Quiz from './pages/Quiz'
 import CameraPage from './pages/Quiz/Camera'
 import SolveQuizPage from './pages/Quiz/solveQuiz'
-import Follow from './pages/Follow/index'
+import Follow from './pages/Follow'
+import MainWrapper from './components/MainWrapper'
+import Error from './pages/Error'
 
 const router = createBrowserRouter([
 	{
@@ -13,28 +15,30 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/',
+		element: <MainWrapper />,
+		errorElement: <Error />,
 		children: [
 			{
-				index: true,
+				path: '/',
 				element: <Home />,
 			},
 			{
 				path: 'follow',
 				element: <Follow />,
 			},
+			{
+				path: '/quiz',
+				element: <Quiz />,
+			},
+			{
+				path: '/quiz/camera',
+				element: <CameraPage />,
+			},
+			{
+				path: '/quiz/solve',
+				element: <SolveQuizPage />,
+			},
 		],
-	},
-	{
-		path: '/quiz',
-		element: <Quiz />,
-	},
-	{
-		path: '/quiz/camera',
-		element: <CameraPage />,
-	},
-	{
-		path: '/quiz/solve',
-		element: <SolveQuizPage />,
 	},
 ])
 

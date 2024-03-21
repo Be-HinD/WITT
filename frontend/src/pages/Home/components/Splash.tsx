@@ -38,7 +38,7 @@ import { mainstate } from '../../../components/StateVariables'
 // 	opacity: '0',
 // } as React.CSSProperties
 
-const mainStyleClass = 'w-[22.5rem] h-[50rem] bg-[#111111]'
+const mainStyleClass = 'w-full h-screen bg-[#111111]'
 
 const loginTitleClass = 'flex justify-center items-center text-[#ffffff] text-[60px] font-black translate-y-[12.5rem]'
 
