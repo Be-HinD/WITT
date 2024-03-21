@@ -1,53 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
 const CameraPage = () => {
-	const [streaming, setStreaming] = useState(false)
-	const [width, setWidth] = useState(window.innerWidth)
+	const [width, setWidth] = useState(window.innerWidth) // 화면 크기를 전체 차지하게
 	const [height, setHeight] = useState(0)
-	const [isInitialized, setIsInitialized] = useState(false)
+
+	const [isStreaming, setIsStreaming] = useState(false)
 	const [isTaken, setIsTaken] = useState(false)
+
+	const [capturedImage, setCapturedImage] = useState<string | undefined>(undefined)
 
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
-	useEffect(() => {
-		const videoCurObj = videoRef.current
-
-		const initCamera = async () => {
-			try {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					video: { facingMode: 'user' },
-					// video: { facingMode: { exact: 'environment' } }, //후면
-				})
-				if (videoRef && videoCurObj) {
-					videoCurObj.srcObject = stream
-					videoCurObj.play()
-
-					setStreaming(true)
-				}
-
-				setIsInitialized(true)
-			} catch (error) {
-				console.error('Error accessing camera:', error)
-			}
-		}
-
-		if (!streaming) {
-			initCamera()
-		}
-
-		return () => {
-			console.log('언마운트')
-
-			if (streaming && videoCurObj?.srcObject instanceof MediaStream) {
-				videoCurObj.srcObject.getTracks().forEach((track) => track.stop())
-				setStreaming(false)
-			}
-		}
-	}, [streaming])
-
+	// 윈도우 사이즈 바꾸면 자동으로 변경
 	useEffect(() => {
 		const handleResize = () => {
 			setWidth(window.innerWidth)
+			// setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
+			setHeight(width * 1.25) // 핸드폰 사진 비율 4:3 고정
 		}
 
 		window.addEventListener('resize', handleResize)
@@ -57,72 +26,88 @@ const CameraPage = () => {
 		}
 	}, [width])
 
-	const handleCanPlay = () => {
-		if (!streaming && videoRef.current) {
-			const video = videoRef.current
-			const aspectRatio = video.videoWidth / video.videoHeight
-			let newHeight = width / aspectRatio
+	// 카메라 세팅
+	useEffect(() => {
+		const videoElement = videoRef.current
 
-			if (isNaN(newHeight)) {
-				newHeight = width / (4 / 3)
+		const initCamera = async () => {
+			try {
+				const stream = await navigator.mediaDevices.getUserMedia({
+					video: { facingMode: 'user' }, // 전면
+					// video: { facingMode: { exact: 'environment' } }, // 후면
+				})
+				if (videoRef && videoElement) {
+					videoElement.srcObject = stream
+					videoElement.play() // 카메라 재생하기
+
+					// setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
+					setHeight(width * 1.25) // 핸드폰 사진 비율 4:3 고정
+					setIsStreaming(true)
+				}
+			} catch (error) {
+				console.error('Error accessing camera: ')
 			}
+		} // 카메라 설치하기
 
-			setHeight(newHeight)
+		if (!isStreaming) {
+			initCamera()
+		} // 재생되고 있지 않으면 카메라 설치를 한다
+
+		// cleanup 카메라 철수 - dev 에서는 안 되는데 배포에서는 됨.
+		return () => {
+			if (isStreaming && videoElement?.srcObject instanceof MediaStream) {
+				videoElement.srcObject.getTracks().forEach((track) => track.stop())
+				setIsStreaming(false)
+			}
 		}
-	}
+	}, [isStreaming, width])
 
-	const captureImage = () => {
-		if (canvasRef.current && videoRef.current) {
-			const canvas = canvasRef.current
-			const video = videoRef.current
-			const canvasContext = canvas.getContext('2d')
+	const handleCaptureImage = () => {
+		const videoElement = videoRef.current
+		const canvasElement = canvasRef.current
+		const canvasContext = canvasElement?.getContext('2d')
 
-			canvas.width = width
-			canvas.height = height
-			canvasContext?.drawImage(video, 0, 0, width, height)
+		if (videoElement && canvasElement) {
+			// 캔버스의 크기를 카메라와 동일하게 만든다
+			canvasElement.height = height
+			canvasElement.width = width
+			canvasContext?.drawImage(videoElement, 0, 0, width, height)
 
-			video.pause()
-			setIsTaken(true)
+			const data = canvasElement.toDataURL('image/png')
+			setCapturedImage(data)
 
-			// const data = canvas.toDataURL('image/png')
+			console.log('w', width)
+			console.log('h', height)
 
-			// 촬영한 사진 저장하고 퀴즈 생성
-			// const saveImageAndGo = () => {
-
-			// }
-		}
-	}
-
-	// 사진을 다시 찍고 싶을 때
-	const replayVideo = () => {
-		setIsTaken(false)
-		if (videoRef?.current && isInitialized) {
-			videoRef.current.play()
+			if (!isTaken) {
+				setIsTaken(true) // 찍는다
+				videoElement.pause()
+			} else {
+				setIsTaken(false) // 다시 카메라 켠다
+				videoElement.play()
+			}
 		}
 	}
 
 	return (
 		<div>
 			<div>
-				<canvas ref={canvasRef}></canvas>
-				<video ref={videoRef} autoPlay loop muted onCanPlay={handleCanPlay} className="-scale-x-100">
+				<video ref={videoRef} autoPlay loop muted className="-scale-x-100 w-full">
 					<source src="" />
+					<canvas ref={canvasRef} className="w-full"></canvas>
 				</video>
 			</div>
 			<div>
-				{!isTaken ? (
-					<button onClick={captureImage} className="w-10 h-10">
-						사진 찍기
-					</button>
-				) : (
-					<button onClick={replayVideo} className="w-10 h-10">
-						다시 찍기
-					</button>
-				)}
+				<button onClick={handleCaptureImage} className="w-10 h-10">
+					{!isTaken ? <div>사진찍기</div> : <div>다시찍기</div>}
+				</button>
 			</div>
 			<div>{isTaken ? <button>현재 사진으로 퀴즈 풀기</button> : null}</div>
+			<div>
+				<img src={capturedImage} alt="" className={`w-[${width}px] h-[${height}px] -scale-x-100`} />
+				미리보기
+			</div>
 		</div>
 	)
 }
-
 export default CameraPage
