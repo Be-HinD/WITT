@@ -1,4 +1,7 @@
 import avatar from '../assets/avatar.gif'
+import { TbBellFilled } from 'react-icons/tb' // 새 알림 없음
+import { BiSolidBellRing } from 'react-icons/bi' // 새 알림 있음
+import { userstate } from '../../../components/StateVariables'
 
 function UserProfile({ gauge = 0.7 }: { gauge?: number }) {
 	// const profileStyle = {
@@ -68,6 +71,8 @@ function UserProfile({ gauge = 0.7 }: { gauge?: number }) {
 
 	const gaugeStyleClass = 'z-[1] absolute mt-[3px] rounded-[5px] bg-[#AEEB92]'
 
+	const { isNewNotice } = userstate()
+
 	return (
 		// <div style={profileStyle}>
 		<div className={profileStyleClass}>
@@ -93,7 +98,9 @@ function UserProfile({ gauge = 0.7 }: { gauge?: number }) {
 				</div>
 			</div>
 			{/* <div style={{ cursor: 'pointer' }}>설정</div> */}
-			<div className="cursor-pointer">설정</div>
+			<div className="cursor-pointer" onClick={() => {}}>
+				{isNewNotice ? <BiSolidBellRing size={30} color="#15bf45" /> : <TbBellFilled size={30} color="#15bf45" />}
+			</div>
 		</div>
 	)
 }

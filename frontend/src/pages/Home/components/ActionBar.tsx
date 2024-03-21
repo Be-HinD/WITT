@@ -77,7 +77,7 @@ function ActionBar() {
 	// 	fontWeight: '900',
 	// } as React.CSSProperties
 
-	const actionStyleClass = 'z-[5] w-full h-[6.25rem] flex justify-between text-[#ffffff]'
+	const actionStyleClass = 'z-[5] w-full h-[6.25rem] flex justify-around text-[#ffffff]'
 
 	const tileStyleClass =
 		'w-[6.625rem] h-[6.25rem] rounded-[10px] border border-[#ffffff2e] bg-gradient-to-br from-[#D9D9D928] from-17% to-[#D9D9D919] to-85.5% shadow-[0_4px_34px_#00000026] backdrop-blur-[50px] backdrop-brightness-100'
