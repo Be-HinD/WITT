@@ -8,7 +8,7 @@ interface Iprops {
 	}
 	place: string
 }
-const detailedInst = (props: Iprops) => {
+const DetailedInst = (props: Iprops) => {
 	return (
 		<div>
 			<p>이 물건은 {props.trashType}로 배출해요.</p>
@@ -24,4 +24,4 @@ const detailedInst = (props: Iprops) => {
 	)
 }
 
-export default detailedInst
+export default DetailedInst
