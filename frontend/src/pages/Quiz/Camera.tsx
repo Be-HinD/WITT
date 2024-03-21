@@ -33,8 +33,8 @@ const CameraPage = () => {
 		const initCamera = async () => {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
-					video: { facingMode: 'user' }, // 전면
-					// video: { facingMode: { exact: 'environment' } }, // 후면
+					// video: { facingMode: 'user' }, // 전면
+					video: { facingMode: { exact: 'environment' } }, // 후면
 				})
 				if (videoRef && videoElement) {
 					videoElement.srcObject = stream
