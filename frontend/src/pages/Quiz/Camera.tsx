@@ -15,8 +15,8 @@ const CameraPage = () => {
 	useEffect(() => {
 		const handleResize = () => {
 			setWidth(window.innerWidth)
-			setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
-			// setHeight(width * 1.25)  // 핸드폰 사진 비율 4:3 고정
+			// setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
+			setHeight(width * 1.25) // 핸드폰 사진 비율 4:3 고정
 		}
 
 		window.addEventListener('resize', handleResize)
@@ -40,8 +40,8 @@ const CameraPage = () => {
 					videoElement.srcObject = stream
 					videoElement.play() // 카메라 재생하기
 
-					setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
-					// setHeight(width * 1.25) // 핸드폰 사진 비율 4:3 고정
+					// setHeight(width * 0.75) // 컴퓨터 사진 비율 3:4 고정
+					setHeight(width * 1.25) // 핸드폰 사진 비율 4:3 고정
 					setIsStreaming(true)
 				}
 			} catch (error) {
@@ -103,10 +103,10 @@ const CameraPage = () => {
 				</button>
 			</div>
 			<div>{isTaken ? <button>현재 사진으로 퀴즈 풀기</button> : null}</div>
-			{/* <div>
+			<div>
 				<img src={capturedImage} alt="" className={`w-[${width}px] h-[${height}px] -scale-x-100`} />
 				미리보기
-			</div> */}
+			</div>
 		</div>
 	)
 }
