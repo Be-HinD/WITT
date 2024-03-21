@@ -54,6 +54,7 @@ const CameraPage = () => {
 		} // 재생되고 있지 않으면 카메라 설치를 한다
 
 		// cleanup 카메라 철수 - dev 에서는 안 되는데 배포에서는 됨.
+		// 핸드폰이 안됨
 		return () => {
 			if (isStreaming && videoElement?.srcObject instanceof MediaStream) {
 				videoElement.srcObject.getTracks().forEach((track) => track.stop())
@@ -91,6 +92,8 @@ const CameraPage = () => {
 
 	return (
 		<div>
+			{/* <input type="file" accept="image/*" capture="environment" /> */}
+			<input type="file" accept="image/*" capture="user" />
 			<div>
 				<video ref={videoRef} autoPlay loop muted className="-scale-x-100 w-full">
 					<source src="" />
