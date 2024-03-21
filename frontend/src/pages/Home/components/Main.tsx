@@ -15,7 +15,7 @@ import background from '../assets/background_main.gif'
 // 	alignItems: 'center',
 // } as React.CSSProperties
 
-const mainStyleClass = 'z-10 w-[22.5rem] h-[50rem] px-[14px] py-[22px] bg-[#111111]'
+const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
 function Main() {
 	return (
