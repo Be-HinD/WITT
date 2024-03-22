@@ -11,7 +11,7 @@ const Follow = () => {
 	return (
 		<div className='w-full'>
 			<Header menu={menu} func={func} />
-			<div className="pt-20">followdd</div>
+			<div className="pt-14 text-white">followdd</div>
 		</div>
 	)
 }
