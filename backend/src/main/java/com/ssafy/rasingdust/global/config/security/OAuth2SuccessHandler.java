@@ -3,12 +3,11 @@ package com.ssafy.rasingdust.global.config.security;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.entity.RefreshToken;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.repository.RefreshTokenRepository;
 import com.ssafy.rasingdust.domain.user.entity.User;
-import com.ssafy.rasingdust.domain.user.service.UserService;
+import com.ssafy.rasingdust.domain.user.service.UserServiceImpl;
 import com.ssafy.rasingdust.global.config.security.cookie.CookieUtil;
 import com.ssafy.rasingdust.global.config.security.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.awt.SystemTray;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     // 사용자가 정상 로그인 완료시 자동으로 호출되는 메서드
     @Override
@@ -46,7 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         String name = (String) properties.get("nickname");
 //        User user = userService.findByUserName((String) oAuth2User.getAttributes().get("nickname"));
-        User user = userService.findByUserName(name);
+        User user = userServiceImpl.findByUserName(name);
 
         String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
         saveRefreshToken(user.getId(), refreshToken);
