@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
@@ -28,7 +30,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
     // 사용자를 리다이렉트할 경로
 //    public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/api/swagger-ui/index.html";
-    public static final String REDIRECT_PATH = "http://j10d103.p.ssafy.io:8081/api/swagger-ui/index.html";
+    public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/";
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -39,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException {
-        System.out.println("enter SuccessHandler");
+        log.info("into SuccessHandler");
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 //        User user = userService.findByEmail((String) oAuth2User.getAttributes().get("email"));
@@ -59,7 +61,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
-        System.out.println("안녕");
+        log.error("안녕 ㅋ");
     }
 
     private void saveRefreshToken(Long userId, String newRefreshToken) {
