@@ -26,11 +26,11 @@ const router = createBrowserRouter([
 				element: <Follow />,
 			},
 			{
-				path: '/quiz',
+				path: 'quiz',
 				element: <Quiz />,
 			},
 			{
-				path: '/quiz/solve',
+				path: 'quiz/solve',
 				element: <SolveQuizPage />,
 			},
 		],
