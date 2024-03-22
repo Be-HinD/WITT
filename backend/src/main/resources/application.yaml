@@ -69,4 +69,5 @@ spring:
         username: ENC(xqQCVTAfmYRmwZ9w2gdoSA==)
         password: ENC(18LUnOaoJHQYsMpduiIKDn34Xxr57/7n)
         driver-class-name: com.mysql.cj.jdbc.Driver
-redirect-uri: https://j10d103.p.ssafy.io/api/login/oauth2/code/kakao
+#redirect-uri: https://j10d103.p.ssafy.io/api/login/oauth2/code/kakao
+redirect-uri: http://j10d103.p.ssafy.io:8081/api/login/oauth2/code/kakao
