@@ -27,7 +27,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
     // 사용자를 리다이렉트할 경로
-    public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/api/swagger-ui/index.html";
+//    public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/api/swagger-ui/index.html";
+    public static final String REDIRECT_PATH = "http://j10d103.p.ssafy.io:8081/api/swagger-ui/index.html";
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
