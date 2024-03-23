@@ -19,7 +19,7 @@ public enum ErrorCode {
 
     //팔로우 관련
     FOLLOW_ALREADY_EXIST(3000, "이미 팔로잉 되어있는 회원입니다."),
-
+    FOLLOW_NOT_FOUND(3000, "팔로잉 되어있지 않은 회원입니다."),
     //회원 관련
     USER_NOT_FOUND(404, "존재하지 않는 회원입니다.")
 
@@ -27,5 +27,5 @@ public enum ErrorCode {
     ;
 
     private final int status;
-    private String message;
+    private final String message;
 }

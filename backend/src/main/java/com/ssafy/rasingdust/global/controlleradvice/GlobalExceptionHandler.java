@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
      * **/
     @ExceptionHandler(BusinessLogicException.class)
     public ResponseEntity<ExceptionResponse> handleBusinessLogicException(final BusinessLogicException e) {
-        final ExceptionResponse exceptionResponse = new ExceptionResponse(e.getStatus(), "서버 내부 로직 예외 발생");
+        final ExceptionResponse exceptionResponse = new ExceptionResponse(e.getStatus(), e.getMessage());
         log.error(e.getMessage(), e);
 
         return ResponseEntity.internalServerError()

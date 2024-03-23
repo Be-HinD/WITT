@@ -6,6 +6,7 @@ import com.ssafy.rasingdust.global.config.security.jwt.TokenAuthenticationFilter
 import com.ssafy.rasingdust.global.config.security.jwt.TokenProvider;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @Configuration
+@Slf4j
 public class WebOAuthSecurityConfig {
 
     private final OAuth2UserCustomService oAuth2UserCustomService;    // 로드 유저로 User 엔티티 상태 관리
@@ -41,6 +43,7 @@ public class WebOAuthSecurityConfig {
     @Bean    // 시큐리티 인증 시스템
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //         토큰 방식으로 하기 때문에 기존의 사용하던 폼로그인, 세션 비활
+        log.info("into Chain");
         return http
             // jwt 토큰 기반으로 csrf 비활성화
             .csrf(AbstractHttpConfigurer::disable)
@@ -88,6 +91,7 @@ public class WebOAuthSecurityConfig {
             .build();
     }
 
+
     // cors 모든 접근 허용
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -114,6 +118,7 @@ public class WebOAuthSecurityConfig {
 
     @Bean    // 요청 헤더에 있는 토큰의 유효성을 검증하는 인증 절차
     public TokenAuthenticationFilter tokenAuthenticationFilter() {    //
+
         return new TokenAuthenticationFilter(tokenProvider);
     }
 
