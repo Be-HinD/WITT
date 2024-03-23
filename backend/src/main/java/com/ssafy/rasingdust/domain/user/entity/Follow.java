@@ -8,13 +8,28 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Table(
+    name="Follow",
+
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "follow_follower_unique",
+            columnNames = {
+                "follower_id",
+                "following_id"
+            }
+        )
+    }
+)
 public class Follow {
 
     @Id
@@ -24,12 +39,16 @@ public class Follow {
 
     // 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follewer_id")
+    @JoinColumn(name = "follower_id")
     private User follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id")
     private User following;
 
-
+    @Builder
+    public Follow(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
+    }
 }

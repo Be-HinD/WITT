@@ -1,7 +1,7 @@
 package com.ssafy.rasingdust.global.config.security;
 
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.repository.RefreshTokenRepository;
-import com.ssafy.rasingdust.domain.user.service.UserService;
+import com.ssafy.rasingdust.domain.user.service.UserServiceImpl;
 import com.ssafy.rasingdust.global.config.security.jwt.TokenAuthenticationFilter;
 import com.ssafy.rasingdust.global.config.security.jwt.TokenProvider;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class WebOAuthSecurityConfig {
     private final OAuth2UserCustomService oAuth2UserCustomService;    // 로드 유저로 User 엔티티 상태 관리
     private final TokenProvider tokenProvider;    // 토큰 생성 및 검증 역할
     private final RefreshTokenRepository refreshTokenRepository;    // 토큰 정보 저장고
-    private final UserService userService;    // 유저 엔티티
+    private final UserServiceImpl userServiceImpl;    // 유저 엔티티
 
     @Bean
     public WebSecurityCustomizer configure() {    // 스프링 시큐리티 기능 비활성화
@@ -91,6 +91,7 @@ public class WebOAuthSecurityConfig {
             .build();
     }
 
+
     // cors 모든 접근 허용
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -111,12 +112,13 @@ public class WebOAuthSecurityConfig {
         return new OAuth2SuccessHandler(tokenProvider,
             refreshTokenRepository,
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
-            userService
+            userServiceImpl
         );
     }
 
     @Bean    // 요청 헤더에 있는 토큰의 유효성을 검증하는 인증 절차
     public TokenAuthenticationFilter tokenAuthenticationFilter() {    //
+
         return new TokenAuthenticationFilter(tokenProvider);
     }
 

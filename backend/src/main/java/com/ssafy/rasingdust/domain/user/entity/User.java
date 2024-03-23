@@ -32,6 +32,9 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+
+
+
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
 
