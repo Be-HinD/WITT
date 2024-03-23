@@ -2,7 +2,7 @@ package com.ssafy.rasingdust.domain.jwt.token.service;
 
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.service.RefreshTokenService;
 import com.ssafy.rasingdust.domain.user.entity.User;
-import com.ssafy.rasingdust.domain.user.service.UserService;
+import com.ssafy.rasingdust.domain.user.service.UserServiceImpl;
 import com.ssafy.rasingdust.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class TokenService {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final RefreshTokenService refreshTokenService;
     private final TokenProvider tokenProvider;
 
@@ -26,7 +26,7 @@ public class TokenService {
 
         // 새로운 엑세스 토큰 생성해 반환
         Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-        User user = userService.findById(userId);
+        User user = userServiceImpl.findById(userId);
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }
 
