@@ -40,7 +40,7 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiry)
 //                .setSubject(user.getEmail())
-                .setSubject(user.getUsername())
+                .setSubject(String.valueOf(user.getId()))
                 .claim("id", user.getId())
                 // 서명
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8))
