@@ -1,6 +1,8 @@
 package com.ssafy.rasingdust.domain.user.entity;
 
 import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
+import com.ssafy.rasingdust.global.exception.BusinessLogicException;
+import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,9 +31,6 @@ public class User implements UserDetails {
     @Column(name = "user_name", unique = true)
     private String userName;
 
-    @Column(name = "password")
-    private String password;
-
 
 
 
@@ -47,26 +46,12 @@ public class User implements UserDetails {
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
 
-    //    @Builder
-//    public User(String userName, String email, String password) {
-//        this.userName = userName;
-//        this.password = password;
-//    }
     @Builder
-    public User(String userName, String password) {
+    public User(String userName) {
         this.userName = userName;
-        this.password = password;
     }
 
-//    @Builder
-//    public User(String email, String password) {
-//        this("None", email, password);
-//    }
 
-    @Builder
-    public User(String password) {
-        this("None", password);
-    }
 
     // 알람 테이블 연관
     // 내가 받은 알람 리스트만 있으면 됨. user.getReceiveAlarmList();
@@ -91,6 +76,18 @@ public class User implements UserDetails {
         return this;
     }
 
+    public void feedCharacter() {
+        // 물병 1개 이상인가?
+        if(this.getBottle() < 1) {throw new BusinessLogicException(ErrorCode.USER_NOT_ENOUGH_BOTTLE);}
+
+        // 물병에서 -1
+        int curBottleCnt = this.getBottle();
+        this.setBottle(curBottleCnt - 1);
+        // 캐릭터 성장 포인트 + 1
+        int currGrowthPoint = this.getGrowthPoint();
+        this.setGrowthPoint(currGrowthPoint + 1);
+    }
+
     // 이후 권한이 여러가지 생기면 추가해야됨
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -98,13 +95,13 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return this.userName;
+    public String getPassword() {
+        return null;
     }
 
     @Override
-    public String getPassword() {
-        return this.password;
+    public String getUsername() {
+        return this.userName;
     }
 
     @Override

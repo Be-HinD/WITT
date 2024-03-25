@@ -1,22 +1,21 @@
 package com.ssafy.rasingdust.domain.user.service;
 
+import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
-import com.ssafy.rasingdust.domain.user.dto.response.FollowResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
-import com.ssafy.rasingdust.domain.user.entity.Follow.FollowBuilder;
 import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.repository.FollowRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,18 +29,32 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("no user with your request userId"));
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
     }
-
-//    public User findByEmail(String email) {
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalArgumentException("no user with your request userId"));
-//    }
 
     @Override
     public User findByUserName(String name) {
         return userRepository.findByUserName(name)
-                .orElseThrow(() -> new IllegalArgumentException("no user with your request username"));
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
+    public List<UserDto> findByuserNameStartsWith(String userName) {
+
+        List<User> userList = userRepository.findByuserNameStartsWith(userName);
+
+        if(userList == null || userList.isEmpty()) {
+            throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        ModelMapper modelMapper = new ModelMapper();
+        List<UserDto> resultDto = userList.stream()
+            .map(data -> modelMapper.map(data, UserDto.class))
+            .collect(Collectors.toList());
+
+
+
+        return resultDto;
     }
 
 
@@ -52,8 +65,6 @@ public class UserServiceImpl implements UserService{
 
         return userRepository.save(
                 User.builder()
-//                        .email(addUserRequestDto.getEmail())
-                        .password(encoder.encode(addUserRequestDto.getPassword()))
                         .build())
                 .getId();
 
@@ -98,5 +109,27 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public FeedCharacterResponse feedCharacter(Long userId) {
+        User findUser = userRepository.findById(userId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
 
+        findUser.feedCharacter();
+        return FeedCharacterResponse.builder()
+            .bottle(findUser.getBottle())
+            .growthPoint(findUser.getGrowthPoint())
+            .build();
+    }
+
+    @PostConstruct
+    void init() {
+        for(int i=0; i<10; i++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("bee").append(i);
+            userRepository.save(User.builder()
+                    .userName(String.valueOf(sb))
+                    .build()
+            );
+        }
+    }
 }

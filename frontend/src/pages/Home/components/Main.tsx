@@ -2,35 +2,31 @@ import UserProfile from './UserProfile'
 import ActionBar from './ActionBar'
 import character from '../assets/tree.png'
 import background from '../assets/background_main.gif'
-
-// const mainStyle = {
-// 	zIndex: '10',
-// 	width: '360px',
-// 	height: '800px',
-// 	padding: '22px 14px',
-// 	backgroundColor: 'rgba(17, 17, 17)',
-// 	display: 'flex',
-// 	flexDirection: 'column',
-// 	justifyContent: 'space-between',
-// 	alignItems: 'center',
-// } as React.CSSProperties
-
-// const buttonStyle = {
-// 	zIndex: '5',
-// 	width: '150px',
-// 	height: '50px',
-// 	borderRadius: '15px',
-// 	backgroundColor: '#3E3E3E',
-// 	border: '1px #ffffff solid',
-// 	display: 'flex',
-// 	justifyContent: 'center',
-// 	alignItems: 'center',
-// 	color: '#ffffff',
-// 	fontSize: '16px',
-// 	fontWeight: '600',
-// } as React.CSSProperties
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { userstate } from '../../../components/StateVariables'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
+
+const noticeStyleClass = {
+	zIndex: '20',
+	position: 'absolute',
+	width: '80%',
+	height: '60px',
+	top: '55%',
+	left: '10%',
+	padding: '20px 30px',
+	backgroundColor: '#1cd44d',
+	borderRadius: '50px',
+	whiteSpace: 'nowrap',
+	overflow: 'hidden',
+	textOverflow: 'ellipsis',
+	color: '#ffffff',
+	fontSize: '12px',
+	fontWeight: '900',
+	boxShadow: '0px 0px 15px 3px #F2FCFC',
+	transform: 'scaleX(0)',
+} as React.CSSProperties
 
 const buttonStyleClass = `
 flex justify-center items-center 
@@ -49,27 +45,31 @@ hover:cursor-pointer
 transition ease-in-out duration-200 
 `
 
-function Main() {
-	// const [buttonEffect, setButtonEffect] = useState(buttonStyle)
-	// const enterHandler = () => {
-	// 	setButtonEffect({
-	// 		...buttonEffect,
-	// 		transform: 'scale(1.1)',
-	// 		backgroundColor: '#ce0ce0',
-	// 		transitionProperty: 'background-color scale',
-	// 		transitionDuration: '200ms',
-	// 	})
-	// }
-	// const leaveHandler = () => {
-	// 	setButtonEffect({
-	// 		...buttonEffect,
-	// 		transform: 'scale(1)',
-	// 		cursor: 'pointer',
-	// 		backgroundColor: '#3e3e3e',
-	// 		transitionProperty: 'background-color scale',
-	// 		transitionDuration: '200ms',
-	// 	})
-	// }
+const Main = () => {
+	const navigate = useNavigate()
+	const [noticeEffect, setNoticeEffect] = useState(noticeStyleClass)
+
+	const notices = userstate((state) => state.notices)
+	const isNewNotice = userstate((state) => state.isNewNotice)
+	const setIsNewNotice = userstate((state) => state.setIsNewNotice)
+
+	useEffect(() => {
+		setIsNewNotice()
+		if (isNewNotice) {
+			notices?.map(() => {})
+		}
+		const starttimer = setTimeout(() => {
+			setNoticeEffect({ ...noticeEffect, transform: 'scaleX(1)', transition: 'all 0.2s ease-out' })
+		}, 500)
+		const endtimer = setTimeout(() => {
+			setNoticeEffect({ ...noticeEffect, transform: 'scaleX(0)', transition: 'all 0.2s ease-out' })
+		}, 3500)
+		return () => {
+			clearTimeout(starttimer)
+			clearTimeout(endtimer)
+		}
+	}, [])
+
 	return (
 		<>
 			<img
@@ -77,7 +77,15 @@ function Main() {
 				style={{ position: 'absolute', opacity: '0.3' }}
 				src={background}
 			/>
-			{/* <div style={mainStyle}> */}
+			<div
+				style={noticeEffect}
+				onClick={() => {
+					navigate('/follow')
+				}}
+			>
+				{`여기에 알림이 표시되었다 사라집니다.여기에 알림이 표시되었다 사라집니다.여기에 알림이 표시되었다
+				사라집니다.여기에 알림이 표시되었다 사라집니다.`}
+			</div>
 			<div
 				style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}
 				className={mainStyleClass}
@@ -87,11 +95,10 @@ function Main() {
 					<img style={{ filter: 'brightness(1.3)' }} src={character} />
 				</div>
 				<div style={{ width: '100%', display: 'flex', justifyContent: 'space-around', transform: 'translateY(100%)' }}>
-					{/* <div style={buttonEffect} onMouseEnter={enterHandler} onMouseLeave={leaveHandler}> */}
 					<div
 						className={buttonStyleClass}
 						onClick={() => {
-							/* 퀴즈 페이지로 라우팅 */
+							navigate('/quiz')
 						}}
 					>
 						{'퀴즈 풀러 가기'}
@@ -99,7 +106,7 @@ function Main() {
 					<div
 						className={buttonStyleClass}
 						onClick={() => {
-							/* 팔로잉 팔로워 페이지로 라우팅 */
+							navigate('/follow')
 						}}
 					>
 						{'콕 찌르러 가기'}
