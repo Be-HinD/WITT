@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { useRouter } from '../../../hooks/useRouter'
 import { SlideTabProp } from '../../../components/interfaces'
 
-const FollowTabs = ({ tabInfo }: { tabInfo: SlideTabProp[] }) => {
+const SlideTab = ({ tabInfo }: { tabInfo: SlideTabProp[] }) => {
 	const [selectedIndex, setSelectedIndex] = useState<number>()
 	const { currentPath } = useRouter()
 
@@ -51,4 +51,4 @@ const FollowTabs = ({ tabInfo }: { tabInfo: SlideTabProp[] }) => {
 	)
 }
 
-export default FollowTabs
+export default SlideTab
