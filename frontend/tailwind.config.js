@@ -5,6 +5,7 @@ export default {
 		extend: {
 			colors: {
 				textWthie: '#EAEAEA',
+				background: '#111111'
 			},
 		},
 	},
