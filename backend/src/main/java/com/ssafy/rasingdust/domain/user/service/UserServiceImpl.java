@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("no user with your request userId"));
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
     }
 
 //    public User findByEmail(String email) {
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByUserName(String name) {
         return userRepository.findByUserName(name)
-                .orElseThrow(() -> new IllegalArgumentException("no user with your request username"));
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
     }
 
 
