@@ -8,6 +8,8 @@ import com.ssafy.rasingdust.domain.user.repository.FollowRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
+import jakarta.annotation.PostConstruct;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +29,22 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new IllegalArgumentException("no user with your request userId"));
     }
 
-//    public User findByEmail(String email) {
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalArgumentException("no user with your request userId"));
-//    }
-
     @Override
     public User findByUserName(String name) {
         return userRepository.findByUserName(name)
                 .orElseThrow(() -> new IllegalArgumentException("no user with your request username"));
+    }
+
+    @Override
+    public List<User> findByuserNameStartsWith(String userName) {
+
+        List<User> userList = userRepository.findByuserNameStartsWith(userName);
+
+        if(userList == null || userList.isEmpty()) {
+            throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return userList;
     }
 
 
@@ -47,7 +56,6 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(
                 User.builder()
 //                        .email(addUserRequestDto.getEmail())
-                        .password(encoder.encode(addUserRequestDto.getPassword()))
                         .build())
                 .getId();
 
@@ -104,4 +112,15 @@ public class UserServiceImpl implements UserService{
             .build();
     }
 
+    @PostConstruct
+    void init() {
+        for(int i=0; i<10; i++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("bee").append(i);
+            userRepository.save(User.builder()
+                    .userName(String.valueOf(sb))
+                    .build()
+            );
+        }
+    }
 }

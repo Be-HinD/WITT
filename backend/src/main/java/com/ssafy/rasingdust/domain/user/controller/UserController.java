@@ -1,20 +1,22 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
-import javax.xml.transform.Result;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,7 +35,7 @@ public class UserController implements UserControllerDocs{
     }
 
     @DeleteMapping("/unfollow/{followId}")
-    public ResponseEntity<?> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long followId) {
+    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long followId) {
         userService.unFollowUser(Long.valueOf(userDetails.getUsername()), followId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
     }
@@ -42,5 +44,11 @@ public class UserController implements UserControllerDocs{
     public ResponseEntity<FeedCharacterResponse> feedCharacter(@AuthenticationPrincipal UserDetails userDetails) {
         FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(feedCharacterResponse);
+    }
+
+    @GetMapping("search")
+    public ResponseEntity<ResultResponse> getUserList(@RequestParam String userName) {
+        List<User> userList = userService.findByuserNameStartsWith(userName);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, userList));
     }
 }
