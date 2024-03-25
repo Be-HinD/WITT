@@ -1,6 +1,8 @@
 package com.ssafy.rasingdust.domain.user.entity;
 
 import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
+import com.ssafy.rasingdust.global.exception.BusinessLogicException;
+import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +91,18 @@ public class User implements UserDetails {
     public User updateUserName(String userName) {
         this.userName = userName;
         return this;
+    }
+
+    public void feedCharacter() {
+        // 물병 1개 이상인가?
+        if(this.getBottle() < 1) {throw new BusinessLogicException(ErrorCode.USER_NOT_ENOUGH_BOTTLE);}
+
+        // 물병에서 -1
+        int curBottleCnt = this.getBottle();
+        this.setBottle(curBottleCnt - 1);
+        // 캐릭터 성장 포인트 + 1
+        int currGrowthPoint = this.getGrowthPoint();
+        this.setGrowthPoint(currGrowthPoint + 1);
     }
 
     // 이후 권한이 여러가지 생기면 추가해야됨

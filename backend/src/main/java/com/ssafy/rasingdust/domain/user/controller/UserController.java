@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
+import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
@@ -35,5 +36,11 @@ public class UserController implements UserControllerDocs{
     public ResponseEntity<?> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long followId) {
         userService.unFollowUser(Long.valueOf(userDetails.getUsername()), followId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
+    }
+
+    @PostMapping("/character")
+    public ResponseEntity<FeedCharacterResponse> feedCharacter(@AuthenticationPrincipal UserDetails userDetails) {
+        FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(feedCharacterResponse);
     }
 }

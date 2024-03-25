@@ -1,19 +1,13 @@
 package com.ssafy.rasingdust.domain.user.service;
 
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
-import com.ssafy.rasingdust.domain.user.dto.response.FollowResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
-import com.ssafy.rasingdust.domain.user.entity.Follow.FollowBuilder;
 import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.repository.FollowRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -98,5 +92,16 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public FeedCharacterResponse feedCharacter(Long userId) {
+        User findUser = userRepository.findById(userId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        findUser.feedCharacter();
+        return FeedCharacterResponse.builder()
+            .bottle(findUser.getBottle())
+            .growthPoint(findUser.getGrowthPoint())
+            .build();
+    }
 
 }
