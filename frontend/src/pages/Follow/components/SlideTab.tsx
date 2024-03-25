@@ -25,7 +25,7 @@ const SlideTab = ({ tabInfo }: { tabInfo: SlideTabProp[] }) => {
 	}, [currentPath])
 
 	return (
-		<div className="flex items-center justify-around z-10 fixed top-16 right-0 left-0">
+		<div className="flex items-center justify-around z-10 fixed top-14 right-0 left-0 bg-background">
 			<ul className={`flex gap-[2px] w-full`}>
 				{tabInfo.map((tab, index) => {
 					return (
