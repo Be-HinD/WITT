@@ -1,7 +1,8 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
-import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
@@ -46,9 +47,10 @@ public class UserController implements UserControllerDocs{
         return ResponseEntity.ok(feedCharacterResponse);
     }
 
-    @GetMapping("search")
+    @GetMapping("/search")
+    @JsonIgnore
     public ResponseEntity<ResultResponse> getUserList(@RequestParam String userName) {
-        List<User> userList = userService.findByuserNameStartsWith(userName);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, userList));
+        List<UserDto> response = userService.findByuserNameStartsWith(userName);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
     }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.user.service;
 
+import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
@@ -11,8 +12,10 @@ import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findByuserNameStartsWith(String userName) {
+    public List<UserDto> findByuserNameStartsWith(String userName) {
 
         List<User> userList = userRepository.findByuserNameStartsWith(userName);
 
@@ -44,7 +47,14 @@ public class UserServiceImpl implements UserService{
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return userList;
+        ModelMapper modelMapper = new ModelMapper();
+        List<UserDto> resultDto = userList.stream()
+            .map(data -> modelMapper.map(data, UserDto.class))
+            .collect(Collectors.toList());
+
+
+
+        return resultDto;
     }
 
 
@@ -55,7 +65,6 @@ public class UserServiceImpl implements UserService{
 
         return userRepository.save(
                 User.builder()
-//                        .email(addUserRequestDto.getEmail())
                         .build())
                 .getId();
 

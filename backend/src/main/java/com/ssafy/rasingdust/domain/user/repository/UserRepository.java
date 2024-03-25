@@ -11,5 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUserName(String name);
 
-    List<User> findByuserNameStartsWith(String rating);
+    List<User> findByuserNameStartsWith(String userName);
 }
