@@ -56,7 +56,7 @@ const Main = () => {
 	useEffect(() => {
 		setIsNewNotice()
 		if (isNewNotice) {
-			notices?.map((notice) => {})
+			notices?.map(() => {})
 		}
 		const starttimer = setTimeout(() => {
 			setNoticeEffect({ ...noticeEffect, transform: 'scaleX(1)', transition: 'all 0.2s ease-out' })
