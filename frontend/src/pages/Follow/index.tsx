@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import SlideTab from './components/SlideTab'
+import { useRouter } from '../../hooks/useRouter'
 
 const followTabInfo = [
 	{ name: '팔로워', path: '/follow' },
@@ -12,9 +13,9 @@ const followTabInfo = [
 	},
 ]
 const Follow = () => {
-	const navigate = useNavigate()
+	const { routeTo } = useRouter()
 	const menu: IMenu = { left: icons.BACK, center: '친구들', right: undefined }
-	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
+	const func: IMenuFunc = { left_func: () => routeTo('/'), right_func: undefined }
 
 	return (
 		<div className="w-full">
