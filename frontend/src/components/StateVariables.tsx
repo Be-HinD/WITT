@@ -25,17 +25,3 @@ export const userstate = create<IUserState>()((set) => ({
 	setNewNotice: (result: number) => set({ newNotice: result }),
 	setIsNewNotice: () => set((state) => ({ isNewNotice: state.newNotice === 0 ? false : true })),
 }))
-
-// export const state = create<State>((set) => ({
-// 	mainstate: {
-// 		isLogin: false,
-// 		setIsLogin: (result: boolean) => set(),
-// 	},
-// 	userstate: {
-// 		newNotice: 0,
-// 		notices: [],
-// 		isNewNotice: false,
-// 		setNewNotice: (result: number) => set(),
-// 		setIsNewNotice: () => set(),
-// 	}
-// }))
