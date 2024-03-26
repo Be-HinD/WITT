@@ -63,4 +63,10 @@ public class UserController implements UserControllerDocs{
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_VISITUSER_SUCCESS, response));
     }
 
+    @GetMapping("/rank")
+    public ResponseEntity<ResultResponse> getUserRank(@AuthenticationPrincipal UserDetails userDetails) {
+        int response = userService.getUserRank(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_RANK_SUCCESS, response));
+    }
+
 }

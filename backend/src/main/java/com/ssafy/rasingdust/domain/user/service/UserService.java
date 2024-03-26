@@ -16,4 +16,5 @@ public interface UserService {
     public void unFollowUser(Long toId, Long fromId);
     public FeedCharacterResponse feedCharacter(Long userId);
     public VisitUserResponse visitUser(Long visitorId, Long invitorId);
+    public int getUserRank(Long userId);
 }
