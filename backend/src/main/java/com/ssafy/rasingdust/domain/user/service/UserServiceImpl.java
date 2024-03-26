@@ -156,6 +156,12 @@ public class UserServiceImpl implements UserService{
             .build();
     }
 
+    @Override
+    public int getUserRank(Long userId) {
+        User user = findById(userId);
+        return userRepository.countWithGrowthPointGreaterThan(user.getGrowthPoint()) + 1;
+    }
+
     @PostConstruct
     void init() {
         for(int i=0; i<10; i++) {
