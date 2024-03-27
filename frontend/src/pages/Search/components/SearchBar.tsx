@@ -4,9 +4,10 @@ import { IoSearch } from 'react-icons/io5'
 interface searchProp {
 	input: string | undefined
 	setInput: React.Dispatch<React.SetStateAction<string>>
+	setIsFocused: React.Dispatch<React.SetStateAction<boolean>>
 	handleInput: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
-const SearchBar = ({ input, setInput, handleInput }: searchProp) => {
+const SearchBar = ({ input, setInput, setIsFocused, handleInput }: searchProp) => {
 	const handleCancel = () => {
 		setInput('')
 	}
@@ -19,6 +20,8 @@ const SearchBar = ({ input, setInput, handleInput }: searchProp) => {
 					<input
 						type="text"
 						value={input}
+						onFocus={() => setIsFocused(true)}
+						onBlur={() => setIsFocused(false)}
 						placeholder="사용자를 검색해 보세요."
 						onChange={handleInput}
 						className=" bg-neutral-800 focus:outline-none"
