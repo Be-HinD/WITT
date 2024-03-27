@@ -1,5 +1,7 @@
 package com.ssafy.rasingdust.domain.user.service;
 
+import static com.ssafy.rasingdust.domain.notification.dto.NotificationType.KOCK_ACTION;
+
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
 import com.ssafy.rasingdust.domain.notification.service.NotificationService;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
@@ -276,6 +278,11 @@ public class UserServiceImpl implements UserService {
             .growthPoint(user.getGrowthPoint())
             .rank(rank)
             .build();
+    }
+
+    @Override
+    public void sendKock(Long id, String userId) {
+        notificationService.saveNotice(KOCK_ACTION, Long.valueOf(userId), id);
     }
 
     /**

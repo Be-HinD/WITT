@@ -1,12 +1,13 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
-import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,46 +26,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Slf4j
-public class UserController implements UserControllerDocs{
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
 
 
     @GetMapping()
-    public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResultResponse> getUser(
+        @AuthenticationPrincipal UserDetails userDetails) {
         GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
     }
 
     @PostMapping("/follow/{fromId}")
-    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
+    public ResponseEntity<ResultResponse> followUser(
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
         userService.followUser(Long.valueOf(userDetails.getUsername()), fromId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_FOLLOW_SUCCESS));
     }
 
     @DeleteMapping("/unfollow/{fromId}")
-    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
+    public ResponseEntity<ResultResponse> unfollowUser(
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
         userService.unFollowUser(Long.valueOf(userDetails.getUsername()), fromId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE_UNFOLLOW_SUCCESS));
     }
 
     @GetMapping("/following/list/{userId}")
-    public ResponseEntity<ResultResponse> getFollowingList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+    public ResponseEntity<ResultResponse> getFollowingList(
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
 
-        List<UserDto> result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()), userId);
+        List<UserDto> result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()),
+            userId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWINGLIST_SUCCESS, result));
     }
 
     @GetMapping("/follower/list/{userId}")
-    public ResponseEntity<ResultResponse> getFollowerList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+    public ResponseEntity<ResultResponse> getFollowerList(
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
 
-        List<UserDto> result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()), userId);
+        List<UserDto> result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()),
+            userId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
     }
 
     @PostMapping("/character")
-    public ResponseEntity<FeedCharacterResponse> feedCharacter(@AuthenticationPrincipal UserDetails userDetails) {
-        FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(Long.valueOf(userDetails.getUsername()));
+    public ResponseEntity<FeedCharacterResponse> feedCharacter(
+        @AuthenticationPrincipal UserDetails userDetails) {
+        FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(
+            Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(feedCharacterResponse);
     }
 
@@ -77,15 +87,24 @@ public class UserController implements UserControllerDocs{
     @GetMapping("/invitor/{userId}")
     public ResponseEntity<ResultResponse> visitUser(
         @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long userId){
-        VisitUserResponse response = userService.visitUser(Long.valueOf(userDetails.getUsername()), userId);
+        @PathVariable Long userId) {
+        VisitUserResponse response = userService.visitUser(Long.valueOf(userDetails.getUsername()),
+            userId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_VISITUSER_SUCCESS, response));
     }
 
     @GetMapping("/rank")
-    public ResponseEntity<ResultResponse> getUserRank(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResultResponse> getUserRank(
+        @AuthenticationPrincipal UserDetails userDetails) {
         int response = userService.getUserRank(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_RANK_SUCCESS, response));
     }
 
+    @Operation(summary = "콕 찌르기")
+    @PostMapping("/kock/{userId}")
+    public ResponseEntity<Void> sendKock(@AuthenticationPrincipal UserDetails user,
+        @PathVariable String userId) {
+        userService.sendKock(Long.valueOf(user.getUsername()), userId);
+        return ResponseEntity.ok().build();
+    }
 }
