@@ -1,9 +1,16 @@
-const SearchResult = () => {
-  return (
-    <div>
-      Search Result
-    </div>
-  );
-};
+import { dummy } from '../../../Follow/FollowerTab'
+import SearchItem from './SearchItem'
 
-export default SearchResult;
+const SearchResult = () => {
+	return (
+		<ul className='px-4'>
+			{dummy.map(() => (
+				<li key="">
+					<SearchItem />
+				</li>
+			))}
+		</ul>
+	)
+}
+
+export default SearchResult
