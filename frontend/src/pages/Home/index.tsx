@@ -4,13 +4,14 @@ import Main from './components/Main'
 import Splash from './components/Splash'
 
 const Home = () => {
+	const token = new URL(location.href).searchParams.get('token')
 	const { isLogin, setIsLogin } = mainstate()
 
 	useEffect(() => {
-		if (localStorage.getItem('token')) {
+		if (token) {
 			setIsLogin(true)
 		}
-	}, [isLogin])
+	}, [setIsLogin, token])
 
 	return <div>{isLogin ? <Main /> : <Splash />}</div>
 }

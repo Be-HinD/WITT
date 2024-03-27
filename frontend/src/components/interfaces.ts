@@ -15,3 +15,8 @@ export interface IHeaderProp {
 	menu: IMenu
 	func: IMenuFunc
 }
+
+export interface SlideTabProp {
+	name: string
+	path: string
+}

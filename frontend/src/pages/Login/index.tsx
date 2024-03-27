@@ -4,9 +4,6 @@ import { icons } from '../../constants/header-icons'
 import Header from '../../components/Header'
 import { useEffect } from 'react'
 import { mainstate } from '../../components/StateVariables'
-import axios from 'axios'
-import qs from 'qs'
-const { VITE_KAKAO_API_KEY, VITE_REDIRECT_URI } = import.meta.env
 
 const Login = () => {
 	const navigate = useNavigate()
@@ -21,6 +18,7 @@ const Login = () => {
 		location.href = url
 		if (code) {
 			localStorage.setItem('token', code)
+			navigate('/')
 			setIsLogin(true)
 		}
 	}, [code])

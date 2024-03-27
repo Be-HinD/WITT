@@ -8,6 +8,8 @@ import lombok.Getter;
 public enum ResultCode {
     //User
     GET_USERLIST_SUCCESS(200, "유저리스트 검색에 성공하였습니다."),
+    GET_VISITUSER_SUCCESS(200, "해당 유저 페이지 방문에 성공하였습니다."),
+    GET_USER_RANK_SUCCESS(200, "해당 유저 랭킹 조회에 성공하였습니다."),
 
     //Follow
     CREATE_FOLLOW_SUCCESS(201, "해당 유저 팔로우를 성공하였습니다."),
@@ -15,7 +17,7 @@ public enum ResultCode {
     GET_FOLLOWINGLIST_SUCCESS(200, "유저의 팔로잉 리스트 조회에 성공하였습니다."),
     GET_FOLLOWERLIST_SUCCESS(200, "유저의 팔로워 리스트 조회에 성공하였습니다."),
 
-    //Pet
+    //Charactor
     PUT_FEEDCHARACTER_SUCCESS(200, "해당 유저의 펫 먹이 주기를 성공하였습니다."),
 
 
