@@ -14,6 +14,7 @@ public class VisitUserResponse {
     private int solvedCnt;
     private int bottle;
     private int growthPoint;
+    private int rank;
     private boolean isFollowing;
     private boolean isFollower;
 }

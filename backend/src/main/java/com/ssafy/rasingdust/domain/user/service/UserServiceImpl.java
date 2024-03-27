@@ -129,6 +129,7 @@ public class UserServiceImpl implements UserService{
             .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         boolean isFollowing = false;
         boolean isFollower = false;
+        int invitorRank = getUserRank(invitorId);
 
         List<Follow> followerList = invitor.getFollowerList();
         List<Follow> followingList = invitor.getFollowingList();
@@ -152,6 +153,7 @@ public class UserServiceImpl implements UserService{
             .solvedCnt(invitor.getSolvedCnt())
             .bottle(invitor.getBottle())
             .growthPoint(invitor.getGrowthPoint())
+            .rank(invitorRank)
             .isFollowing(isFollowing)
             .isFollower(isFollower)
             .build();
