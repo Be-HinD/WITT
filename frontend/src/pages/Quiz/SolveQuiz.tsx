@@ -12,6 +12,7 @@ const SolveQuizPage = () => {
 	return (
 		<div className="pt-20">
 			<Header menu={menu} func={func}></Header>
+
 			<div className="w-40 h-40">내가 찍은 사진</div>
 			<div className="">
 				<div className="text-white text-lg">이 물건은 {'일반쓰레기로 배출'}해요</div>

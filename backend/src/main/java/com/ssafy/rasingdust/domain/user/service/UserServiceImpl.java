@@ -3,6 +3,8 @@ package com.ssafy.rasingdust.domain.user.service;
 import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.domain.user.repository.FollowRepository;
@@ -210,6 +212,69 @@ public class UserServiceImpl implements UserService{
         return FeedCharacterResponse.builder()
             .bottle(findUser.getBottle())
             .growthPoint(findUser.getGrowthPoint())
+            .build();
+    }
+
+    @Override
+    public VisitUserResponse visitUser(Long visitorId, Long invitorId) {
+        User invitor = userRepository.findById(invitorId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        boolean isFollowing = false;
+        boolean isFollower = false;
+        int invitorRank = getUserRank(invitorId);
+
+        List<Long> followerList = invitor.getFollowerList().stream()
+            .map((follow)-> follow.getFollowing().getId())
+            .toList();
+
+        List<Long> followingList = invitor.getFollowingList().stream()
+            .map((follow -> follow.getFollower().getId()))
+            .toList();
+        for (Long followerId : followerList) {
+            if(followerId.equals(visitorId)){
+                isFollower = true;
+                break;
+            }
+        }
+
+        for (Long followingId : followingList) {
+            if(followingId.equals(visitorId)) {
+                isFollowing = true;
+                break;
+            }
+        }
+
+        return VisitUserResponse.builder()
+            .id(invitor.getId())
+            .userName(invitor.getUsername())
+            .solvedCnt(invitor.getSolvedCnt())
+            .bottle(invitor.getBottle())
+            .growthPoint(invitor.getGrowthPoint())
+            .rank(invitorRank)
+            .isFollowing(isFollowing)
+            .isFollower(isFollower)
+            .build();
+    }
+
+    @Override
+    public int getUserRank(Long userId) {
+        User user = findById(userId);
+        return userRepository.countWithGrowthPointGreaterThan(user.getGrowthPoint()) + 1;
+    }
+
+    @Override
+    public GetUserResponse getUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        int rank = getUserRank(userId);
+
+        return GetUserResponse.builder()
+            .id(user.getId())
+            .userName(user.getUsername())
+            .solvedCnt(user.getSolvedCnt())
+            .bottle(user.getBottle())
+            .growthPoint(user.getGrowthPoint())
+            .rank(rank)
             .build();
     }
 

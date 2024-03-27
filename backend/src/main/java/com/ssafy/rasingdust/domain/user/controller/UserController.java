@@ -2,6 +2,8 @@ package com.ssafy.rasingdust.domain.user.controller;
 
 import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
@@ -29,9 +31,10 @@ public class UserController implements UserControllerDocs{
 
     @PostMapping("/follow/{fromId}")
     public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
-
-        userService.followUser(Long.valueOf(userDetails.getUsername()), fromId);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_FOLLOW_SUCCESS));
+    @GetMapping()
+    public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
     }
 
     @DeleteMapping("/unfollow/{fromId}")
@@ -65,4 +68,19 @@ public class UserController implements UserControllerDocs{
         List<UserDto> response = userService.findByuserNameStartsWith(userName);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
     }
+
+    @GetMapping("/invitor/{userId}")
+    public ResponseEntity<ResultResponse> visitUser(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long userId){
+        VisitUserResponse response = userService.visitUser(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_VISITUSER_SUCCESS, response));
+    }
+
+    @GetMapping("/rank")
+    public ResponseEntity<ResultResponse> getUserRank(@AuthenticationPrincipal UserDetails userDetails) {
+        int response = userService.getUserRank(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_RANK_SUCCESS, response));
+    }
+
 }
