@@ -131,18 +131,23 @@ public class UserServiceImpl implements UserService{
         boolean isFollower = false;
         int invitorRank = getUserRank(invitorId);
 
-        List<Follow> followerList = invitor.getFollowerList();
-        List<Follow> followingList = invitor.getFollowingList();
-        for (Follow follower : followerList) {
-            if(follower.getId().equals(visitorId)){
-                isFollowing = true;
+        List<Long> followerList = invitor.getFollowerList().stream()
+            .map((follow)-> follow.getFollowing().getId())
+            .toList();
+
+        List<Long> followingList = invitor.getFollowingList().stream()
+            .map((follow -> follow.getFollower().getId()))
+            .toList();
+        for (Long followerId : followerList) {
+            if(followerId.equals(visitorId)){
+                isFollower = true;
                 break;
             }
         }
 
-        for (Follow following : followingList) {
-            if(following.getId().equals(visitorId)) {
-                isFollower = true;
+        for (Long followingId : followingList) {
+            if(followingId.equals(visitorId)) {
+                isFollowing = true;
                 break;
             }
         }
