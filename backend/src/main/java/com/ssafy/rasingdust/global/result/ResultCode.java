@@ -18,6 +18,9 @@ public enum ResultCode {
     //Pet
     PUT_FEEDCHARACTER_SUCCESS(200, "해당 유저의 펫 먹이 주기를 성공하였습니다."),
 
+    //Noti
+    GET_NOTIFICATION_SUCCESS(200, "알림함 조회에 성공하였습니다."),
+    READ_NOTIFICATION_SUCCESS(200, "알림 조회에 성공하였습니다."),
 
     ;
 

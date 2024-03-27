@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum NotificationType {
-    SSE_CONNECT("connect", "SSE 연겷완효"),
+    SSE_CONNECT("connect", "SSE 연결성공"),
     TEST_MSG("test", "테스트 메시지"),
     FOLLOW_EVENT("follow", "팔로우 요청이 왔습니다."),
     KOCK_ACTION("kock", "콕 찔렸습니다");

@@ -1,10 +1,17 @@
 package com.ssafy.rasingdust.domain.notification.service;
 
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
+import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.notification.entity.Notification;
+import com.ssafy.rasingdust.domain.user.entity.User;
+import java.util.List;
 
 public interface NotificationService {
 
-    public SseEmitter subscribe(String userId, String lastEventId);
+    Notification saveNotice(NotificationType notificationType, Long receiverId,
+        Long senderId);
 
-    void sendTest(String userId);
+    List<NotificationDto> getNoticeList(User loginUser);
+
+    void readNotice(Long id, User loginUser);
 }

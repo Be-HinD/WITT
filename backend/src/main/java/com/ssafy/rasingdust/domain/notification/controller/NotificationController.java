@@ -1,43 +1,44 @@
 package com.ssafy.rasingdust.domain.notification.controller;
 
 
+import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.service.NotificationService;
+import com.ssafy.rasingdust.domain.user.entity.User;
+import com.ssafy.rasingdust.global.result.ResultCode;
+import com.ssafy.rasingdust.global.result.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-@RequestMapping("/sse")
+@RequestMapping("/notices")
 @RequiredArgsConstructor
-@Tag(name = "SSEController", description = "SSE 연결 관련")
+@Tag(name = "NotificationController", description = "알림함 관련 API")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @Operation(summary = "SSE 연결")
-    @GetMapping(value = "/subscribe/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> subscribe(@PathVariable String userId,
-        @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
-        HttpServletResponse response) {
-        SseEmitter emitter = notificationService.subscribe(userId, lastEventId);
-        response.setHeader("X-Accel-Buffering", "no");
-        return ResponseEntity.ok(emitter);
+    @Operation(summary = "알림함 조회")
+    @GetMapping()
+    public ResponseEntity<ResultResponse> getNoticeList(@AuthenticationPrincipal User loginUser) {
+        List<NotificationDto> notificationDtoList = notificationService.getNoticeList(loginUser);
+        return ResponseEntity.ok(
+            new ResultResponse(ResultCode.GET_NOTIFICATION_SUCCESS, notificationDtoList));
     }
 
-    @Operation(summary = "SSE로 테스트 메시지 전달")
-    @PostMapping("/send/{userId}")
-    public ResponseEntity<Void> sendData(@PathVariable String userId) {
-        notificationService.sendTest(userId);
-        return ResponseEntity.ok().build();
+    @Operation(summary = "알림 읽음처리")
+    @PutMapping("/{id}")
+    public ResponseEntity<ResultResponse> readNotice(@AuthenticationPrincipal User loginUser,
+        @PathVariable Long id) {
+        notificationService.readNotice(id, loginUser);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.READ_NOTIFICATION_SUCCESS));
     }
 }
