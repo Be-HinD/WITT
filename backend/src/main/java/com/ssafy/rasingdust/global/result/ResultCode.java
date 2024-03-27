@@ -10,7 +10,7 @@ public enum ResultCode {
     GET_USERLIST_SUCCESS(200, "유저리스트 검색에 성공하였습니다."),
     GET_VISITUSER_SUCCESS(200, "해당 유저 페이지 방문에 성공하였습니다."),
     GET_USER_RANK_SUCCESS(200, "해당 유저 랭킹 조회에 성공하였습니다."),
-
+    GET_USER_SUCCESS(200, "해당 유저 조회에 성공하였습니다."),
     //Follow
     CREATE_FOLLOW_SUCCESS(201, "해당 유저 팔로우를 성공하였습니다."),
     DELETE__UNFOLLOW_SUCCESS(201, "해당 유저 언팔로우를 성공하였습니다."),

@@ -3,6 +3,7 @@ package com.ssafy.rasingdust.domain.user.controller;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
@@ -28,6 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController implements UserControllerDocs{
 
     private final UserService userService;
+
+    @GetMapping()
+    public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
+    }
 
     @PostMapping("/follow/{followId}")
     public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long followId) {
