@@ -1,7 +1,6 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.rasingdust.domain.user.dto.UserDto;
+import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
@@ -30,23 +29,32 @@ public class UserController implements UserControllerDocs{
 
     private final UserService userService;
 
+    @PostMapping("/follow/{fromId}")
+    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
     @GetMapping()
     public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
         GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
     }
 
-    @PostMapping("/follow/{followId}")
-    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long followId) {
-
-        userService.followUser(Long.valueOf(userDetails.getUsername()), followId);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_FOLLOW_SUCCESS));
+    @DeleteMapping("/unfollow/{fromId}")
+    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
+        userService.unFollowUser(Long.valueOf(userDetails.getUsername()), fromId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
     }
 
-    @DeleteMapping("/unfollow/{followId}")
-    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long followId) {
-        userService.unFollowUser(Long.valueOf(userDetails.getUsername()), followId);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
+    @GetMapping("/following/list/{userId}")
+    public ResponseEntity<ResultResponse> getFollowingList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+
+        List<UserDto> result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWINGLIST_SUCCESS, result));
+    }
+
+    @GetMapping("/follower/list/{userId}")
+    public ResponseEntity<ResultResponse> getFollowerList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+
+        List<UserDto> result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
     }
 
     @PostMapping("/character")
@@ -56,7 +64,6 @@ public class UserController implements UserControllerDocs{
     }
 
     @GetMapping("/search")
-    @JsonIgnore
     public ResponseEntity<ResultResponse> getUserList(@RequestParam String userName) {
         List<UserDto> response = userService.findByuserNameStartsWith(userName);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));

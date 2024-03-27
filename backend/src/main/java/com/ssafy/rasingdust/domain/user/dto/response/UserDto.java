@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.domain.user.dto;
+package com.ssafy.rasingdust.domain.user.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -11,4 +11,5 @@ public class UserDto {
     private int solvedCnt;
     private int bottle;
     private int growthPoint;
+    private boolean isFollow;
 }

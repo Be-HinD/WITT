@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
 
+    @Transient
+    private boolean isFollow;
+
     @Builder
     public User(String userName) {
         this.userName = userName;
