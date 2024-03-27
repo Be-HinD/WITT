@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import logo from '../assets/mainlogo.png'
 import login from '../assets/login.png'
 import Cloud from './Cloud'
-import { mainstate } from '../../../components/StateVariables'
+import { useNavigate } from 'react-router-dom'
 
 const mainStyleClass = 'w-full h-screen bg-[#111111]'
 
@@ -16,7 +16,7 @@ const Splash = () => {
 	const [titleEffect, setTitleEffect] = useState(loginTitleClass)
 	const [logoEffect, setLogoEffect] = useState(logoStyleClass)
 	const [buttonEffect, setButtonEffect] = useState(buttonStyleClass)
-	const { setIsLogin } = mainstate()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const timer1 = setTimeout(() => {
@@ -51,7 +51,7 @@ const Splash = () => {
 			<div className={buttonEffect}>
 				<img
 					onClick={() => {
-						setIsLogin(true)
+						navigate('/auth')
 					}}
 					src={login}
 				/>
