@@ -3,6 +3,7 @@ package com.ssafy.rasingdust.domain.user.service;
 import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.User;
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface UserService {
     public void followUser(Long toId, Long fromId);
     public void unFollowUser(Long toId, Long fromId);
     public FeedCharacterResponse feedCharacter(Long userId);
+    public VisitUserResponse visitUser(Long visitorId, Long invitorId);
+    public int getUserRank(Long userId);
 }
