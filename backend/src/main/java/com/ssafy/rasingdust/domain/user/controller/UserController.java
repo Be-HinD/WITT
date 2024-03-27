@@ -29,18 +29,23 @@ public class UserController implements UserControllerDocs{
 
     private final UserService userService;
 
-    @PostMapping("/follow/{fromId}")
-    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
+
     @GetMapping()
     public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
         GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
     }
 
+    @PostMapping("/follow/{fromId}")
+    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
+        userService.followUser(Long.valueOf(userDetails.getUsername()), fromId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_FOLLOW_SUCCESS));
+    }
+
     @DeleteMapping("/unfollow/{fromId}")
     public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
         userService.unFollowUser(Long.valueOf(userDetails.getUsername()), fromId);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE_UNFOLLOW_SUCCESS));
     }
 
     @GetMapping("/following/list/{userId}")

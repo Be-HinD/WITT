@@ -13,7 +13,7 @@ public enum ResultCode {
     GET_USER_SUCCESS(200, "해당 유저 조회에 성공하였습니다."),
     //Follow
     CREATE_FOLLOW_SUCCESS(201, "해당 유저 팔로우를 성공하였습니다."),
-    DELETE__UNFOLLOW_SUCCESS(201, "해당 유저 언팔로우를 성공하였습니다."),
+    DELETE_UNFOLLOW_SUCCESS(201, "해당 유저 언팔로우를 성공하였습니다."),
     GET_FOLLOWINGLIST_SUCCESS(200, "유저의 팔로잉 리스트 조회에 성공하였습니다."),
     GET_FOLLOWERLIST_SUCCESS(200, "유저의 팔로워 리스트 조회에 성공하였습니다."),
 
