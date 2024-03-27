@@ -46,20 +46,15 @@ public class User implements UserDetails {
     @Column(name = "growth_point", nullable = false)
     private int growthPoint = 0;
 
+    @Transient
+    private boolean isFollow;
+
     @Builder
     public User(String userName) {
         this.userName = userName;
     }
 
 
-
-    // 알람 테이블 연관
-    // 내가 받은 알람 리스트만 있으면 됨. user.getReceiveAlarmList();
-    @OneToMany(mappedBy = "receiver")
-    private List<Alarm> receiveAlarmList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sender")
-    private List<Alarm> sendeAlarmList = new ArrayList<>();
 
     // 팔로우 테이블 연관
     // 사용자가 팔로우하는 관계

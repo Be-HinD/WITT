@@ -1,7 +1,9 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
+import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
-import com.ssafy.rasingdust.domain.user.entity.User;
+import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
@@ -27,17 +29,37 @@ public class UserController implements UserControllerDocs{
 
     private final UserService userService;
 
-    @PostMapping("/follow/{followId}")
-    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long followId) {
 
-        userService.followUser(Long.valueOf(userDetails.getUsername()), followId);
+    @GetMapping()
+    public ResponseEntity<ResultResponse> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        GetUserResponse response = userService.getUser(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_SUCCESS, response));
+    }
+
+    @PostMapping("/follow/{fromId}")
+    public ResponseEntity<ResultResponse> followUser(@AuthenticationPrincipal UserDetails userDetails ,@PathVariable Long fromId) {
+        userService.followUser(Long.valueOf(userDetails.getUsername()), fromId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_FOLLOW_SUCCESS));
     }
 
-    @DeleteMapping("/unfollow/{followId}")
-    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long followId) {
-        userService.unFollowUser(Long.valueOf(userDetails.getUsername()), followId);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE__UNFOLLOW_SUCCESS));
+    @DeleteMapping("/unfollow/{fromId}")
+    public ResponseEntity<ResultResponse> unfollowUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long fromId) {
+        userService.unFollowUser(Long.valueOf(userDetails.getUsername()), fromId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.DELETE_UNFOLLOW_SUCCESS));
+    }
+
+    @GetMapping("/following/list/{userId}")
+    public ResponseEntity<ResultResponse> getFollowingList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+
+        List<UserDto> result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWINGLIST_SUCCESS, result));
+    }
+
+    @GetMapping("/follower/list/{userId}")
+    public ResponseEntity<ResultResponse> getFollowerList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId) {
+
+        List<UserDto> result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
     }
 
     @PostMapping("/character")
@@ -46,9 +68,24 @@ public class UserController implements UserControllerDocs{
         return ResponseEntity.ok(feedCharacterResponse);
     }
 
-    @GetMapping("search")
+    @GetMapping("/search")
     public ResponseEntity<ResultResponse> getUserList(@RequestParam String userName) {
-        List<User> userList = userService.findByuserNameStartsWith(userName);
-        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, userList));
+        List<UserDto> response = userService.findByuserNameStartsWith(userName);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
     }
+
+    @GetMapping("/invitor/{userId}")
+    public ResponseEntity<ResultResponse> visitUser(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long userId){
+        VisitUserResponse response = userService.visitUser(Long.valueOf(userDetails.getUsername()), userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_VISITUSER_SUCCESS, response));
+    }
+
+    @GetMapping("/rank")
+    public ResponseEntity<ResultResponse> getUserRank(@AuthenticationPrincipal UserDetails userDetails) {
+        int response = userService.getUserRank(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USER_RANK_SUCCESS, response));
+    }
+
 }

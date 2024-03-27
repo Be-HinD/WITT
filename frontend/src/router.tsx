@@ -6,6 +6,9 @@ import SolveQuizPage from './pages/Quiz/SolveQuiz'
 import Follow from './pages/Follow'
 import MainWrapper from './components/MainWrapper'
 import Error from './pages/Error'
+import FollowerTab from './pages/Follow/FollowerTab'
+import FollowingTab from './pages/Follow/FollowingTab'
+// import ResultPage from './pages/Quiz/Result'
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +27,16 @@ const router = createBrowserRouter([
 			{
 				path: 'follow',
 				element: <Follow />,
+				children: [
+					{
+						path: '',
+						element: <FollowerTab />,
+					},
+					{
+						path: 'following',
+						element: <FollowingTab />,
+					},
+				],
 			},
 			{
 				path: 'quiz',
@@ -33,6 +46,10 @@ const router = createBrowserRouter([
 				path: 'quiz/solve',
 				element: <SolveQuizPage />,
 			},
+			// {
+			// 	path: 'quiz/result',
+			// 	element: <ResultPage />,
+			// },
 		],
 	},
 ])

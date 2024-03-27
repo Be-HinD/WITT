@@ -20,6 +20,7 @@ public enum ErrorCode {
     //팔로우 관련
     FOLLOW_ALREADY_EXIST(3000, "이미 팔로잉 되어있는 회원입니다."),
     FOLLOW_NOT_FOUND(3000, "팔로잉 되어있지 않은 회원입니다."),
+    FOLLOW_BAD_REQUEST(4004, "자기 자신은 팔로우할 수 없습니다."),
     //회원 관련
     USER_NOT_FOUND(404, "해당하는 회원이 존재하지 않습니다."),
     USER_NOT_ENOUGH_BOTTLE(422, "사용 할 수 있는 물병이 없습니다.")
