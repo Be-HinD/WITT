@@ -3,7 +3,6 @@ package com.ssafy.rasingdust.domain.notification.controller;
 
 import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.service.NotificationService;
-import com.ssafy.rasingdust.domain.user.entity.User;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,7 +28,8 @@ public class NotificationController {
 
     @Operation(summary = "알림함 조회")
     @GetMapping()
-    public ResponseEntity<ResultResponse> getNoticeList(@AuthenticationPrincipal User loginUser) {
+    public ResponseEntity<ResultResponse> getNoticeList(
+        @AuthenticationPrincipal UserDetails loginUser) {
         List<NotificationDto> notificationDtoList = notificationService.getNoticeList(loginUser);
         return ResponseEntity.ok(
             new ResultResponse(ResultCode.GET_NOTIFICATION_SUCCESS, notificationDtoList));
@@ -36,7 +37,7 @@ public class NotificationController {
 
     @Operation(summary = "알림 읽음처리")
     @PutMapping("/{id}")
-    public ResponseEntity<ResultResponse> readNotice(@AuthenticationPrincipal User loginUser,
+    public ResponseEntity<ResultResponse> readNotice(@AuthenticationPrincipal UserDetails loginUser,
         @PathVariable Long id) {
         notificationService.readNotice(id, loginUser);
         return ResponseEntity.ok(new ResultResponse(ResultCode.READ_NOTIFICATION_SUCCESS));
