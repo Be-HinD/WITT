@@ -3,6 +3,7 @@ package com.ssafy.rasingdust.domain.user.service;
 import com.ssafy.rasingdust.domain.user.dto.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -128,6 +129,7 @@ public class UserServiceImpl implements UserService{
             .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         boolean isFollowing = false;
         boolean isFollower = false;
+        int invitorRank = getUserRank(invitorId);
 
         List<Follow> followerList = invitor.getFollowerList();
         List<Follow> followingList = invitor.getFollowingList();
@@ -151,6 +153,7 @@ public class UserServiceImpl implements UserService{
             .solvedCnt(invitor.getSolvedCnt())
             .bottle(invitor.getBottle())
             .growthPoint(invitor.getGrowthPoint())
+            .rank(invitorRank)
             .isFollowing(isFollowing)
             .isFollower(isFollower)
             .build();
@@ -160,6 +163,22 @@ public class UserServiceImpl implements UserService{
     public int getUserRank(Long userId) {
         User user = findById(userId);
         return userRepository.countWithGrowthPointGreaterThan(user.getGrowthPoint()) + 1;
+    }
+
+    @Override
+    public GetUserResponse getUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        int rank = getUserRank(userId);
+
+        return GetUserResponse.builder()
+            .id(user.getId())
+            .userName(user.getUsername())
+            .solvedCnt(user.getSolvedCnt())
+            .bottle(user.getBottle())
+            .growthPoint(user.getGrowthPoint())
+            .rank(rank)
+            .build();
     }
 
     @PostConstruct
