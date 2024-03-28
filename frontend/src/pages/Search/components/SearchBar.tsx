@@ -24,7 +24,7 @@ const SearchBar = ({ input, setInput, setIsFocused, handleInput, handleEnter }: 
 						onFocus={() => setIsFocused(true)}
 						onBlur={() => setIsFocused(false)}
 						placeholder="사용자를 검색해 보세요."
-						onKeyUp={handleEnter}
+						onKeyDown={handleEnter}
 						onChange={handleInput}
 						className="bg-neutral-800 focus:outline-none w-full"
 					/>
