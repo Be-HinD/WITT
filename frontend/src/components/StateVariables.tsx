@@ -2,6 +2,8 @@ import { create } from 'zustand'
 
 export interface IMainState {
 	isLogin: boolean
+	token: string
+	setToken: (result: string) => void
 	setIsLogin: (result: boolean) => void
 }
 
@@ -15,7 +17,10 @@ export interface IUserState {
 }
 
 export const mainstate = create<IMainState>()((set) => ({
-	isLogin: false,
+	isLogin: true,
+	token:
+		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTYxMzg1NCwiZXhwIjoxNzEyODIzNDU0LCJzdWIiOiIxMSIsImlkIjoxMX0.ej3iNoru8MPtwQA80EHYlBs6v6Y5ShIrvluVdylbOzA',
+	setToken: (result: string) => set({ token: result }),
 	setIsLogin: (result: boolean) => set({ isLogin: result }),
 }))
 

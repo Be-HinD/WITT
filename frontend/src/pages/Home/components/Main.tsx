@@ -3,7 +3,9 @@ import ActionBar from './ActionBar'
 import character from '../assets/tree.png'
 import background from '../assets/background_main.gif'
 import { useEffect, useState } from 'react'
-import { userstate } from '../../../components/StateVariables'
+import { mainstate, userstate } from '../../../components/StateVariables'
+import { getToken } from './API'
+import axios from 'axios'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -54,6 +56,8 @@ const Main = () => {
 	const isNewNotice = userstate((state) => state.isNewNotice)
 	const setIsNewNotice = userstate((state) => state.setIsNewNotice)
 
+	const token = mainstate((state) => state.token)
+
 	const notify = () => {
 		setIsNewNotice()
 		console.log(isNewNotice)
@@ -75,9 +79,19 @@ const Main = () => {
 		notify()
 	}
 
+	const getData = async () => {
+		console.log(token)
+		try {
+			const accessToken = await getToken(token)
+			console.log(accessToken)
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				console.log(error.response)
+			}
+		}
+	}
 	useEffect(() => {
-		setNewNotice('여기 새로운 알림 소식이 있습니다.....................')
-		notify()
+		getData()
 	}, [])
 
 	return (

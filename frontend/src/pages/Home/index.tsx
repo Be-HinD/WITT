@@ -10,8 +10,9 @@ const Home = () => {
 	useEffect(() => {
 		if (token) {
 			setIsLogin(true)
+			console.log(token)
 		}
-	}, [setIsLogin, token])
+	})
 
 	return <div>{isLogin ? <Main /> : <Splash />}</div>
 }
