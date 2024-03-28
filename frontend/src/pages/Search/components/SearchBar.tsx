@@ -14,7 +14,7 @@ const SearchBar = ({ input, setInput, setIsFocused, handleInput, handleEnter }: 
 	}
 
 	return (
-		<div className="flex gap-2 w-full items-center text-whiteText">
+		<div className="flex gap-2 items-center text-whiteText fixed top-14 right-0 left-0 px-4 bg-background pb-4">
 			<div className="flex items-center justify-between px-3 py-2 w-[90%] shrink-0 bg-neutral-800 rounded-lg">
 				<div className="flex gap-2 w-full">
 					<IoSearch className="size-6" />
