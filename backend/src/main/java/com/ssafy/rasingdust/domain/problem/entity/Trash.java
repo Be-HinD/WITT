@@ -1,4 +1,4 @@
-package com.ssafy.rasingdust.domain.trash.entity;
+package com.ssafy.rasingdust.domain.problem.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,8 +18,4 @@ public class Trash {
 
     @Column(name = "trash_classification", nullable = false)
     private String trashClassification;
-
-    @Column(name = "material_classification", nullable = false)
-    private String materialClassification;
-
 }
