@@ -20,6 +20,9 @@ public enum ResultCode {
     //Charactor
     PUT_FEEDCHARACTER_SUCCESS(200, "해당 유저의 펫 먹이 주기를 성공하였습니다."),
 
+    //Problem
+    GET_PROBLEM_SUCCESS(200, "해당 문제 조회에 성공하였습니다."),
+    PUT_USER_BOTTLE_SUCCESS(200, "해당 유저의 보유 물병 + 1, 풀이 수 + 1을 성공하였습니다.")
 
     ;
 
