@@ -24,6 +24,10 @@ public enum ResultCode {
     GET_NOTIFICATION_SUCCESS(200, "알림함 조회에 성공하였습니다."),
     READ_NOTIFICATION_SUCCESS(200, "알림 조회에 성공하였습니다."),
 
+    //Problem
+    GET_PROBLEM_SUCCESS(200, "해당 문제 조회에 성공하였습니다."),
+    PUT_USER_BOTTLE_SUCCESS(200, "해당 유저의 보유 물병 + 1, 풀이 수 + 1을 성공하였습니다."),
+
     ;
 
     private final int status;

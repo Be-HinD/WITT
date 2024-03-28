@@ -41,10 +41,12 @@ const router = createBrowserRouter([
 			{
 				path: 'quiz',
 				element: <Quiz />,
-			},
-			{
-				path: 'quiz/solve',
-				element: <SolveQuizPage />,
+				children: [
+					{
+						path: 'solve',
+						element: <SolveQuizPage />,
+					},
+				],
 			},
 			// {
 			// 	path: 'quiz/result',

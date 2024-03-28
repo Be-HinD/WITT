@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -206,14 +207,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public FeedCharacterResponse feedCharacter(Long userId) {
         User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-
         findUser.feedCharacter();
+        int rank = getUserRank(findUser.getId());
         return FeedCharacterResponse.builder()
             .bottle(findUser.getBottle())
             .growthPoint(findUser.getGrowthPoint())
+            .rank(rank)
             .build();
     }
 
