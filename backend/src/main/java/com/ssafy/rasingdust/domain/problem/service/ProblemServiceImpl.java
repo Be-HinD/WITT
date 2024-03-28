@@ -1,9 +1,14 @@
 package com.ssafy.rasingdust.domain.problem.service;
 
+import com.ssafy.rasingdust.domain.problem.dto.response.AddBottleResponse;
 import com.ssafy.rasingdust.domain.problem.dto.response.GetProblemResponse;
 import com.ssafy.rasingdust.domain.problem.repository.TrashRepository;
+import com.ssafy.rasingdust.domain.user.entity.User;
+import com.ssafy.rasingdust.domain.user.repository.UserRepository;
+import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class ProblemServiceImpl implements ProblemService{
 
     private final TrashRepository trashRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public GetProblemResponse getProblem(Long number) {
@@ -46,6 +53,28 @@ public class ProblemServiceImpl implements ProblemService{
             .correct(correct)
             .dummy1(dummy1)
             .dummy2(dummy2)
+            .build();
+    }
+
+    @Override
+    @Transactional
+    public AddBottleResponse addBottle(Long userId) {
+        User findUser = userRepository.findById(userId)
+            .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        int rank = userService.getUserRank(findUser.getId());
+        log.info("전 유저 병 수 : " + findUser.getBottle());
+        log.info("전 풀이 수 : " + findUser.getSolvedCnt());
+        log.info("전 유저 랭킹 : " + rank);
+        findUser.addBottle();
+        rank = userService.getUserRank(findUser.getId());
+        log.info("후 유저 병 수 : " + findUser.getBottle());
+        log.info("후 풀이 수 : " + findUser.getSolvedCnt());
+        log.info("전 유저 랭킹 : " + rank);
+
+        return AddBottleResponse.builder()
+            .bottle(findUser.getBottle())
+            .solvedCnt(findUser.getSolvedCnt())
+            .rank(rank)
             .build();
     }
 

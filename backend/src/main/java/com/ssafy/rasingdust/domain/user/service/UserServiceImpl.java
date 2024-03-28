@@ -1,9 +1,9 @@
 package com.ssafy.rasingdust.domain.user.service;
 
-import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -204,14 +205,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public FeedCharacterResponse feedCharacter(Long userId) {
         User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-
         findUser.feedCharacter();
+        int rank = getUserRank(findUser.getId());
         return FeedCharacterResponse.builder()
             .bottle(findUser.getBottle())
             .growthPoint(findUser.getGrowthPoint())
+            .rank(rank)
             .build();
     }
 
