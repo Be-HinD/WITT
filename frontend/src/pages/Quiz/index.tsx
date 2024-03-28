@@ -70,7 +70,7 @@ const Quiz = () => {
 			})
 			.catch((error) => {
 				console.error('Error:', error)
-				window.alert(`${error} 에러 ${base64Image}`)
+				window.alert(`${error.message}`)
 			})
 	}
 
