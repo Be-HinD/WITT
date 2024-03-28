@@ -5,8 +5,12 @@ import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import HowToUse from './components/HowToUse'
 import axios from 'axios'
+import VConsole from 'vconsole'
 
 const Quiz = () => {
+	const vConsole = new VConsole() // 핸드폰에서 디버깅용
+	console.log(vConsole)
+
 	const [base64Image, setBase64Image] = useState<string | ArrayBuffer | null>(null)
 	const [capturedImage, setCapturedImage] = useState<File | undefined>(undefined)
 
@@ -70,6 +74,7 @@ const Quiz = () => {
 			})
 			.catch((error) => {
 				console.error('Error:', error)
+				window.alert(`${error.message}`)
 			})
 	}
 
