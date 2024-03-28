@@ -66,7 +66,7 @@ const Quiz = () => {
 			.post('https://api.openai.com/v1/chat/completions', payload, { headers })
 			.then((response) => {
 				console.log(response.data)
-				console.log(response.data.choices[0].message.content)
+				window.alert(response.data.choices[0].message.content)
 			})
 			.catch((error) => {
 				console.error('Error:', error)
