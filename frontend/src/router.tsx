@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Quiz from './pages/Quiz'
-import SolveQuizPage from './pages/Quiz/SolveQuiz'
 import Follow from './pages/Follow'
 import MainWrapper from './components/MainWrapper'
 import Error from './pages/Error'
@@ -41,13 +40,8 @@ const router = createBrowserRouter([
 			{
 				path: 'quiz',
 				element: <Quiz />,
-				children: [
-					{
-						path: 'solve',
-						element: <SolveQuizPage />,
-					},
-				],
 			},
+
 			// {
 			// 	path: 'quiz/result',
 			// 	element: <ResultPage />,
