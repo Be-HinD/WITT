@@ -4,11 +4,12 @@ import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
 import com.ssafy.rasingdust.domain.notification.entity.Notification;
 import com.ssafy.rasingdust.domain.notification.repository.NotificationRepository;
+import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +34,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDto> getNoticeList(UserDetails loginUser) {
+    public SliceResponse<NotificationDto> getNoticeList(UserDetails loginUser, Pageable pageable) {
 
-        return notificationRepository.findAllByReceiverIdOrderByTimeDesc(
-                Long.valueOf(loginUser.getUsername()))
-            .stream().map(NotificationDto::from).toList();
+        return notificationRepository.getNoticeSliceByUserId(
+            Long.valueOf(loginUser.getUsername()), pageable);
     }
 
     @Override
