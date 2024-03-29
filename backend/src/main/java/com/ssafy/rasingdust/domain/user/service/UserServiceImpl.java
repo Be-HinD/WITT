@@ -1,9 +1,11 @@
 package com.ssafy.rasingdust.domain.user.service;
 
+import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.UserListDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -12,12 +14,15 @@ import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,19 +47,36 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDto> findByuserNameStartsWith(String userName) {
+    public SliceResponse findByuserNameStartsWith(Long userId, String userName, Pageable pageable) {
 
-        List<User> userList = userRepository.findByuserNameStartsWith(userName);
+        //현재 로그인한 유저의 팔로잉 리스트 조회
+        List<User> currentUserFollowingList = followRepository.findByFollowing(userId);
 
-        if(userList == null || userList.isEmpty()) {
-            throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
+        //condition == 현재 유저의 팔로잉 리스트
+        List<Long> condition = new ArrayList<>();
+
+        if(!currentUserFollowingList.isEmpty()) {
+            for(int i=0; i<currentUserFollowingList.size()-1; i++) {
+                User user = currentUserFollowingList.get(i);
+                condition.add(user.getId());
+            }
+            condition.add(currentUserFollowingList.getLast().getId());
         }
 
-        ModelMapper modelMapper = new ModelMapper();
-        List<UserDto> resultDto = userList.stream()
-            .map(data -> modelMapper.map(data, UserDto.class))
-            .collect(Collectors.toList());
 
+        Slice<UserListDto> result = userRepository.searchUser(condition, userName, pageable);
+
+        /**
+         * 현재 로그인 한 유저와 동시에 팔로우 하고있는 유저들 중 대표되는 한 유저의 닉네임 조회
+         * **/
+        for(UserListDto user : result) {
+            if(user.getFollowCnt() > 0) {
+                user.setDuplicateFollower(userRepository.findByCondition(condition, user.getId()));
+            }
+        }
+
+        // 비검사 경고 제거 필요
+        SliceResponse resultDto = new SliceResponse(result);
 
 
         return resultDto;
