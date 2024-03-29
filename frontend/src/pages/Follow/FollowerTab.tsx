@@ -4,9 +4,13 @@ import FollowUser from './components/FollowUser'
 const FollowerTab = () => {
 	return (
 		<div className="pt-12 px-5">
-			{dummy.map((user) => (
-				<FollowUser user={user}/>
-			))}
+			<ul className="flex flex-col">
+				{dummy.map((user) => (
+					<li className="flex text-textWthi justify-between items-center gap-4 my-2">
+						<FollowUser user={user} />
+					</li>
+				))}
+			</ul>
 		</div>
 	)
 }

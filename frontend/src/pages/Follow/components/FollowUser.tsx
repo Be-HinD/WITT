@@ -12,7 +12,7 @@ const FollowUser = ({user}: FollowProp) => {
 	const isFollow = true
 
 	return (
-		<div className="flex text-textWthi justify-between items-center gap-4 my-4">
+		<>
 			<div className="size-full rounded-full overflow-hidden w-2/12 shrink-0">
 				<img src={user.profileImg} alt="dummy" className="object-cover aspect-square"/>
 			</div>
@@ -29,7 +29,7 @@ const FollowUser = ({user}: FollowProp) => {
 					팔로잉
 				</button>
 			)}
-		</div>
+		</>
 	)
 }
 
