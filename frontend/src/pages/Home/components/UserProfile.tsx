@@ -1,7 +1,8 @@
+import { data, userstate } from '../../../components/StateVariables'
 import avatar from '../assets/avatar.gif'
 import { ImSearch } from 'react-icons/im' // 유저 검색 아이콘
 
-const UserProfile = ({ gauge = 0.7 }: { gauge?: number }) => {
+const UserProfile = (mydata: data) => {
 	const profileStyleClass =
 		'flex justify-center items-center z-[5] w-full h-[4.125rem] bg-[#342C3D] text-[#ffffff] font-black rounded-[15px]'
 
@@ -14,23 +15,29 @@ const UserProfile = ({ gauge = 0.7 }: { gauge?: number }) => {
 
 	const gaugeStyleClass = 'z-[1] absolute mt-[3px] rounded-[5px] bg-[#AEEB92]'
 
+	const levels = userstate((state) => state.levels)
+
 	return (
 		<div className={profileStyleClass}>
 			<img width={48} src={avatar} />
 			<div className={userinfoStyleClass}>
 				<div className="flex my-[5px] cursor-pointer">
-					<span className={levelStyleClass}>Lv.{'나무'}</span>
-					{'얼룩덜룩카피바라'}님<span className="mx-[15px] text-[8px]">{30}위</span>
+					<span className={levelStyleClass}>{`${levels[~~(mydata.growthPoint / 10)]}`}</span>
+					{`${mydata.userName}`}님<span className="mx-[15px] text-[8px]">{`${mydata.rank}`}위</span>
 				</div>
 				<div className="flex justify-between my-[5px]">
 					<div>
 						<span style={{ width: '44%', maxWidth: '320px', height: '12.5px' }} className={totalgaugeStyleClass}></span>
 						<span
-							style={{ width: `${44 * gauge}%`, maxWidth: `${320 * gauge}px`, height: '12.5px' }}
+							style={{
+								width: `${44 * (mydata.growthPoint / 10)}%`,
+								maxWidth: `${320 * (mydata.growthPoint / 10)}px`,
+								height: '12.5px',
+							}}
 							className={gaugeStyleClass}
 						></span>
 					</div>
-					<div className="text-xs -top-[5px]">{gauge * 100}%</div>
+					<div className="text-xs -top-[5px]">{(mydata.growthPoint / 10) * 100}%</div>
 				</div>
 			</div>
 			<div
