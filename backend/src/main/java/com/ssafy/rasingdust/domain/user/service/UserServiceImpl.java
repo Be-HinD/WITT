@@ -1,11 +1,14 @@
 package com.ssafy.rasingdust.domain.user.service;
 
 import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
-import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
+import com.ssafy.rasingdust.domain.user.dto.response.UserListDto;
+import static com.ssafy.rasingdust.domain.notification.dto.NotificationType.KOCK_ACTION;
+import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.notification.service.NotificationService;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
-import com.ssafy.rasingdust.domain.user.dto.response.UserListDto;
+import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -25,14 +28,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final NotificationService notificationService;
 
     @Override
     public User findById(Long userId) {
@@ -64,6 +69,7 @@ public class UserServiceImpl implements UserService{
         }
 
 
+
         Slice<UserListDto> result = userRepository.searchUser(condition, userName, pageable);
 
         /**
@@ -77,8 +83,7 @@ public class UserServiceImpl implements UserService{
 
         // 비검사 경고 제거 필요
         SliceResponse resultDto = new SliceResponse(result);
-
-
+        
         return resultDto;
     }
 
@@ -90,16 +95,17 @@ public class UserServiceImpl implements UserService{
 
         return userRepository.save(
                 User.builder()
-                        .build())
-                .getId();
+                    .build())
+            .getId();
 
 
     }
+
     @Override
     public void followUser(Long toId, Long fromId) {
 
         //예외처리 : 자기 자신을 팔로우하려는 경우
-        if(toId.equals(fromId)) {
+        if (toId.equals(fromId)) {
             throw new BusinessLogicException(ErrorCode.FOLLOW_BAD_REQUEST);
         }
 
@@ -114,12 +120,12 @@ public class UserServiceImpl implements UserService{
         Optional<Follow> isFollowExist = Optional.ofNullable(
             followRepository.followIsExist(toId, fromId));
 
-        if(isFollowExist.isPresent()) {
+        if (isFollowExist.isPresent()) {
             throw new BusinessLogicException(ErrorCode.FOLLOW_ALREADY_EXIST);
         }
 
         followRepository.save(follow);
-
+        notificationService.saveNotice(NotificationType.FOLLOW_EVENT, fromId, toId);
     }
 
     @Override
@@ -129,7 +135,7 @@ public class UserServiceImpl implements UserService{
         Optional<Follow> isFollowExist = Optional.ofNullable(
             followRepository.followIsExist(toId, fromId));
 
-        if(isFollowExist.isEmpty()) {
+        if (isFollowExist.isEmpty()) {
             throw new BusinessLogicException(ErrorCode.FOLLOW_NOT_FOUND);
         }
 
@@ -139,21 +145,17 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * 내 팔로우 목록을 조회할 경우
-     * 맞팔 Status를 체크할 필요 없음.
-     * 다른 사람의 팔로우 목록을 조회할 경우
-     * 맞팔 Status 체크 로직 추가
-     * **/
+     * 내 팔로우 목록을 조회할 경우 맞팔 Status를 체크할 필요 없음. 다른 사람의 팔로우 목록을 조회할 경우 맞팔 Status 체크 로직 추가
+     **/
     @Override
     public List<UserDto> getFollowingList(Long myId, Long userId) {
-
 
         Optional<User> user = userRepository.findById(userId);
 
         Optional<User> currentUser = userRepository.findById(myId);
 
         //예외처리 : 유저가 존재하지 않는 경우
-        if(user.isEmpty() || currentUser.isEmpty()) {
+        if (user.isEmpty() || currentUser.isEmpty()) {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -164,13 +166,14 @@ public class UserServiceImpl implements UserService{
          * 다른 유저의 팔로워들이 현재 유저를 팔로우하고 있는지 체크
          * 다른 유저가 팔로우하고 있는 사람이 현재 로그인한 유저도 팔로우 하고있다면 true값 세팅
          * */
-        if(!userId.equals(myId)) {
-            List<User> currentUserFollowList = followRepository.findByFollowing(myId);   //로그인한 유저의 팔로우 리스트
+        if (!userId.equals(myId)) {
+            List<User> currentUserFollowList = followRepository.findByFollowing(
+                myId);   //로그인한 유저의 팔로우 리스트
 
             followingList.remove(currentUser.get());    //현재 로그인한 유저가 포함될 경우 제거
 
-            for(User follow : followingList) {
-                if(currentUserFollowList.contains(follow)) {
+            for (User follow : followingList) {
+                if (currentUserFollowList.contains(follow)) {
                     follow.setFollow(true);
                 }
             }
@@ -193,7 +196,7 @@ public class UserServiceImpl implements UserService{
         Optional<User> currentUser = userRepository.findById(myId);
 
         //예외처리 : 유저가 존재하지 않는 경우
-        if(user.isEmpty() || currentUser.isEmpty()) {
+        if (user.isEmpty() || currentUser.isEmpty()) {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -204,13 +207,14 @@ public class UserServiceImpl implements UserService{
          * 다른 유저의 팔로워들이 현재 로그인한 유저가 팔로우 하고있는지 체크
          * 팔로잉 리스트 조회 비즈니스 로직과 동일
          * */
-        if(!userId.equals(myId)) {
-            List<User> currentUserFollowingList = followRepository.findByFollowing(myId);   //로그인한 유저의 팔로우 리스트
+        if (!userId.equals(myId)) {
+            List<User> currentUserFollowingList = followRepository.findByFollowing(
+                myId);   //로그인한 유저의 팔로우 리스트
 
             followerList.remove(currentUser.get());     //현재 로그인한 유저가 포함될 경우 제거
 
-            for(User follow : followerList) {
-                if(currentUserFollowingList.contains(follow)) {
+            for (User follow : followerList) {
+                if (currentUserFollowingList.contains(follow)) {
                     follow.setFollow(true);
                 }
             }
@@ -226,14 +230,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public FeedCharacterResponse feedCharacter(Long userId) {
         User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-
         findUser.feedCharacter();
+        int rank = getUserRank(findUser.getId());
         return FeedCharacterResponse.builder()
             .bottle(findUser.getBottle())
             .growthPoint(findUser.getGrowthPoint())
+            .rank(rank)
             .build();
     }
 
@@ -246,21 +252,21 @@ public class UserServiceImpl implements UserService{
         int invitorRank = getUserRank(invitorId);
 
         List<Long> followerList = invitor.getFollowerList().stream()
-            .map((follow)-> follow.getFollowing().getId())
+            .map((follow) -> follow.getFollowing().getId())
             .toList();
 
         List<Long> followingList = invitor.getFollowingList().stream()
             .map((follow -> follow.getFollower().getId()))
             .toList();
         for (Long followerId : followerList) {
-            if(followerId.equals(visitorId)){
+            if (followerId.equals(visitorId)) {
                 isFollower = true;
                 break;
             }
         }
 
         for (Long followingId : followingList) {
-            if(followingId.equals(visitorId)) {
+            if (followingId.equals(visitorId)) {
                 isFollowing = true;
                 break;
             }
@@ -300,17 +306,22 @@ public class UserServiceImpl implements UserService{
             .build();
     }
 
+    @Override
+    public void sendKock(Long id, String userId) {
+        notificationService.saveNotice(KOCK_ACTION, Long.valueOf(userId), id);
+    }
+
     /**
      * Test를 위한 초기화
-     * **/
+     **/
     @PostConstruct
     void init() {
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             StringBuilder sb = new StringBuilder();
             sb.append("Dummy").append(i);
             userRepository.save(User.builder()
-                    .userName(String.valueOf(sb))
-                    .build()
+                .userName(String.valueOf(sb))
+                .build()
             );
         }
     }

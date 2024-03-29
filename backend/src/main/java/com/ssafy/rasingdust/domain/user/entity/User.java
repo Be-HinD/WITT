@@ -80,6 +80,11 @@ public class User implements UserDetails {
         this.setGrowthPoint(currGrowthPoint + 1);
     }
 
+    public void addBottle() {
+        this.bottle += 1;
+        this.solvedCnt += 1;
+    }
+
     // 이후 권한이 여러가지 생기면 추가해야됨
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
