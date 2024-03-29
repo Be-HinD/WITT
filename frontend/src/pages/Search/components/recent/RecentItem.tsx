@@ -7,7 +7,7 @@ const RecentItem = ({ userUpdate, type, keyword, userInfo }: SearchItemProp) => 
 	const handleClick = () => {
 		userUpdate!(type, userInfo, keyword)
 		if (type === RecentItemType.USER && userInfo) {
-			// routeTo(`user/${userInfo?.id}`)
+			routeTo(`user/${userInfo?.id}`)
 		}
 	}
 
