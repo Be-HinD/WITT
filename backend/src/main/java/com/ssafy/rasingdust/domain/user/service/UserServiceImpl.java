@@ -311,18 +311,4 @@ public class UserServiceImpl implements UserService {
         notificationService.saveNotice(KOCK_ACTION, Long.valueOf(userId), id);
     }
 
-    /**
-     * Test를 위한 초기화
-     **/
-    @PostConstruct
-    void init() {
-        for (int i = 0; i < 10; i++) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Dummy").append(i);
-            userRepository.save(User.builder()
-                .userName(String.valueOf(sb))
-                .build()
-            );
-        }
-    }
 }
