@@ -20,7 +20,7 @@ const Loading = ({ gptAnswer }: { gptAnswer: number }) => {
 		axios
 			.get(`${import.meta.env.VITE_API_BASE_URL}/problem`, { params: { number: gptAnswer } })
 			.then((response) => {
-				console.log(response.data)
+				console.log(response)
 				setQuizData(response.data.data)
 			})
 			.catch((error) => {
