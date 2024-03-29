@@ -48,18 +48,4 @@ public class ProblemController {
         return ResponseEntity.ok(new ResultResponse(ResultCode.PUT_USER_BOTTLE_SUCCESS, response));
     }
 
-
-    @PostConstruct
-    public void init() {
-        // 이미 데이터가 있는지 체크하여, 중복 초기화를 방지합니다.
-        String[] trashClassification = {"음식물쓰레기", "일반쓰레기", "캔", "플라스틱", "유리", "종이"};
-
-        int size = trashClassification.length;
-        for (String s : trashClassification) {
-            Trash trash = new Trash();
-            trash.setTrashClassification(s);
-            trashRepository.save(trash);
-        }
-
-    }
 }
