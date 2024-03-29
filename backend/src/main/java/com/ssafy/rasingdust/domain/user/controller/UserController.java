@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
+import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -78,8 +80,9 @@ public class UserController implements UserControllerDocs {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResultResponse> getUserList(@RequestParam String userName) {
-        List<UserDto> response = userService.findByuserNameStartsWith(userName);
+    public ResponseEntity<ResultResponse> getUserList(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String userName, Pageable pageable) {
+        SliceResponse response = userService.findByuserNameStartsWith(
+            Long.valueOf(userDetails.getUsername()), userName, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
     }
 
