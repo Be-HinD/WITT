@@ -4,8 +4,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				textWthie: '#EAEAEA',
-				background: '#111111'
+				whiteText: '#EAEAEA',
+				GrayText: '#C4C4C4',
+				background: '#111111',
 			},
 		},
 	},

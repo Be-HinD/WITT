@@ -14,7 +14,6 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -48,10 +47,16 @@ public class Follow {
     @JoinColumn(name = "following_id")
     private User following;
 
+    @Transient
+    private boolean isFollow;
+
     @Builder
     public Follow(User follower, User following, boolean isFollow) {
         this.follower = follower;
         this.following = following;
     }
 
+    public void setFollow(boolean follow) {
+        isFollow = follow;
+    }
 }
