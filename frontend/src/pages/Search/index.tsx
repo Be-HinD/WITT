@@ -3,23 +3,23 @@ import Header from '../../components/Header'
 import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import { useRouter } from '../../hooks/useRouter'
-import SearchBar from './components/SearchBar'
+import SearchBar from './components/search/SearchBar'
 import RecentSearch from './components/recent/RecentSearch'
 import SearchResult from './components/search/SearchResult'
-import { RecentItemType } from './components/recent/RecentItem'
+import { ISearchKeyword, ISearchUser, RecentItemType } from './search-types'
 
 /*
   해야할 것들
   (+) 1. x 누르면 로컬스토리지에서 검색 기록 삭제
-  (-) 2. SearchBar 상단 고정
+  (+) 2. SearchBar 상단 고정
   (-) 3. RecentSearch에 User Type 검색 결과도 prop 전달
   (-) 4. 같은 방식으로 User Type에 대한 검색 기록 local Storage에서 관리
-	(-) 5. 스켈레톤 컴포넌트 작성
+	(-) 5. 유저 검색 결과 스켈레톤 컴포넌트 작성
+
+	최근 검색 결과 - 유저 버전
+	검색 결과에서 SearchItem을 클릭하면 로컬스토리지 USER 에 add
+	이미 있으면 순서만 최근으로 업데이트하기
 */
-export interface IKeyword {
-	id: number
-	text: string
-}
 
 const Search = () => {
 	// header
@@ -30,7 +30,8 @@ const Search = () => {
 	// state
 	const [, setIsFocused] = useState(false)
 	const [input, setInput] = useState('')
-	const [recentKeywords, setRecentKeywords] = useState<IKeyword[]>([])
+	const [recentKeywords, setRecentKeywords] = useState<ISearchKeyword[]>([])
+	const [recentUsers, setRecentUsers] = useState<ISearchUser[]>([])
 
 	// 페이지가 로드될 때 로컬 스토리지에서 최근 검색 내용을 가져옴
 	useLayoutEffect(() => {
@@ -38,12 +39,18 @@ const Search = () => {
 		if (keywords) {
 			setRecentKeywords(JSON.parse(keywords))
 		}
+
+		const users = localStorage.getItem(RecentItemType.USER)
+		if (users) {
+			setRecentUsers([...JSON.parse(users), ...recentUsers])
+		}
 	}, [])
 
 	// 최근 검색 이력 state가 변할 때마다 로컬 스토리지에 업데이트
 	useEffect(() => {
 		if (recentKeywords.length) localStorage.setItem(RecentItemType.KEYWORD, JSON.stringify(recentKeywords))
-	}, [recentKeywords])
+		if (recentUsers.length) localStorage.setItem(RecentItemType.USER, JSON.stringify(recentUsers))
+	}, [recentKeywords, recentUsers])
 
 	// 검색어를 input에 담는 함수
 	const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,8 +66,31 @@ const Search = () => {
 		}
 	}
 
-	const handleDelete = (id: number) => {
-		setRecentKeywords(recentKeywords.filter((keyword) => keyword.id !== id))
+	const handleUpdateUsers = (userInfo: ISearchUser) => {
+		// 검색한 사용자는 userId를 로컬 스토리지에 담아두기
+		// userId로 사용자 정보 요청하는 api가 없을 경우..를 대비해 일단 몽땅 넣어두자.
+		alert(userInfo)
+		setRecentUsers([
+			{
+				id: userInfo.id,
+				profileImg: userInfo.profileImg,
+				userName: userInfo.userName,
+				level: userInfo.level,
+			},
+			...recentUsers,
+		])
+		// localStorage.setItem(RecentItemType.USER, JSON.stringify([...recentUsers, userInfo]))
+	}
+
+	const handleDelete = (type: RecentItemType, id: number) => {
+		switch (type) {
+			case RecentItemType.KEYWORD:
+				setRecentKeywords(recentKeywords.filter((keyword) => keyword.id !== id))
+				return
+			case RecentItemType.USER:
+				setRecentUsers(recentUsers.filter((user) => user.id !== id))
+				return
+		}
 	}
 
 	/*
@@ -81,7 +111,17 @@ const Search = () => {
 					handleEnter={handleEnter}
 				/>
 				<fieldset>
-					{input ? <SearchResult /> : <RecentSearch recentKeywords={recentKeywords} handleDelete={handleDelete} />}
+					{input ? (
+						<SearchResult userUpdate={handleUpdateUsers} />
+					) : (
+						<RecentSearch
+							setInput={setInput}
+							userUpdate={handleUpdateUsers}
+							recentKeywords={recentKeywords}
+							recentUsers={recentUsers}
+							handleDelete={handleDelete}
+						/>
+					)}
 				</fieldset>
 			</section>
 		</div>

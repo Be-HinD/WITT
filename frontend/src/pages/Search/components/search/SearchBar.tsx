@@ -1,13 +1,7 @@
 import { MdCancel } from 'react-icons/md'
 import { IoSearch } from 'react-icons/io5'
+import { searchProp } from '../../search-types'
 
-interface searchProp {
-	input: string | undefined
-	setInput: React.Dispatch<React.SetStateAction<string>>
-	setIsFocused: React.Dispatch<React.SetStateAction<boolean>>
-	handleInput: (event: React.ChangeEvent<HTMLInputElement>) => void
-	handleEnter: (event: React.KeyboardEvent<HTMLInputElement>) => void
-}
 const SearchBar = ({ input, setInput, setIsFocused, handleInput, handleEnter }: searchProp) => {
 	const handleCancel = () => {
 		setInput('')
