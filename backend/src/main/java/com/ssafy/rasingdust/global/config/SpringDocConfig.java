@@ -6,12 +6,19 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Dust Rasing API", version = "v1", description = "SSAFY 특화 프로젝트"), security = @SecurityRequirement(name = "Authorization"))
+@OpenAPIDefinition(
+    info = @Info(title = "Dust Rasing API", version = "v1", description = "SSAFY 특화 프로젝트"),
+    security = @SecurityRequirement(name = "Authorization"),
+    servers = {
+        @Server(url="https://j10d103.p.ssafy.io/api", description = "Default Server url")
+    }
+)
 @SecurityScheme(name = "Authorization",
     type = SecuritySchemeType.HTTP,
     scheme = "bearer",
