@@ -5,14 +5,13 @@ import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import HowToUse from './components/HowToUse'
 import axios from 'axios'
-import VConsole from 'vconsole'
+import Loading from './Loading'
 
 const Quiz = () => {
-	const vConsole = new VConsole() // 핸드폰에서 디버깅용
-	console.log(vConsole)
-
 	const [base64Image, setBase64Image] = useState<string | ArrayBuffer | null>(null)
-	const [capturedImage, setCapturedImage] = useState<File | undefined>(undefined)
+	const [capturedImage, setCapturedImage] = useState<File | undefined>()
+	const [isLoading, setIsLoading] = useState(false)
+	const [gptAnswer, setGptAnswer] = useState<number>(-1)
 
 	const handleCaptureImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const preview = e.target.files?.[0]
@@ -65,65 +64,75 @@ const Quiz = () => {
 		max_tokens: 300,
 	}
 
+	const navigate = useNavigate()
+
 	const handleAskGPT = () => {
+		setIsLoading(true)
 		axios
 			.post('https://api.openai.com/v1/chat/completions', payload, { headers })
 			.then((response) => {
 				console.log(response.data)
-				window.alert(response.data.choices[0].message.content)
+				const answer = response.data.choices[0].message.content
+				setGptAnswer(answer)
+				if (answer === '0') {
+					window.alert('쓰레기로 분류할 수 없습니다 (ex. 사람, 동물) 다시 촬영해주세요.')
+					window.location.reload()
+				}
 			})
 			.catch((error) => {
 				console.error('Error:', error)
-				window.alert(`${error.message}`)
 			})
 	}
 
-	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '퀴즈', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	return (
 		<div>
 			<Header menu={menu} func={func}></Header>
-			<div>
-				<div className="pt-20 flex flex-col items-center justify-center ">
+			{isLoading ? (
+				<Loading gptAnswer={gptAnswer} />
+			) : (
+				<div>
+					<div className="pt-20 flex flex-col items-center justify-center ">
+						{capturedImage ? (
+							<img src={URL.createObjectURL(capturedImage)} className="my-4" />
+						) : (
+							<div>
+								<HowToUse />
+							</div>
+						)}
+					</div>
 					{capturedImage ? (
-						<img src={URL.createObjectURL(capturedImage)} className="my-4" />
-					) : (
-						<div>
-							<HowToUse />
+						<div className="flex justify-center">
+							<label htmlFor="camera">
+								<div className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4 mr-3">
+									다시 찍기
+								</div>
+							</label>
+							<div
+								onClick={handleAskGPT}
+								className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4"
+							>
+								제출하고 퀴즈 풀기
+							</div>
 						</div>
-					)}
-				</div>
-				{capturedImage ? (
-					<div className="flex justify-center">
-						<label htmlFor="camera">
-							<div className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4 mr-3">
-								다시 찍기
+					) : (
+						<label htmlFor="camera" className="flex justify-center">
+							<div className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4 ">
+								사진 찍고 퀴즈 풀어보기
 							</div>
 						</label>
-						<div
-							onClick={handleAskGPT}
-							className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4"
-						>
-							제출하고 퀴즈 풀기
-						</div>
-					</div>
-				) : (
-					<label htmlFor="camera" className="flex justify-center">
-						<div className="text-white font-semibold text-lg bg-purple-800 rounded-full px-6 py-2 leading-9 hover:bg-purple-500 transition-colors mb-4 ">
-							사진 찍고 퀴즈 풀어보기
-						</div>
-					</label>
-				)}
-				<input
-					id="camera"
-					type="file"
-					accept="image/*"
-					capture="environment"
-					onChange={handleCaptureImage}
-					className="hidden"
-				/>
-			</div>
+					)}
+					<input
+						id="camera"
+						type="file"
+						accept="image/*"
+						capture="environment"
+						onChange={handleCaptureImage}
+						className="hidden"
+					/>
+				</div>
+			)}
 		</div>
 	)
 }

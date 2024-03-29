@@ -2,11 +2,9 @@ package com.ssafy.rasingdust.domain.notification.service;
 
 import static com.ssafy.rasingdust.domain.notification.dto.NotificationType.TEST_MSG;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
-import com.ssafy.rasingdust.domain.notification.repository.NotificationRepository;
-import com.ssafy.rasingdust.domain.notification.repository.SseRepositoryImpl;
+import com.ssafy.rasingdust.domain.notification.repository.SseRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,14 +23,12 @@ public class SseServiceImpl implements SseService {
     //    private final RedisOperations<String, NotificationDto> eventRedisOperations;
 //    private final RedisMessageListenerContainer redisMessageListenerContainer;
     final UserRepository userRepository;
-    private final SseRepositoryImpl sseRepositoryImpl;
-    private final NotificationRepository notificationRepository;
-    private final ObjectMapper objectMapper;
+    private final SseRepository sseRepository;
 
     @Override
     public SseEmitter subscribe(String userId, String lastEventId) {
         String emitterId = makeTimeIncludeId(userId);
-        SseEmitter emitter = sseRepositoryImpl.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
+        SseEmitter emitter = sseRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 
         // emitter의 상태를 체크함, 완료되었는지 타임아웃이 났는지
         checkEmitterStatus(emitter, emitterId);
@@ -43,9 +39,9 @@ public class SseServiceImpl implements SseService {
         sendSse(emitter, emitterId, emitterId, notificationDto);
 
         // 클라이언트가 미수신한 Event 전송
-//        if (hasLostData(lastEventId)) {
-//            sendLostData(lastEventId, email, emitterId, emitter);
-//        }
+        if (hasLostData(lastEventId)) {
+            sendLostData(lastEventId, userId, emitterId, emitter);
+        }
 
         return emitter;
     }
@@ -62,15 +58,16 @@ public class SseServiceImpl implements SseService {
     public void send(NotificationDto notificationDto) {
 
         // 로그인 한 유저의 SseEmitter 모두 가져오기
-        Map<String, SseEmitter> sseEmitters = sseRepositoryImpl.findAllEmitterStartWithByUserId(
+        Map<String, SseEmitter> sseEmitters = sseRepository.findAllEmitterStartWithByUserId(
             String.valueOf(notificationDto.getReceiverId()));
 
         sseEmitters.forEach(
             (key, emitter) -> {
                 // 데이터 캐시 저장(유실된 데이터 처리하기 위함)
-                //sseRepositoryImpl.saveEventCache(key, notificationDto);
+                sseRepository.saveEventCache(key, notificationDto);
                 // 데이터 전송
-                sendSse(emitter, key, key, notificationDto);
+                sendSse(emitter, makeTimeIncludeId(String.valueOf(notificationDto.getReceiverId())),
+                    key, notificationDto);
             }
         );
     }
@@ -82,28 +79,28 @@ public class SseServiceImpl implements SseService {
 //        eventRedisOperations.convertAndSend(getTopicName(NotificationDto.getUserId()),
 //            NotificationDto);
 //    }
-//    private void sendLostData(String lastEventId, String userId, String emitterId,
-//        SseEmitter emitter) {
-//
-//        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByUserEmail(
-//            String.valueOf(email));
-//        eventCaches.entrySet().stream()
-//            .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-//            .forEach(
-//                entry -> sendNotification(emitter, entry.getKey(), emitterId, entry.getValue()));
-//    }
+    private void sendLostData(String lastEventId, String userId, String emitterId,
+        SseEmitter emitter) {
+
+        Map<String, NotificationDto> eventCaches = sseRepository.findAllEventCacheStartWithByUserId(
+            userId);
+        eventCaches.entrySet().stream()
+            .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
+            .forEach(
+                entry -> sendSse(emitter, entry.getKey(), emitterId, entry.getValue()));
+    }
 
     //종료 상태
     private void checkEmitterStatus(SseEmitter emitter, String emitterId) {
         emitter.onCompletion(() -> {
-            sseRepositoryImpl.deleteById(emitterId);
+            sseRepository.deleteById(emitterId);
             //redisMessageListenerContainer.removeMessageListener(messageListener);
         });
         emitter.onTimeout(() -> {
-            sseRepositoryImpl.deleteById(emitterId);
+            sseRepository.deleteById(emitterId);
             //redisMessageListenerContainer.removeMessageListener(messageListener);
         });
-        emitter.onError((e) -> sseRepositoryImpl.deleteById(emitterId));
+        emitter.onError((e) -> sseRepository.deleteById(emitterId));
     }
 
     private void sendSse(SseEmitter emitter, String eventId, String emitterId,
@@ -115,7 +112,7 @@ public class SseServiceImpl implements SseService {
                 .name(dto.getEvent())
                 .data(dto));
         } catch (IOException exception) {
-            sseRepositoryImpl.deleteById(emitterId);
+            sseRepository.deleteById(emitterId);
             emitter.completeWithError(exception);
         }
     }

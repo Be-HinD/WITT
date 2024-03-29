@@ -4,10 +4,8 @@ import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
-import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.User;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
@@ -24,9 +22,9 @@ public interface UserService {
 
     public void unFollowUser(Long toId, Long fromId);
 
-    public List<UserDto> getFollowingList(Long myId, Long userId);
+    public SliceResponse getFollowingList(Long myId, Long userId, Pageable pageable);
 
-    public List<UserDto> getFollowerList(Long myId, Long userId);
+    public SliceResponse getFollowerList(Long myId, Long userId, Pageable pagealbe);
 
     public FeedCharacterResponse feedCharacter(Long userId);
 

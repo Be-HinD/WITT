@@ -16,14 +16,11 @@ import com.ssafy.rasingdust.domain.user.repository.FollowRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
-import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public SliceResponse findByuserNameStartsWith(Long userId, String userName, Pageable pageable) {
 
         //현재 로그인한 유저의 팔로잉 리스트 조회
-        List<User> currentUserFollowingList = followRepository.findByFollowing(userId);
+        List<User> currentUserFollowingList = followRepository.findByFollowings(userId);
 
         //condition == 현재 유저의 팔로잉 리스트
         List<Long> condition = new ArrayList<>();
@@ -148,7 +145,7 @@ public class UserServiceImpl implements UserService {
      * 내 팔로우 목록을 조회할 경우 맞팔 Status를 체크할 필요 없음. 다른 사람의 팔로우 목록을 조회할 경우 맞팔 Status 체크 로직 추가
      **/
     @Override
-    public List<UserDto> getFollowingList(Long myId, Long userId) {
+    public SliceResponse getFollowingList(Long myId, Long userId, Pageable pageable) {
 
         Optional<User> user = userRepository.findById(userId);
 
@@ -160,36 +157,32 @@ public class UserServiceImpl implements UserService {
         }
 
         //해당 유저의 팔로잉리스트를 조회
-        List<User> followingList = followRepository.findByFollowing(user.get().getId());
+        Slice<UserDto> result = followRepository.findByFollowing(user.get().getId(), pageable);
+
 
         /**다른 유저의 팔로잉 리스트를 조회할 경우
          * 다른 유저의 팔로워들이 현재 유저를 팔로우하고 있는지 체크
          * 다른 유저가 팔로우하고 있는 사람이 현재 로그인한 유저도 팔로우 하고있다면 true값 세팅
          * */
         if (!userId.equals(myId)) {
-            List<User> currentUserFollowList = followRepository.findByFollowing(
-                myId);   //로그인한 유저의 팔로우 리스트
+            //로그인한 유저의 팔로우 리스트
+            List<UserDto> currentUserFollowList = followRepository.findByFollowing(myId);
 
-            followingList.remove(currentUser.get());    //현재 로그인한 유저가 포함될 경우 제거
 
-            for (User follow : followingList) {
+            for (UserDto follow : result) {
                 if (currentUserFollowList.contains(follow)) {
                     follow.setFollow(true);
                 }
             }
         }
 
-        ModelMapper modelMapper = new ModelMapper();
+        SliceResponse response = new SliceResponse(result);
 
-        List<UserDto> resultDto = followingList.stream()
-            .map(data -> modelMapper.map(data, UserDto.class))
-            .collect(Collectors.toList());
-
-        return resultDto;
+        return response;
     }
 
     @Override
-    public List<UserDto> getFollowerList(Long myId, Long userId) {
+    public SliceResponse getFollowerList(Long myId, Long userId, Pageable pageable) {
 
         Optional<User> user = userRepository.findById(userId);
 
@@ -201,32 +194,26 @@ public class UserServiceImpl implements UserService {
         }
 
         //해당 유저의 팔로워리스트를 조회
-        List<User> followerList = followRepository.findByFollower(user.get().getId());
+        Slice<UserDto> result = followRepository.findByFollower(user.get().getId(), pageable);
 
         /**다른 유저의 팔로워 리스트를 조회할 경우
          * 다른 유저의 팔로워들이 현재 로그인한 유저가 팔로우 하고있는지 체크
          * 팔로잉 리스트 조회 비즈니스 로직과 동일
          * */
         if (!userId.equals(myId)) {
-            List<User> currentUserFollowingList = followRepository.findByFollowing(
-                myId);   //로그인한 유저의 팔로우 리스트
+            List<UserDto> currentUserFollowingList = followRepository.findByFollowing(myId);   //로그인한 유저의 팔로우 리스트
 
-            followerList.remove(currentUser.get());     //현재 로그인한 유저가 포함될 경우 제거
 
-            for (User follow : followerList) {
+            for (UserDto follow : result.getContent()) {
                 if (currentUserFollowingList.contains(follow)) {
                     follow.setFollow(true);
                 }
             }
         }
 
-        ModelMapper modelMapper = new ModelMapper();
+        SliceResponse response = new SliceResponse(result);
 
-        List<UserDto> resultDto = followerList.stream()
-            .map(data -> modelMapper.map(data, UserDto.class))
-            .collect(Collectors.toList());
-
-        return resultDto;
+        return response;
     }
 
     @Override
@@ -311,18 +298,4 @@ public class UserServiceImpl implements UserService {
         notificationService.saveNotice(KOCK_ACTION, Long.valueOf(userId), id);
     }
 
-    /**
-     * Test를 위한 초기화
-     **/
-    @PostConstruct
-    void init() {
-        for (int i = 0; i < 10; i++) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Dummy").append(i);
-            userRepository.save(User.builder()
-                .userName(String.valueOf(sb))
-                .build()
-            );
-        }
-    }
 }
