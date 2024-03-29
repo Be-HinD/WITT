@@ -20,4 +20,5 @@ public class SliceResponse<T> {
         this.first = sliceContent.isFirst();
         this.last = sliceContent.isLast();
     }
+
 }
