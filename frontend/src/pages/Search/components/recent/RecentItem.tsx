@@ -2,15 +2,12 @@ import { IoSearch } from 'react-icons/io5'
 import { RecentItemType, SearchItemProp } from '../../search-types'
 import { useRouter } from '../../../../hooks/useRouter'
 
-const RecentItem = ({ setInput, userUpdate, type, keyword, userInfo }: SearchItemProp) => {
+const RecentItem = ({ userUpdate, type, keyword, userInfo }: SearchItemProp) => {
 	const { routeTo } = useRouter()
 	const handleClick = () => {
+		userUpdate!(type, userInfo, keyword)
 		if (type === RecentItemType.USER && userInfo) {
 			// routeTo(`user/${userInfo?.id}`)
-			userUpdate!(userInfo)
-		}
-		if (type === RecentItemType.KEYWORD && keyword && setInput) {
-			setInput(keyword.text)
 		}
 	}
 

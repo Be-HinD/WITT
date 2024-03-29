@@ -12,13 +12,9 @@ import { ISearchKeyword, ISearchUser, RecentItemType } from './search-types'
   해야할 것들
   (+) 1. x 누르면 로컬스토리지에서 검색 기록 삭제
   (+) 2. SearchBar 상단 고정
-  (-) 3. RecentSearch에 User Type 검색 결과도 prop 전달
-  (-) 4. 같은 방식으로 User Type에 대한 검색 기록 local Storage에서 관리
+  (+) 3. 최근 검색 기록에서 클릭하면 기존 기록 데이터를 상단으로 끌어올리기
+  (+) 4. 같은 방식으로 User Type에 대한 검색 기록 local Storage에서 관리
 	(-) 5. 유저 검색 결과 스켈레톤 컴포넌트 작성
-
-	최근 검색 결과 - 유저 버전
-	검색 결과에서 SearchItem을 클릭하면 로컬스토리지 USER 에 add
-	이미 있으면 순서만 최근으로 업데이트하기
 */
 
 const Search = () => {
@@ -66,20 +62,27 @@ const Search = () => {
 		}
 	}
 
-	const handleUpdateUsers = (userInfo: ISearchUser) => {
-		// 검색한 사용자는 userId를 로컬 스토리지에 담아두기
-		// userId로 사용자 정보 요청하는 api가 없을 경우..를 대비해 일단 몽땅 넣어두자.
-		alert(userInfo)
-		setRecentUsers([
-			{
-				id: userInfo.id,
-				profileImg: userInfo.profileImg,
-				userName: userInfo.userName,
-				level: userInfo.level,
-			},
-			...recentUsers,
-		])
-		// localStorage.setItem(RecentItemType.USER, JSON.stringify([...recentUsers, userInfo]))
+	const handleHistroyUpdate = (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => {
+		switch (type) {
+			case RecentItemType.KEYWORD:
+				if(keyword) {
+					setRecentKeywords([{ id: keyword.id, text: keyword.text }, ...recentKeywords.filter((k) => k.id != keyword.id)])
+					setInput(keyword.text)
+				}
+				return
+			case RecentItemType.USER:
+				userInfo &&
+					setRecentUsers([
+						{
+							id: userInfo.id,
+							profileImg: userInfo.profileImg,
+							userName: userInfo.userName,
+							level: userInfo.level,
+						},
+						...recentUsers.filter((user) => user.id != userInfo.id),
+					])
+				return
+		}
 	}
 
 	const handleDelete = (type: RecentItemType, id: number) => {
@@ -112,11 +115,10 @@ const Search = () => {
 				/>
 				<fieldset>
 					{input ? (
-						<SearchResult userUpdate={handleUpdateUsers} />
+						<SearchResult userUpdate={handleHistroyUpdate} />
 					) : (
 						<RecentSearch
-							setInput={setInput}
-							userUpdate={handleUpdateUsers}
+							userUpdate={handleHistroyUpdate}
 							recentKeywords={recentKeywords}
 							recentUsers={recentUsers}
 							handleDelete={handleDelete}

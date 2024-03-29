@@ -7,7 +7,7 @@ import { RecentItemType, RecentSearchProp } from '../../search-types'
   localStorage에 각각 저장해두고 검색어와 유저 각 순서대로 표시하기
 */
 
-const RecentSearch = ({ setInput, userUpdate, recentKeywords, recentUsers, handleDelete }: RecentSearchProp) => {
+const RecentSearch = ({userUpdate, recentKeywords, recentUsers, handleDelete }: RecentSearchProp) => {
 	return (
 		<div className="flex flex-col pt-12">
 			<h3 className="text-base">최근 검색</h3>
@@ -21,7 +21,6 @@ const RecentSearch = ({ setInput, userUpdate, recentKeywords, recentUsers, handl
 						{recentKeywords.map((keyword) => (
 							<li key={keyword.id} className="flex items-center gap-3 justify-between py-2">
 								<RecentItem
-									setInput={setInput}
 									type={RecentItemType.KEYWORD}
 									userUpdate={userUpdate}
 									keyword={keyword}
@@ -39,7 +38,6 @@ const RecentSearch = ({ setInput, userUpdate, recentKeywords, recentUsers, handl
 						{recentUsers.map((user, index) => (
 								<li key={`${user.profileImg}${index}`} className="flex items-center gap-3 justify-between py-2">
 								<RecentItem
-									setInput={setInput}
 									type={RecentItemType.USER}
 									userUpdate={userUpdate}
 									userInfo={user}

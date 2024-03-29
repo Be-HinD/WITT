@@ -9,9 +9,9 @@ export interface ISearchKeyword {
 }
 
 export interface ISearchUser {
-	id: number,
-	profileImg: string,
-	userName: string,
+	id: number
+	profileImg: string
+	userName: string
 	level: string
 }
 
@@ -20,17 +20,15 @@ export interface UserInfoProp {
 }
 
 export interface SearchItemProp {
-	setInput?: React.Dispatch<React.SetStateAction<string>>
 	type: RecentItemType
-	userUpdate?: (userInfo: ISearchUser) => void
+	userUpdate?: (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => void
 	keyword?: ISearchKeyword
 	profileImg?: string
 	userInfo?: ISearchUser
 }
 
 export interface RecentSearchProp {
-	setInput: React.Dispatch<React.SetStateAction<string>>
-	userUpdate: (userInfo: ISearchUser) => void
+	userUpdate: (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => void
 	recentKeywords: ISearchKeyword[]
 	recentUsers: ISearchUser[]
 	handleDelete: (type: RecentItemType, id: number) => void
@@ -45,5 +43,5 @@ export interface searchProp {
 }
 
 export interface SearchResultProp {
-	userUpdate: (userInfo: ISearchUser) => void
+	userUpdate: (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => void
 }
