@@ -33,6 +33,12 @@ spring:
     sql:
         init:
             mode: always
+    # JPA 페이징 Defalut값 설정
+    data:
+        web:
+            pageable:
+                default-page-size: 20
+                one-indexed-parameters: true
 
 
 springdoc:

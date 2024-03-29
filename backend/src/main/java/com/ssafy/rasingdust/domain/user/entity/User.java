@@ -1,6 +1,5 @@
 package com.ssafy.rasingdust.domain.user.entity;
 
-import com.ssafy.rasingdust.domain.alarm.entity.Alarm;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import jakarta.persistence.*;
@@ -21,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "member")
 public class User implements UserDetails {
 
     @Id
@@ -30,9 +30,6 @@ public class User implements UserDetails {
 
     @Column(name = "user_name", unique = true)
     private String userName;
-
-
-
 
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
