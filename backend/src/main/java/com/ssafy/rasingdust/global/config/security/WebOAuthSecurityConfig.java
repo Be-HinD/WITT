@@ -92,7 +92,7 @@ public class WebOAuthSecurityConfig {
     }
 
 
-    // cors 모든 접근 허용
+    // cors 설정, Credential true 시 Origin url(client url)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
