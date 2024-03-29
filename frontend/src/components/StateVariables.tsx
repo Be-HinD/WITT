@@ -1,4 +1,21 @@
 import { create } from 'zustand'
+import dust from '../pages/Home/assets/dust.png'
+import bud from '../pages/Home/assets/bud.png'
+import flower from '../pages/Home/assets/flower.png'
+import tree from '../pages/Home/assets/tree.png'
+import mountain from '../pages/Home/assets/mountain.png'
+import earth from '../pages/Home/assets/earth.png'
+import baobabtree from '../pages/Home/assets/baobab_tree.png'
+import thelittleprince from '../pages/Home/assets/the_little_prince.png'
+
+export interface data {
+	id: number
+	userName: string
+	solvedCnt: number
+	growthPoint: number
+	rank: number
+	bottle: number
+}
 
 export interface IMainState {
 	isLogin: boolean
@@ -8,27 +25,34 @@ export interface IMainState {
 }
 
 export interface IUserState {
+	characters: string[]
+	levels: string[]
+	character: number
+	mydata: data
 	newNotice: string
 	notices: JSON[]
-	isNewNotice: boolean
+	setCharacter: (result: number) => void
 	setNotices: (result: JSON[]) => void
 	setNewNotice: (result: string) => void
-	setIsNewNotice: () => void
 }
 
 export const mainstate = create<IMainState>()((set) => ({
 	isLogin: true,
-	token:
-		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTYxMzg1NCwiZXhwIjoxNzEyODIzNDU0LCJzdWIiOiIxMSIsImlkIjoxMX0.ej3iNoru8MPtwQA80EHYlBs6v6Y5ShIrvluVdylbOzA',
+	token: '',
 	setToken: (result: string) => set({ token: result }),
 	setIsLogin: (result: boolean) => set({ isLogin: result }),
 }))
 
 export const userstate = create<IUserState>()((set) => ({
+	characters: [dust, bud, flower, tree, mountain, earth, baobabtree, thelittleprince],
+	levels: ['먼지', '새싹', '꽃', '나무', '산', '지구', '바오밥나무', '어린왕자'],
+	character: 0,
+	mydata: localStorage.getItem('mydata')
+		? JSON.parse(localStorage.getItem('mydata') as string)
+		: { id: -1, userName: 'guest', bottle: 0, growthPoint: 0, solvedCnt: 0, rank: 0 },
 	newNotice: '',
 	notices: [],
-	isNewNotice: false,
+	setCharacter: (result: number) => set({ character: result }),
 	setNotices: (result: JSON[]) => result.map((value) => set((state) => ({ notices: [...state.notices, value] }))),
 	setNewNotice: (result: string) => set({ newNotice: result }),
-	setIsNewNotice: () => set((state) => ({ isNewNotice: state.newNotice !== '' })),
 }))

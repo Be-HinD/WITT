@@ -1,11 +1,9 @@
 import UserProfile from './UserProfile'
 import ActionBar from './ActionBar'
-import character from '../assets/tree.png'
 import background from '../assets/background_main.gif'
 import { useEffect, useState } from 'react'
 import { mainstate, userstate } from '../../../components/StateVariables'
-import { getToken } from './API'
-import axios from 'axios'
+import { getUserData } from './API'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -53,15 +51,16 @@ const Main = () => {
 	// const setNotices = userstate((state) => state.setNotices)
 	const newNotice = userstate((state) => state.newNotice)
 	const setNewNotice = userstate((state) => state.setNewNotice)
-	const isNewNotice = userstate((state) => state.isNewNotice)
-	const setIsNewNotice = userstate((state) => state.setIsNewNotice)
 
 	const token = mainstate((state) => state.token)
+	const setToken = mainstate((state) => state.setToken)
+	const characters = userstate((state) => state.characters)
+	const character = userstate((state) => state.character)
+	const mydata = userstate((state) => state.mydata)
+	const levels = userstate((state) => state.levels)
 
 	const notify = () => {
-		setIsNewNotice()
-		console.log(isNewNotice)
-		if (isNewNotice) {
+		if (newNotice !== '') {
 			setTimeout(() => {
 				setNoticeEffect({ ...noticeEffect, transform: 'scaleX(1)', transition: 'all 0.2s ease-out' })
 			}, 500)
@@ -73,21 +72,21 @@ const Main = () => {
 
 	const getMyStatus = (state: string) => {
 		setNewNotice(`현재 캐릭터의 레벨은 ${state}입니다. 물을 주어 캐릭터를 성장시키세요!`)
-		// if (isNewNotice) {
-		// 	notices?.map(() => {})
-		// }
 		notify()
 	}
 
 	const getData = async () => {
-		console.log(token)
-		try {
-			const accessToken = await getToken(token)
-			console.log(accessToken)
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				console.log(error.response)
-			}
+		// const cookies = new Cookies()
+		// const refreshToken = cookies.get('refresh_token')
+		// const accessToken = await getToken(refreshToken)
+		const accessToken = new URL(location.href).searchParams.get('token')
+		// console.log(accessToken)
+		setToken(accessToken!)
+		if (token !== '') {
+			localStorage.setItem('token', token)
+			const result = await getUserData(token)
+			localStorage.setItem('mydata', JSON.stringify(result.data))
+			console.log(mydata)
 		}
 	}
 	useEffect(() => {
@@ -106,17 +105,17 @@ const Main = () => {
 				style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}
 				className={mainStyleClass}
 			>
-				<UserProfile />
+				{UserProfile(mydata)}
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img
 						style={{ filter: 'brightness(1.3)', cursor: 'pointer' }}
-						src={character}
+						src={characters[character]}
 						onClick={() => {
-							getMyStatus(`${'나무'}`)
+							getMyStatus(`${levels[~~(mydata.growthPoint / 10)]}`)
 						}}
 					/>
 				</div>
-				<ActionBar />
+				{ActionBar(mydata)}
 			</div>
 		</>
 	)

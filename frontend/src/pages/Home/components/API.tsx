@@ -1,17 +1,31 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 
 export const getToken = async (token: string) => {
 	const url = '/api/token'
-	const config = {
-		headers: { 'Content-Type': 'application/json' },
-	} as AxiosRequestConfig
 	const body = { refreshToken: token }
+	console.log(body)
 	return await axios
-		.post(url, body, config)
+		.post(url, body)
+		.then((response) => {
+			return response.data
+		})
+		.catch((e) => {
+			console.error(e)
+			return ''
+		})
+}
+
+export const getUserData = async (accesstoken: string) => {
+	const url = '/api/user'
+	const config = {
+		headers: {
+			Authorization: `Bearer ${accesstoken}`,
+		},
+	}
+	return await axios
+		.get(url, config)
 		.then((response) => {
 			return response.data
 		})
 		.catch((e) => console.error(e))
 }
-
-export const getUserName = async () => {}

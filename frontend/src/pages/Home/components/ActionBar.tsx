@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import heart from '../assets/love.svg'
 import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'
+import { data } from '../../../components/StateVariables'
 
 const PlusEffectClass = `
 absolute 
@@ -34,7 +35,7 @@ hover:scale-110
 
 const actionbuttonStyleClass = 'text-[#ffffff] text-xs font-black'
 
-const ActionBar = () => {
+const ActionBar = (mydata: data) => {
 	const navigate = useNavigate()
 
 	return (
@@ -59,7 +60,7 @@ const ActionBar = () => {
 				>
 					<div className={PlusEffectClass}></div>
 					<img src={water} />
-					<div className={actionbuttonStyleClass}>물 주기{`(${4})`}</div>
+					<div className={actionbuttonStyleClass}>물 주기{`(${mydata.bottle})`}</div>
 				</div>
 			</div>
 			<div>

@@ -8,7 +8,10 @@ export default defineConfig({
 		proxy: {
 			'/api': {
 				target: 'http://localhost:8081/api',
+				// target: 'https://j10d103.p.ssafy.io/api',
 				changeOrigin: true,
+				secure: false,
+				ws: true,
 				rewrite: (path) => path.replace(/^\/api/, ''),
 			},
 		},
