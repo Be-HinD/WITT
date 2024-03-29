@@ -1,10 +1,10 @@
 import { ISearchUser } from "../../Search/search-types"
 
-interface IUser extends ISearchUser {
-	isFollow: boolean
-}
+// interface IUser extends ISearchUser {
+// 	isFollow: boolean
+// }
 interface FollowProp {
-	user: IUser
+	user: ISearchUser
 }
 
 const FollowUser = ({user}: FollowProp) => {
