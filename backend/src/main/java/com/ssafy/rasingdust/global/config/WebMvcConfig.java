@@ -11,19 +11,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry
-            .addMapping("/**")
-//                .allowedOrigins("http://192.168.0.29:3000")
-            .allowedOriginPatterns("*")
-//                .allowedOrigins("http://localhost:5173", "http://localhost:5174")
+        registry.addMapping("/**")
+            .allowedOrigins("http://localhost:5173", "http://localhost:5174", "https://j10d103.p.ssafy.io")
             .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
                 HttpMethod.PATCH.name())
-            .allowedHeaders("Authorization")
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
+            .allowedHeaders("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers")
             .allowCredentials(true)
             .exposedHeaders("Authorization")
-            .maxAge(1800); // Pre-flight Caching
+            .maxAge(3600); // Pre-flight Caching
     }
-
 }
