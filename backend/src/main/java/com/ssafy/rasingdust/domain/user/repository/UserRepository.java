@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     @Query(value = "SELECT u.userName FROM Follow f INNER JOIN User u ON f.follower.id = u.id WHERE f.following.id = :userId AND f.follower.id IN(:condition) ORDER BY u.userName LIMIT 1")
     String findByCondition(@Param("condition") List<Long> condition, @Param("userId") Long userId);
+
 }
