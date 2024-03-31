@@ -37,8 +37,8 @@ export interface IUserState {
 }
 
 export const mainstate = create<IMainState>()((set) => ({
-	isLogin: false,
-	token: '',
+	isLogin: true,
+	token: localStorage.getItem('token') ? localStorage.getItem('token')! : '',
 	setToken: (result: string) => set({ token: result }),
 	setIsLogin: (result: boolean) => set({ isLogin: result }),
 }))

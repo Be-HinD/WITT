@@ -3,7 +3,6 @@ import axios from 'axios'
 export const getToken = async (token: string) => {
 	const url = '/api/token'
 	const body = { refreshToken: token }
-	console.log(body)
 	return await axios
 		.post(url, body)
 		.then((response) => {
@@ -27,5 +26,8 @@ export const getUserData = async (accesstoken: string) => {
 		.then((response) => {
 			return response.data
 		})
-		.catch((e) => console.error(e))
+		.catch((e) => {
+			console.error(e)
+			return {}
+		})
 }
