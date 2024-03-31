@@ -45,19 +45,19 @@ const noticeStyleClass = {
 // `
 
 const Main = () => {
-	const [noticeEffect, setNoticeEffect] = useState(noticeStyleClass)
-
 	// const notices = userstate((state) => state.notices)
 	// const setNotices = userstate((state) => state.setNotices)
 	const newNotice = userstate((state) => state.newNotice)
 	const setNewNotice = userstate((state) => state.setNewNotice)
-
+	
 	const token = mainstate((state) => state.token)
-	const setToken = mainstate((state) => state.setToken)
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
 	const mydata = userstate((state) => state.mydata)
 	const levels = userstate((state) => state.levels)
+	
+	const [noticeEffect, setNoticeEffect] = useState(noticeStyleClass)
+	const [userdata, setUserData] = useState(mydata)
 
 	const notify = () => {
 		if (newNotice !== '') {
@@ -76,17 +76,11 @@ const Main = () => {
 	}
 
 	const getData = async () => {
-		// const cookies = new Cookies()
-		// const refreshToken = cookies.get('refresh_token')
-		// const accessToken = await getToken(refreshToken)
-		const accessToken = new URL(location.href).searchParams.get('token')
-		// console.log(accessToken)
-		setToken(accessToken!)
 		if (token !== '') {
-			localStorage.setItem('token', token)
 			const result = await getUserData(token)
+			setUserData(result.data)
 			localStorage.setItem('mydata', JSON.stringify(result.data))
-			console.log(mydata)
+			
 		}
 	}
 	useEffect(() => {
@@ -105,7 +99,7 @@ const Main = () => {
 				style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}
 				className={mainStyleClass}
 			>
-				{UserProfile(mydata)}
+				{UserProfile(userdata)}
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img
 						style={{ filter: 'brightness(1.3)', cursor: 'pointer' }}
@@ -115,7 +109,7 @@ const Main = () => {
 						}}
 					/>
 				</div>
-				{ActionBar(mydata)}
+				{ActionBar(userdata)}
 			</div>
 		</>
 	)
