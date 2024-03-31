@@ -80,7 +80,6 @@ const Main = () => {
 			const result = await getUserData(token)
 			setUserData(result.data)
 			localStorage.setItem('mydata', JSON.stringify(result.data))
-			
 		}
 	}
 	useEffect(() => {

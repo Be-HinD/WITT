@@ -2,32 +2,27 @@ import { useEffect } from 'react'
 import { mainstate } from '../../components/StateVariables'
 import Main from './components/Main'
 import Splash from './components/Splash'
-import { Cookies } from 'react-cookie'
-import { getToken } from './components/API'
+import { getUserData } from './components/API'
 
 const Home = () => {
-	const cookie = new Cookies()
-	const token = cookie.get('refresh_token')
+	const token = mainstate((state) => state.token)
 	const { isLogin, setIsLogin } = mainstate((state) => ({
 		isLogin: state.isLogin,
 		setIsLogin: state.setIsLogin
 	}))
-	
 
-	const accessToken = async (token: string) => {
-		const result = await getToken(token)
-		return result.accessToken
+	const getData = async () => {
+		if (token !== '') {
+			const result = await getUserData(token!)
+			localStorage.setItem('mydata', JSON.stringify(result.data))
+		}
 	}
 
 	useEffect(() => {
 		if (token) {
-			const userToken = accessToken('token')
-			userToken.then(async (value) => {
-			localStorage.setItem('token', value)
-			setIsLogin(true)
-		})
+			getData().then(() => setIsLogin(true))
 		}
-	}, [])
+	}, [token])
 
 	return <div>{isLogin ? <Main /> : <Splash />}</div>
 }
