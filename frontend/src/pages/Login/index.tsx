@@ -12,17 +12,16 @@ const Login = () => {
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	const setIsLogin = mainstate((state) => state.setIsLogin)
 	const cookie = new Cookies()
-	const token = cookie.get('refresh_token')
 
 	useEffect(() => {
 		// const url = 'http://localhost:8081/api/oauth2/authorization/kakao'
 		const url = 'https://j10d103.p.ssafy.io/api/oauth2/authorization/kakao'
 		location.href = url
-		if (token) {
+		if (cookie.get('refresh_token') != '') {
 			navigate('/')
 			setIsLogin(true)
 		}
-	}, [token])
+	}, [])
 
 	return (
 		<div className=" max-w-screen-sm">
