@@ -19,7 +19,11 @@ const UserProfile = (mydata: data) => {
 
 	return (
 		<div className={profileStyleClass}>
-			<img width={48} src={avatar} />
+			<img
+				width={60}
+				style={{ borderRadius: '1000px', aspectRatio: '1/1' }}
+				src={mydata.profileImg ? mydata.profileImg : avatar}
+			/>
 			<div className={userinfoStyleClass}>
 				<div className="flex my-[5px] cursor-pointer">
 					<span className={levelStyleClass}>{`${levels[~~(mydata.growthPoint / 10)]}`}</span>

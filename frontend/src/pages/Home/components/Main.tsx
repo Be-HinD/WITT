@@ -90,7 +90,10 @@ const Main = () => {
 
 	useEffect(() => {
 		getData()
-	}, [])
+		if (localStorage.getItem('mydata')) {
+			setUserData(JSON.parse(localStorage.getItem('mydata')!))
+		}
+	}, [mydata])
 
 	return (
 		<>
