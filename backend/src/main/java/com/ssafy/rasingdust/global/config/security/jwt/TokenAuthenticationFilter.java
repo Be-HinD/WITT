@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
+@Slf4j
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
@@ -29,6 +30,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader(
             HEADER_AUTHORIZATION);    // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         String token = getAccessToken(authorizationHeader);
+
+        log.info("요청 Token = " + token);
 
         // 토큰 유효성 검사
         if (tokenProvider.isValidToken(token)) {
