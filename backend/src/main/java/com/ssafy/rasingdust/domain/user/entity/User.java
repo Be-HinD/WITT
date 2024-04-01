@@ -31,6 +31,10 @@ public class User implements UserDetails {
     @Column(name = "user_name", unique = true)
     private String userName;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String profileImg;
+
     @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();
 
@@ -47,8 +51,9 @@ public class User implements UserDetails {
     private boolean isFollow;
 
     @Builder
-    public User(String userName) {
+    public User(String userName, String profileImg) {
         this.userName = userName;
+        this.profileImg = profileImg;
     }
 
 
