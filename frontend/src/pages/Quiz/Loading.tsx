@@ -40,7 +40,7 @@ const Loading = ({ gptAnswer, capturedImage }: { gptAnswer: number; capturedImag
 	useEffect(() => {
 		setImage(capturedImage)
 		generateQuiz(gptAnswer)
-	}, [gptAnswer])
+	})
 
 	return (
 		<div className="pt-20">
