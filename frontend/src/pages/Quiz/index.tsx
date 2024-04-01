@@ -12,7 +12,6 @@ const Quiz = () => {
 	const [capturedImage, setCapturedImage] = useState<File | undefined>()
 	const [isLoading, setIsLoading] = useState(false)
 	const [gptAnswer, setGptAnswer] = useState<number>(-1)
-
 	const handleCaptureImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const preview = e.target.files?.[0]
 		setCapturedImage(preview)
@@ -75,7 +74,7 @@ const Quiz = () => {
 				const answer = response.data.choices[0].message.content
 				setGptAnswer(answer)
 				if (answer === '0') {
-					window.alert('쓰레기로 분류할 수 없습니다 (ex. 사람, 동물) 다시 촬영해주세요.')
+					window.alert('쓰레기로 분류할 수 없습니다. 다시 촬영해주세요.')
 					window.location.reload()
 				}
 			})
@@ -89,8 +88,8 @@ const Quiz = () => {
 	return (
 		<div>
 			<Header menu={menu} func={func}></Header>
-			{isLoading ? (
-				<Loading gptAnswer={gptAnswer} />
+			{isLoading && capturedImage ? (
+				<Loading gptAnswer={gptAnswer} capturedImage={capturedImage} />
 			) : (
 				<div>
 					<div className="pt-20 flex flex-col items-center justify-center ">

@@ -1,25 +1,54 @@
-interface Iprops {
-	trashType: string
-	bagType: string
-	days: string[]
-	time: {
-		from: number
-		to: number
+import { useNavigate } from 'react-router-dom'
+import { useQuizStore } from '../store'
+import Header from '../../../components/Header'
+import { IMenu, IMenuFunc } from '../../../components/interfaces'
+import { icons } from '../../../constants/header-icons'
+
+const DetailedInst = () => {
+	const menu: IMenu = { left: icons.BACK, center: '퀴즈', right: undefined }
+	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
+	const wasteData = [
+		{ name: '음식물쓰레기', container: '음식물쓰레기 수거함', days: '화, 목, 일' },
+		{
+			name: '일반쓰레기',
+			container: '종량제 봉투',
+			days: '월~금',
+		},
+		{
+			name: '재활용쓰레기',
+			container: '투명한 비닐',
+			days: '월~금',
+		},
+	]
+	const { answerType, image } = useQuizStore()
+	const navigate = useNavigate()
+	const handleMoreQuiz = () => {
+		navigate('/quiz')
 	}
-	place: string
-}
-const DetailedInst = (props: Iprops) => {
 	return (
-		<div>
-			<p>이 물건은 {props.trashType}로 배출해요.</p>
-
-			<p>
-				{props.trashType}는 {props.bagType} 봉투에 넣어서 {...props.days} 요일
-				{props.time.from}시에서 {props.time.to}시 사이에
-				{props.place}에 배출해요.
-			</p>
-
-			<button>퀴즈 더 풀기</button>
+		<div className="text-white">
+			<Header menu={menu} func={func}></Header>
+			<div className="pt-16 flex flex-col items-center">
+				{image && <img src={URL.createObjectURL(image)} alt="" />}
+				<div className="text-lg bg-stone-800 mx-6 p-8 rounded-xl my-5">
+					<div className="mb-7">
+						이 물건은 <span className="font-semibold">{wasteData[answerType].name}</span>로 배출해요.
+					</div>
+					<div>
+						<span className="font-semibold">{wasteData[answerType].container}</span>에 넣어서
+					</div>
+					<div>
+						<span className="font-semibold">{wasteData[answerType].days}요일</span> 해가 진 후에
+					</div>
+					<div>내 집 앞에 배출해요.</div>
+				</div>
+				<div
+					onClick={handleMoreQuiz}
+					className="text-white font-semibold bg-purple-800 rounded-full px-4 leading-9 hover:bg-purple-500 transition-colors mb-4 mr-3 flex justify-center w-fit p-1"
+				>
+					+ 퀴즈 더 풀기
+				</div>
+			</div>
 		</div>
 	)
 }
