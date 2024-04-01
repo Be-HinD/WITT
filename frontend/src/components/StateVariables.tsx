@@ -37,7 +37,7 @@ export interface IUserState {
 }
 
 export const mainstate = create<IMainState>()((set) => ({
-	isLogin: false,
+	isLogin: localStorage.getItem('token') ? true : false,
 	token: localStorage.getItem('token') ? localStorage.getItem('token')! : '',
 	setToken: (result: string) => set({ token: result }),
 	setIsLogin: (result: boolean) => set({ isLogin: result }),
@@ -48,10 +48,11 @@ export const userstate = create<IUserState>()((set) => ({
 	levels: ['먼지', '새싹', '꽃', '나무', '산', '지구', '바오밥나무', '어린왕자'],
 	character: 0,
 	mydata: localStorage.getItem('mydata')
-		? JSON.parse(localStorage.getItem('mydata') as string)
+		? JSON.parse(localStorage.getItem('mydata')!)
 		: { id: -1, userName: 'guest', bottle: 0, growthPoint: 0, solvedCnt: 0, rank: 0 },
 	newNotice: '',
 	notices: [],
+	setMyData: (result: data) => set((state) => ({ mydata: { ...state.mydata, result } })),
 	setCharacter: (result: number) => set({ character: result }),
 	setNotices: (result: JSON[]) => result.map((value) => set((state) => ({ notices: [...state.notices, value] }))),
 	setNewNotice: (result: string) => set({ newNotice: result }),
