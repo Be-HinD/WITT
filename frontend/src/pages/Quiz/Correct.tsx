@@ -1,6 +1,6 @@
 import ResultModal from './components/ResultModal'
 import DetailedInst from './components/DetailedInst'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const CorrectPage = () => {
 	const comment = '정답입니다!'
@@ -12,6 +12,8 @@ const CorrectPage = () => {
 	const handleVisibility = () => {
 		setIsvisible(false)
 	}
+
+	useEffect(() => {}, [])
 
 	return (
 		<div className="">
