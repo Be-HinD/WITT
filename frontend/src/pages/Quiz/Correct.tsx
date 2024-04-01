@@ -1,6 +1,7 @@
 import ResultModal from './components/ResultModal'
 import DetailedInst from './components/DetailedInst'
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const CorrectPage = () => {
 	const comment = '정답입니다!'
@@ -13,7 +14,17 @@ const CorrectPage = () => {
 		setIsvisible(false)
 	}
 
-	useEffect(() => {}, [])
+	const token = localStorage.getItem('token')
+	useEffect(() => {
+		axios
+			.put(`${import.meta.env.VITE_API_BASE_URL}/problem`, { headers: { Authorization: `Bearer ${token}` } })
+			.then((response) => {
+				console.log(response.data)
+			})
+			.catch((error: unknown) => {
+				console.error('Error', error)
+			})
+	}, [])
 
 	return (
 		<div className="">
