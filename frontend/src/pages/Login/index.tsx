@@ -25,8 +25,8 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		const url = 'http://localhost:8081/api/oauth2/authorization/kakao'
-		// const url = 'http://j10d103.p.ssafy.io:8081/api/oauth2/authorization/kakao'
+		// const url = 'http://localhost:8081/api/oauth2/authorization/kakao'
+		const url = 'https://j10d103.p.ssafy.io/api/oauth2/authorization/kakao'
 		location.href = url
 		const token = cookie.get('refresh_token')
 		// token = cookie.get('refresh_token')
