@@ -16,6 +16,9 @@
 
 		/* Linting */
 		"strict": true,
+		"paths": {
+			"react": ["./node_modules/@types/react"]
+		},
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true
