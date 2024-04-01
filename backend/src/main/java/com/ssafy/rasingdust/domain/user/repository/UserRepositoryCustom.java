@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface UserRepositoryCustom {
-    Slice<UserListDto> searchUser(List<Long> condition, String userName, Pageable pageable);
+    Slice<UserListDto> searchUser(List<Long> condition, String userName, Long currentUser, Pageable pageable);
 }

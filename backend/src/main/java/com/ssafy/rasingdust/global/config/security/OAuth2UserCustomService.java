@@ -49,13 +49,16 @@ public class OAuth2UserCustomService extends
 
 // 'properties' 맵에서 'nickname' 키에 해당하는 값을 가져옵니다.
         String name = (String) properties.get("nickname");
+        String profile = (String) properties.get("profile_image");
 
         System.out.println("Nickname: " + name);
+        System.out.println("ProfileIme : " + profile);
 //        System.out.println("email = " + email);
         User user = userRepository.findByUserName(name)
             .map(entity -> entity.updateUserName(name))
             .orElse(User.builder()
                 .userName(name)
+                .profileImg(profile)
                 .build());
 
         return userRepository.save(user);
