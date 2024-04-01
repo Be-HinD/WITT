@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +27,11 @@ public class SseController {
     private final SseService sseService;
 
     @Operation(summary = "SSE 연결")
-    @GetMapping(value = "/subscribe/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> subscribe(@PathVariable String userId,
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> subscribe(@AuthenticationPrincipal UserDetails loginUser,
         @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
         HttpServletResponse response) {
-        SseEmitter emitter = sseService.subscribe(userId, lastEventId);
+        SseEmitter emitter = sseService.subscribe(loginUser.getUsername(), lastEventId);
         response.setHeader("X-Accel-Buffering", "no");
         return ResponseEntity.ok(emitter);
     }
