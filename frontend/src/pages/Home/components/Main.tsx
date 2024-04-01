@@ -2,8 +2,7 @@ import UserProfile from './UserProfile'
 import ActionBar from './ActionBar'
 import background from '../assets/background_main.gif'
 import { useEffect, useState } from 'react'
-import { mainstate, userstate } from '../../../components/StateVariables'
-import { getUserData } from './API'
+import { userstate } from '../../../components/StateVariables'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -49,13 +48,12 @@ const Main = () => {
 	// const setNotices = userstate((state) => state.setNotices)
 	const newNotice = userstate((state) => state.newNotice)
 	const setNewNotice = userstate((state) => state.setNewNotice)
-	
-	const token = mainstate((state) => state.token)
+
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
 	const mydata = userstate((state) => state.mydata)
 	const levels = userstate((state) => state.levels)
-	
+
 	const [noticeEffect, setNoticeEffect] = useState(noticeStyleClass)
 	const [userdata, setUserData] = useState(mydata)
 
@@ -75,15 +73,10 @@ const Main = () => {
 		notify()
 	}
 
-	const getData = async () => {
-		if (token !== '') {
-			const result = await getUserData(token)
-			setUserData(result.data)
-			localStorage.setItem('mydata', JSON.stringify(result.data))
-		}
-	}
 	useEffect(() => {
-		getData()
+		if (localStorage.getItem('mydata')) {
+			setUserData(JSON.parse(localStorage.getItem('mydata')!))
+		}
 	}, [])
 
 	return (
