@@ -94,7 +94,7 @@ const Quiz = () => {
 				<div>
 					<div className="pt-20 flex flex-col items-center justify-center ">
 						{capturedImage ? (
-							<img src={URL.createObjectURL(capturedImage)} className="my-4" />
+							<img src={URL.createObjectURL(capturedImage)} className="w-[60%] mx-[20%] mt-6 mb-10 rounded-2xl" />
 						) : (
 							<div>
 								<HowToUse />

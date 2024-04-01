@@ -38,6 +38,7 @@ const AlarmPage = () => {
 
 	useEffect(() => {
 		if (!token) {
+			window.alert('로그인 후 이용이 가능한 서비스입니다.')
 			navigate('/')
 		} else {
 			const source = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/sse/subscribe`, {
