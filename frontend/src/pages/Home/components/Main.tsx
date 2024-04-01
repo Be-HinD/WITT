@@ -3,6 +3,8 @@ import ActionBar from './ActionBar'
 import background from '../assets/background_main.gif'
 import { useEffect, useState } from 'react'
 import { userstate } from '../../../components/StateVariables'
+import { Cookies } from 'react-cookie'
+import { getToken, getUserData } from './API'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -44,6 +46,7 @@ const noticeStyleClass = {
 // `
 
 const Main = () => {
+	const cookie = new Cookies()
 	// const notices = userstate((state) => state.notices)
 	// const setNotices = userstate((state) => state.setNotices)
 	const newNotice = userstate((state) => state.newNotice)
@@ -73,10 +76,20 @@ const Main = () => {
 		notify()
 	}
 
-	useEffect(() => {
-		if (localStorage.getItem('mydata')) {
-			setUserData(JSON.parse(localStorage.getItem('mydata')!))
+	const getData = async () => {
+		if (cookie.get('refresh_token')) {
+			getToken(cookie.get('refresh_token')!).then((value) => {
+				localStorage.setItem('token', value.data)
+				getUserData(value.data).then((result) => {
+					localStorage.setItem('mydata', JSON.stringify(result.data))
+					setUserData(result.data)
+				})
+			})
 		}
+	}
+
+	useEffect(() => {
+		getData()
 	}, [])
 
 	return (
