@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.jwt.token.service;
 
+import com.ssafy.rasingdust.domain.jwt.refreshtoken.entity.RefreshToken;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.repository.RefreshTokenRepository;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.service.RefreshTokenService;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -34,7 +35,7 @@ public class TokenService {
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }
 
-    public String createDevelopToken(Long userId) {
+    public RefreshToken createDevelopToken(Long userId) {
         // 만약 해당 유저의 refresh토큰이 있다면 이미 있습니다. => 충돌 에러
         if(refreshTokenRepository.existsByUserId(userId)) {
             throw new BusinessLogicException(ErrorCode.USER_DEVELOP_TOKEN_CONFLICT);
@@ -42,7 +43,14 @@ public class TokenService {
 
         // 없으면 30일 짜리 개발용 토큰 생성
         User user = userServiceImpl.findById(userId);
-        return tokenProvider.generateToken(user, Duration.ofDays(30));
+
+        String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(30));
+        RefreshToken savedRefreshToken = RefreshToken.builder()
+            .userId(user.getId())
+            .refreshToken(refreshToken)
+            .build();
+        refreshTokenRepository.save(savedRefreshToken);
+        return savedRefreshToken;
     }
 
 

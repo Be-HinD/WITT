@@ -1,6 +1,7 @@
 package com.ssafy.rasingdust.domain.jwt.token.controller;
 
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.dto.request.CreateAccessTokenRequest;
+import com.ssafy.rasingdust.domain.jwt.refreshtoken.entity.RefreshToken;
 import com.ssafy.rasingdust.domain.jwt.token.dto.response.CreateAccessTokenResponse;
 import com.ssafy.rasingdust.domain.jwt.token.service.TokenService;
 import com.ssafy.rasingdust.global.result.ResultCode;
@@ -30,9 +31,9 @@ public class TokenController implements TokenControllerDocs{
         return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_ACCESSTOKEN_SUCCESS, response));
     }
 
-    @PostMapping("/token/develop/{user_id}")
+    @PostMapping("/token/develop/{userId}")
     public ResponseEntity<ResultResponse> createDevelopToken(@PathVariable Long userId){
-        String response = tokenService.createDevelopToken(userId);
+        RefreshToken response = tokenService.createDevelopToken(userId);
         return ResponseEntity.ok(new ResultResponse(ResultCode.POST_DEVELOP_TOKEN_SUCCESS, response));
     }
 }
