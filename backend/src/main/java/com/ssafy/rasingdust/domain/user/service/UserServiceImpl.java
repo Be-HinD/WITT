@@ -17,12 +17,16 @@ import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +70,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-
-        Slice<UserListDto> result = userRepository.searchUser(condition, userName, pageable);
+        Slice<UserListDto> result = userRepository.searchUser(condition, userName, userId, pageable);
 
         /**
          * 현재 로그인 한 유저와 동시에 팔로우 하고있는 유저들 중 대표되는 한 유저의 닉네임 조회
@@ -163,11 +166,11 @@ public class UserServiceImpl implements UserService {
         /**다른 유저의 팔로잉 리스트를 조회할 경우
          * 다른 유저의 팔로워들이 현재 유저를 팔로우하고 있는지 체크
          * 다른 유저가 팔로우하고 있는 사람이 현재 로그인한 유저도 팔로우 하고있다면 true값 세팅
+         * 현재 로그인 한 유저가 팔로잉 리스트에 포함되는 경우 제거해서 반환
          * */
         if (!userId.equals(myId)) {
             //로그인한 유저의 팔로우 리스트
             List<UserDto> currentUserFollowList = followRepository.findByFollowing(myId);
-
 
             for (UserDto follow : result) {
                 if (currentUserFollowList.contains(follow)) {
@@ -176,7 +179,14 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        SliceResponse response = new SliceResponse(result);
+        // isFollow 기준으로 정렬
+        List<UserDto> sortedList = result.getContent().stream()
+            .sorted(Comparator.comparing(userDto -> userDto.isFollow() ? 0 : 1))
+            .collect(Collectors.toList());
+
+        Slice<UserDto> orderedResponse = new SliceImpl(sortedList, pageable, result.hasNext());
+
+        SliceResponse response = new SliceResponse(orderedResponse);
 
         return response;
     }
@@ -211,7 +221,14 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        SliceResponse response = new SliceResponse(result);
+        // isFollow 기준으로 정렬
+        List<UserDto> sortedList = result.getContent().stream()
+            .sorted(Comparator.comparing(userDto -> userDto.isFollow() ? 0 : 1))
+            .collect(Collectors.toList());
+
+        Slice<UserDto> orderedResponse = new SliceImpl(sortedList, pageable, result.hasNext());
+
+        SliceResponse response = new SliceResponse(orderedResponse);
 
         return response;
     }
