@@ -1,12 +1,16 @@
+import { dummy } from '../../constants/dummy-data'
 import FollowUser from './components/FollowUser'
 
-export const dummy = new Array(15).fill({})
 const FollowerTab = () => {
 	return (
 		<div className="pt-12 px-5">
-			{dummy.map(() => (
-				<FollowUser />
-			))}
+			<ul className="flex flex-col">
+				{dummy.map((user) => (
+					<li className="flex text-textWthi justify-between items-center gap-4 my-2">
+						<FollowUser user={user} />
+					</li>
+				))}
+			</ul>
 		</div>
 	)
 }

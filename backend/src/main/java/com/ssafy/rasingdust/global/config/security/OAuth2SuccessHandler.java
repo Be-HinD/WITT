@@ -27,8 +27,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-    // 사용자를 리다이렉트할 경로
-//    public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/api/swagger-ui/index.html";
     public static final String REDIRECT_PATH = "https://j10d103.p.ssafy.io/";
 
     private final TokenProvider tokenProvider;
@@ -43,24 +41,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("into SuccessHandler");
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-//        User user = userService.findByEmail((String) oAuth2User.getAttributes().get("email"));
         Map<String, Object> attributes = oAuth2User.getAttributes();
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         String name = (String) properties.get("nickname");
-//        User user = userService.findByUserName((String) oAuth2User.getAttributes().get("nickname"));
         User user = userServiceImpl.findByUserName(name);
 
         String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
         saveRefreshToken(user.getId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
+//        String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+//        String targetUrl = getTargetUrl(accessToken);
 
         clearAuthenticationAttributes(request, response);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-        log.error("안녕 ㅋ");
+        getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH);
+        log.info("deactivate SuccessHandler");
     }
 
     private void saveRefreshToken(Long userId, String newRefreshToken) {
