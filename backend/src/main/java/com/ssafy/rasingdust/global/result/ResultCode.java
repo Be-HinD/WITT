@@ -6,6 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ResultCode {
+    //Token
+    POST_DEVELOP_TOKEN_SUCCESS(201, "개발용 토큰 발급에 성공하였습니다."),
+
     //User
     GET_USERLIST_SUCCESS(200, "유저리스트 검색에 성공하였습니다."),
     GET_VISITUSER_SUCCESS(200, "해당 유저 페이지 방문에 성공하였습니다."),
