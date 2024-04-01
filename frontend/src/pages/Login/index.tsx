@@ -3,14 +3,12 @@ import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import Header from '../../components/Header'
 import { useEffect } from 'react'
-import { mainstate } from '../../components/StateVariables'
 import { Cookies } from 'react-cookie'
 
 const Login = () => {
 	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '로그인', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
-	const setIsLogin = mainstate((state) => state.setIsLogin)
 	const cookie = new Cookies()
 	let token = cookie.get('refresh_token')
 
@@ -21,7 +19,6 @@ const Login = () => {
 		token = cookie.get('refresh_token')
 		if (token != '') {
 			navigate('/')
-			setIsLogin(true)
 		}
 	}, [token])
 
