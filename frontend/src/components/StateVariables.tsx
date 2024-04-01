@@ -11,6 +11,7 @@ import thelittleprince from '../pages/Home/assets/the_little_prince.png'
 export interface data {
 	id: number
 	userName: string
+	profileImg: string
 	solvedCnt: number
 	growthPoint: number
 	rank: number
