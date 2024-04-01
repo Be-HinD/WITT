@@ -11,12 +11,14 @@ const Login = () => {
 	const menu: IMenu = { left: icons.BACK, center: '로그인', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	const cookie = new Cookies()
+	let token = cookie.get('refresh_token')
 
 	const getData = async () => {
 		if (cookie.get('refresh_token')) {
 			getToken(cookie.get('refresh_token')!).then((value) => {
-				localStorage.setItem('token', value.accessToken)
-				getUserData(value.accessToken!).then((result) => {
+				console.log(value!.data)
+				localStorage.setItem('token', value.data)
+				getUserData(value.data).then((result) => {
 					localStorage.setItem('mydata', JSON.stringify(result.data))
 					navigate('/')
 				})
@@ -28,12 +30,11 @@ const Login = () => {
 		// const url = 'http://localhost:8081/api/oauth2/authorization/kakao'
 		const url = 'https://j10d103.p.ssafy.io/api/oauth2/authorization/kakao'
 		location.href = url
-		const token = cookie.get('refresh_token')
-		// token = cookie.get('refresh_token')
+		token = cookie.get('refresh_token')
 		if (token != '') {
 			getData()
 		}
-	})
+	}, [token])
 
 	return (
 		<div className=" max-w-screen-sm">

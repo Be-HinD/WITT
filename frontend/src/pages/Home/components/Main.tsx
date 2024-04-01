@@ -79,8 +79,8 @@ const Main = () => {
 	const getData = async () => {
 		if (cookie.get('refresh_token')) {
 			getToken(cookie.get('refresh_token')!).then((value) => {
-				localStorage.setItem('token', value.accessToken)
-				getUserData(value.accessToken!).then((result) => {
+				localStorage.setItem('token', value.data)
+				getUserData(value.data).then((result) => {
 					localStorage.setItem('mydata', JSON.stringify(result.data))
 					setUserData(result.data)
 				})
