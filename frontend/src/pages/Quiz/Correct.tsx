@@ -17,7 +17,7 @@ const CorrectPage = () => {
 	const token = localStorage.getItem('token')
 	useEffect(() => {
 		axios
-			.put(`${import.meta.env.VITE_API_BASE_URL}/problem`, { headers: { Authorization: `Bearer ${token}` } })
+			.put(`${import.meta.env.VITE_API_BASE_URL}/problem`, {}, { headers: { Authorization: `Bearer ${token}` } })
 			.then((response) => {
 				console.log(response.data)
 			})
