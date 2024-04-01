@@ -4,15 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.SerializationUtils;
 
 import java.io.IOException;
 import java.util.Base64;
 
+@Slf4j
 public class CookieUtil {
     // 요청값(이름, 값, 만료 기간)을 바탕으로 쿠키 생성
     public static void addCookies(HttpServletResponse response, String name, String value, int maxAge) {
-        System.out.println("쿠키생성");
+        log.info("쿠키생성");
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);

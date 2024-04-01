@@ -3,7 +3,6 @@ package com.ssafy.rasingdust.domain.jwt.token.controller;
 import com.ssafy.rasingdust.domain.jwt.refreshtoken.dto.request.CreateAccessTokenRequest;
 import com.ssafy.rasingdust.domain.jwt.token.dto.response.CreateAccessTokenResponse;
 import com.ssafy.rasingdust.domain.jwt.token.service.TokenService;
-import com.ssafy.rasingdust.domain.problem.dto.response.GetProblemResponse;
 import com.ssafy.rasingdust.global.result.ResultCode;
 import com.ssafy.rasingdust.global.result.ResultResponse;
 import jakarta.annotation.PostConstruct;
@@ -11,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
-public class TokenController {
+public class TokenController implements TokenControllerDocs{
     private final TokenService tokenService;
 
     @PostMapping("/token")
@@ -29,5 +27,11 @@ public class TokenController {
         String response = tokenService.createNewAccessToken(request.getRefreshToken());
         log.info("deactivate token Controller");
         return ResponseEntity.ok(new ResultResponse(ResultCode.CREATE_ACCESSTOKEN_SUCCESS, response));
+    }
+
+    @PostMapping("/token/develop/{user_id}")
+    public ResponseEntity<ResultResponse> createDevelopToken(@PathVariable Long userId){
+        String response = tokenService.createDevelopToken(userId);
+        return ResponseEntity.ok(new ResultResponse(ResultCode.POST_DEVELOP_TOKEN_SUCCESS, response));
     }
 }
