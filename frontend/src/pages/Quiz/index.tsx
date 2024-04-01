@@ -48,7 +48,7 @@ const Quiz = () => {
 				content: [
 					{
 						type: 'text',
-						text: 'please identify what kind of garbage it would be, possibly in the future as well. there are 7 types of answer you can offer. first, if it mostly contains plastic, answer "4". answer "6", if it mostly are made of paper. answer "3" if it is a aluminium can. answer "5" if it is glass. answer "1" if it could be food waste. answer "2" if you cannot figure out what type of waste they are, or if it is general waste. answer "0" this is really important by the way, if they are human or animals.',
+						text: 'please identify what kind of garbage it would be, possibly in the future as well. there are 7 types of answer you can offer. first, if it mostly contains plastic, answer "4". answer "6", if it mostly are made of paper. answer "3" if it is a aluminium can. answer "5" if it is glass. answer "1" if it could be food waste. answer "2" if you cannot figure out what type of waste they are, or if it is general waste. answer "0" this is really important by the way, if they are human or animals. give the answer only as a number. simply a number. ',
 					},
 					{
 						type: 'image_url',
