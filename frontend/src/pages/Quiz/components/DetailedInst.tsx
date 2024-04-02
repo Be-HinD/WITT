@@ -32,12 +32,7 @@ const DetailedInst = () => {
 				{image && <img src={URL.createObjectURL(image)} alt="" className="w-[60%] mx-[20%] mt-6 mb-10 rounded-2xl" />}
 				<div className="text-lg bg-stone-800 mx-6 p-8 rounded-xl my-5">
 					<div className="mb-7">
-						이 물건은{' '}
-						<span className="font-semibold">
-							{wasteData[answerType].name}
-							{answerType}
-						</span>
-						로 배출해요.
+						이 물건은 <span className="font-semibold">{wasteData[answerType].name}</span>로 배출해요
 					</div>
 					<div>
 						<span className="font-semibold">{wasteData[answerType].container}</span>에 넣어서
@@ -45,7 +40,7 @@ const DetailedInst = () => {
 					<div>
 						<span className="font-semibold">{wasteData[answerType].days}요일</span> 해가 진 후에
 					</div>
-					<div>내 집 앞에 배출해요.</div>
+					<div>내 집 앞에 배출해주세요</div>
 				</div>
 				<div
 					onClick={handleMoreQuiz}

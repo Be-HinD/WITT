@@ -30,7 +30,7 @@ const CorrectPage = () => {
 		<div className="">
 			{isVisible ? (
 				<div className="w-full h-full">
-					<div className="bg-black bg-opacity-60 absolute z-10 w-full h-full" onClick={handleVisibility}></div>
+					<div className="bg-black bg-opacity-90 absolute z-10 w-full h-[110%]" onClick={handleVisibility}></div>
 					<ResultModal comment={comment} emoji={emoji} next={next} result={result} />
 				</div>
 			) : null}
