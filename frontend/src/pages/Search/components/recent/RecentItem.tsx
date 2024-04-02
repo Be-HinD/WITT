@@ -1,13 +1,14 @@
 import { IoSearch } from 'react-icons/io5'
 import { RecentItemType, SearchItemProp } from '../../search-types'
-import { useRouter } from '../../../../hooks/useRouter'
+// import { useRouter } from '../../../../hooks/useRouter'
 
 const RecentItem = ({ userUpdate, type, keyword, userInfo }: SearchItemProp) => {
-	const { routeTo } = useRouter()
+	// const { routeTo } = useRouter()
 	const handleClick = () => {
 		userUpdate!(type, userInfo, keyword)
 		if (type === RecentItemType.USER && userInfo) {
-			routeTo(`user/${userInfo?.id}`)
+			// routeTo(`user/${userInfo?.id}`)
+			alert('이동')
 		}
 	}
 
@@ -17,7 +18,13 @@ const RecentItem = ({ userUpdate, type, keyword, userInfo }: SearchItemProp) => 
 				{type === RecentItemType.KEYWORD ? (
 					<IoSearch className="w-full size-6" />
 				) : (
-					userInfo && <img src={userInfo.profileImg} alt="dummy" className="object-cover aspect-square" />
+					userInfo && (
+						<img
+							src={userInfo.profileImg ? userInfo.profileImg : `/public/dummy/random/${userInfo.id % 7}.jpeg`}
+							alt="dummy"
+							className="object-cover aspect-square"
+						/>
+					)
 				)}
 			</div>
 			<div className="w-10/12">

@@ -8,5 +8,8 @@ public class UserListDto {
     private String duplicateFollower;
     private Long id;
     private String userName;
+    private int growth_point;
+    private int solved_cnt;
+    private String profileImg;
 
 }

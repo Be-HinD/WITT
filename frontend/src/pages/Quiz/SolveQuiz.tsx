@@ -10,24 +10,25 @@ interface IQuizData {
 	dummy2: string
 }
 
-const SolveQuiz = ({ quizData }: { quizData: IQuizData }) => {
+const SolveQuiz = ({ quizData, capturedImage }: { quizData: IQuizData; capturedImage: File }) => {
 	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '퀴즈', right: undefined }
-	const func: IMenuFunc = { left_func: () => navigate('/quiz'), right_func: undefined }
+	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 
 	const options: string[] = Object.values(quizData)
 
 	return (
-		<div className="pt-20">
+		<div>
 			<Header menu={menu} func={func}></Header>
-
-			<div className="w-40 h-40">내가 찍은 사진</div>
+			<img src={URL.createObjectURL(capturedImage)} alt="" className="w-[60%] mx-[20%] mt-6 mb-10 rounded-2xl" />
 			<div className="">
-				<div className="text-white text-lg">이 물건은 어떤 쓰레기로 분류될까요?</div>
-
-				<div className="flex">
+				<div className="text-white text-lg font-semibold my-5 ml-5">
+					<div>이 물건은 어떤 쓰레기로</div>
+					<div>분류할까요</div>
+				</div>
+				<div className="ml-5">
 					{options.map((option) => (
-						<AnswerOption wasteType={option} />
+						<AnswerOption wasteType={option} correct={quizData.correct} key={option} />
 					))}
 				</div>
 			</div>

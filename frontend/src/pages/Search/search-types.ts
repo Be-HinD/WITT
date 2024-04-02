@@ -10,9 +10,13 @@ export interface ISearchKeyword {
 
 export interface ISearchUser {
 	id: number
-	profileImg: string
+	profileImg: string | null
 	userName: string
-	level: string
+	level?: number
+	growth_point?: number
+	solved_cnt?: number
+	followCnt: number
+	duplicateFollower: string | null
 }
 
 export interface UserInfoProp {
@@ -43,5 +47,6 @@ export interface searchProp {
 }
 
 export interface SearchResultProp {
+	input: string
 	userUpdate: (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => void
 }

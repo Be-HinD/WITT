@@ -13,7 +13,7 @@ const Home = () => {
 	}))
 
 	useEffect(() => {
-		if (cookie.get('refresh_token')) {
+		if (cookie.get('refresh_token') || localStorage.getItem('token')) {
 			setIsLogin(true)
 		}
 	}, [])

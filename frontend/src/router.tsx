@@ -8,7 +8,9 @@ import Error from './pages/Error'
 import FollowerTab from './pages/Follow/FollowerTab'
 import FollowingTab from './pages/Follow/FollowingTab'
 import Search from './pages/Search'
-// import ResultPage from './pages/Quiz/Result'
+import AlarmPage from './pages/Alarm'
+import CorrectPage from './pages/Quiz/Correct'
+import WrongPage from './pages/Quiz/Wrong'
 
 const router = createBrowserRouter([
 	{
@@ -42,13 +44,21 @@ const router = createBrowserRouter([
 				path: 'quiz',
 				element: <Quiz />,
 			},
-			// {
-			// 	path: 'quiz/result',
-			// 	element: <ResultPage />,
-			// },
+			{
+				path: 'quiz/correct',
+				element: <CorrectPage />,
+			},
+			{
+				path: 'quiz/wrong',
+				element: <WrongPage />,
+			},
 			{
 				path: 'search',
 				element: <Search />,
+			},
+			{
+				path: 'alarm',
+				element: <AlarmPage />,
 			},
 		],
 	},

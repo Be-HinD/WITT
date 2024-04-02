@@ -12,6 +12,7 @@ import lombok.Setter;
 public class GetUserResponse {
     private Long id;
     private String userName;
+    private String profileImg;
     private int solvedCnt;
     private int bottle;
     private int growthPoint;

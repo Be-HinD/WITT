@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.user.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
@@ -30,7 +31,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public Slice<UserListDto> searchUser(List<Long> condition, String userName, Pageable pageable) {
+    public Slice<UserListDto> searchUser(List<Long> condition, String userName, Long currentUser, Pageable pageable) {
 
         QUser userAlias = new QUser("userAlias");
 
@@ -43,15 +44,23 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             .where(follow.follower.id.in(condition)
                 .and(follow.following.id.eq(user.id)));
 
+        BooleanBuilder predicate = new BooleanBuilder();
+        predicate.and(user.id.ne(currentUser));
+
+
         List<UserListDto> result = queryFactory
             .select(Projections.fields(UserListDto.class, user.id.as("id"),
                 user.userName.as("userName"),
+                user.growthPoint.as("growthPoint"),
+                user.solvedCnt.as("solvedCnt"),
+                user.profileImg.as("profileImg"),
                 ExpressionUtils.as(
                     followCountSubquery, "followCnt"
                 )
             ))
             .from(user)
-            .where(user.userName.likeIgnoreCase("%" + userName + "%"))
+            .where(user.userName.likeIgnoreCase("%" + userName + "%")
+                .and(predicate))
             .offset(pageable.getOffset())
             .limit(pageSize + 1)
             .orderBy(new OrderSpecifier<>(Order.DESC, followCountSubquery))

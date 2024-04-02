@@ -61,7 +61,10 @@ public class WebOAuthSecurityConfig {
                 UsernamePasswordAuthenticationFilter.class)
             // 요청 url 제한(모든 요청 허용)
             .authorizeRequests(authorizeRequests ->
-                authorizeRequests.anyRequest().permitAll())
+                authorizeRequests.requestMatchers("/user/**").authenticated()
+                    .anyRequest().permitAll())
+
+//                authorizeRequests.anyRequest().permitAll())
             //                .requestMatchers("/api/token").permitAll()
             //                .requestMatchers("/api/**").permitAll()
             //                .requestMatchers("/api/**").authenticated()
@@ -118,7 +121,7 @@ public class WebOAuthSecurityConfig {
 
     @Bean    // 요청 헤더에 있는 토큰의 유효성을 검증하는 인증 절차
     public TokenAuthenticationFilter tokenAuthenticationFilter() {    //
-
+        log.info("인증 절차 수행");
         return new TokenAuthenticationFilter(tokenProvider);
     }
 

@@ -29,9 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/problem")
 @RequiredArgsConstructor
 @Slf4j
-public class ProblemController {
+public class ProblemController implements ProblemControllerDocs{
 
-    private final TrashRepository trashRepository;
     private final ProblemService problemService;
 
     //
