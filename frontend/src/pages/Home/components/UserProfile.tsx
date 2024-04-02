@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { data, userstate } from '../../../components/StateVariables'
 import avatar from '../assets/avatar.gif'
 import { ImSearch } from 'react-icons/im' // 유저 검색 아이콘
+import AlarmBell from '../../Alarm/components/AlarmBell' // 알림 조회 아이콘
 
 const UserProfile = (mydata: data) => {
 	const navigate = useNavigate()
@@ -9,7 +10,7 @@ const UserProfile = (mydata: data) => {
 	const profileStyleClass =
 		'flex justify-center items-center z-[5] w-full h-[4.125rem] bg-[#342C3D] text-[#ffffff] font-black rounded-[15px]'
 
-	const userinfoStyleClass = 'flex-column justify-center w-1/2 mx-[30px] my-0 text-[10px]'
+	const userinfoStyleClass = 'flex-column items-center w-1/2 h-full py-[10px] text-[10px]'
 
 	const levelStyleClass =
 		'flex justify-center items-center mr-0.5 w-[2.625rem] h-3.5 rounded-[5px] text-[#ffffff] text-[8px] bg-[#6DBE70]'
@@ -24,36 +25,50 @@ const UserProfile = (mydata: data) => {
 		<div className={profileStyleClass}>
 			<img
 				width={60}
-				style={{ borderRadius: '1000px', aspectRatio: '1/1' }}
+				style={{ borderRadius: '1000px', aspectRatio: '1/1', margin: '0px 10px' }}
 				src={mydata.profileImg ? mydata.profileImg : avatar}
 			/>
 			<div className={userinfoStyleClass}>
-				<div className="flex my-[5px] cursor-pointer">
+				<div style={{ minWidth: '100px', width: '100%' }} className="flex justify-around my-[5px]">
 					<span className={levelStyleClass}>{`${levels[~~(mydata.growthPoint / 10)]}`}</span>
 					{`${mydata.userName}`}님<span className="mx-[15px] text-[8px]">{`${mydata.rank}`}위</span>
 				</div>
-				<div className="flex justify-between my-[5px]">
+				<div className="my-[5px]">
 					<div>
-						<span style={{ width: '44%', maxWidth: '320px', height: '12.5px' }} className={totalgaugeStyleClass}></span>
 						<span
 							style={{
-								width: `${44 * (mydata.growthPoint / 10)}%`,
-								maxWidth: `${320 * (mydata.growthPoint / 10)}px`,
+								width: '44%',
+								maxWidth: '320px',
+								height: '12.5px',
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+							className={totalgaugeStyleClass}
+						>
+							<div>{(mydata.growthPoint % 10) * 10}%</div>
+						</span>
+						<span
+							style={{
+								width: `${44 * ((mydata.growthPoint % 10) / 10)}%`,
+								maxWidth: `${320 * ((mydata.growthPoint % 10) / 10)}px`,
 								height: '12.5px',
 							}}
 							className={gaugeStyleClass}
 						></span>
 					</div>
-					<div className="text-xs -top-[5px]">{(mydata.growthPoint / 10) * 100}%</div>
 				</div>
 			</div>
 			<div
-				className="cursor-pointer"
+				className="cursor-pointer mx-[10px]"
 				onClick={() => {
 					navigate('/search')
 				}}
 			>
-				{<ImSearch size={30} color="#ffffff" />}
+				{<ImSearch size={20} color="#ffffff" />}
+			</div>
+			<div className="mx-[10px]">
+				<AlarmBell />
 			</div>
 		</div>
 	)

@@ -58,19 +58,43 @@ const ActionBar = (mydata: data) => {
 
 	const [popup, setPopup] = useState(true)
 	const [popupEffect, setPopupEffect] = useState(popupStyleClass)
+	const [comment, setComment] = useState(
+		<div>
+			캐릭터에게 먹이를 주시겠습니까?
+			<br />
+			현재 보유한 물병 중 1개가 차감됩니다.
+		</div>
+	)
 
 	const popupBox = (
 		<div className={popupEffect}>
-			<div>
-				캐릭터에게 먹이를 주시겠습니까?
-				<br />
-				현재 보유한 물병 중 1개가 차감됩니다.
-			</div>
+			{comment}
 			<div className="flex justify-around items-center">
-				<div className={popupButtonStyleClass + 'bg-[#1cd44d]'} onClick={() => {}}>
+				<div
+					style={{ display: popup ? 'flex' : 'none' }}
+					className={popupButtonStyleClass + 'bg-[#1cd44d]'}
+					onClick={() => {
+						if (mydata.bottle > 0) {
+							// 먹이주기 api 실행하기
+						} else {
+							setPopup(false)
+							setComment(
+								<div>
+									캐릭터에게 줄 물병이 없습니다.
+									<br />
+									퀴즈를 풀어 물병을 획득한 후 시도해주세요.
+								</div>
+							)
+							setTimeout(() => {
+								setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
+							}, 500)
+						}
+					}}
+				>
 					확인
 				</div>
 				<div
+					style={{ display: popup ? 'flex' : 'none' }}
 					className={popupButtonStyleClass + 'bg-[#dddddd]'}
 					onClick={() => {
 						setPopup(false)
@@ -108,7 +132,7 @@ const ActionBar = (mydata: data) => {
 							if (!popupEffect.includes(' transition-scale duration-500')) {
 								setPopupEffect(popupEffect.replace(' transition-scale duration-500', ''))
 							}
-							setPopup(!popup)
+							setPopup(true)
 							setPopupEffect(popupEffect.replace('scale-0', 'scale-100 transition-scale duration-500'))
 						}}
 					>

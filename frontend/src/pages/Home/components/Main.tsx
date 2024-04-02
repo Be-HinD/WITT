@@ -37,6 +37,7 @@ const Main = () => {
 
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
+	const setCharacter = userstate((state) => state.setCharacter)
 	const mydata = userstate((state) => state.mydata)
 	const levels = userstate((state) => state.levels)
 
@@ -60,6 +61,7 @@ const Main = () => {
 				getUserData(value.data).then((result) => {
 					localStorage.setItem('mydata', JSON.stringify(result.data))
 					setUserData(result.data)
+					setCharacter(~~(mydata.growthPoint / 10))
 				})
 			})
 		}
@@ -69,6 +71,7 @@ const Main = () => {
 		getData()
 		if (localStorage.getItem('mydata')) {
 			setUserData(JSON.parse(localStorage.getItem('mydata')!))
+			setCharacter(~~(mydata.growthPoint / 10))
 		}
 	}, [mydata])
 
