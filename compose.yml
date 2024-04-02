@@ -2,7 +2,7 @@ version: '3'
 services:
   frontend:
     container_name: dust_frontend
-    image: devhenrycha/dust_frontend:${FRONTEND_TAG}
+    image: dust_frontend
     ports:
       - "80:80"
       - "443:443"
@@ -15,7 +15,7 @@ services:
     
   backend:
     container_name: dust_backend
-    image: devhenrycha/dust_backend:${BACKEND_TAG}
+    image: dust_backend
     ports:
       - "8081:8081"
     # volumes:
