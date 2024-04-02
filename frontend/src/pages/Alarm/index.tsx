@@ -19,13 +19,19 @@ const AlarmPage = () => {
 	const menu: IMenu = { left: icons.BACK, center: '알림함', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	const token = localStorage.getItem('token')
-	const [alarmList, setAlarmList] = useState<IAlarm[] | null>()
+	// const token =
+	// 	'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
+	const [alarmList, setAlarmList] = useState<IAlarm[]>()
+	console.log('리스트 전체', alarmList)
 	const fetchAlarmList = () => {
 		axios
 			.get(`${import.meta.env.VITE_API_BASE_URL}/notices`, { headers: { authorization: `Bearer ${token}` } })
 			.then((response) => {
-				console.log(response.data)
-				setAlarmList(response.data)
+				console.log('알림리스트 응답', response.data)
+				setAlarmList(response.data.data)
+			})
+			.catch((error: unknown) => {
+				console.error('Error:', error)
 			})
 	}
 
@@ -34,7 +40,7 @@ const AlarmPage = () => {
 
 	useEffect(() => {
 		fetchAlarmList()
-	})
+	}, [])
 
 	useEffect(() => {
 		if (!token) {
@@ -44,11 +50,16 @@ const AlarmPage = () => {
 			const source = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/sse/subscribe`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
-					'Cache-Control': 'no-cache',
+					// 'Cache-Control': 'no-cache',
 					Connection: 'keep-alive',
+					// 'Last-Event-ID': lastEventId,
 				},
 				heartbeatTimeout: 3600000,
 			})
+
+			source.onopen = () => {
+				console.log('연결 성공')
+			}
 
 			source.onerror = (error) => {
 				console.log(error)
@@ -56,6 +67,7 @@ const AlarmPage = () => {
 			}
 
 			source.addEventListener('message', (e) => {
+				console.log('SSE를 통해 온 알림')
 				console.log(e)
 				const data = JSON.parse(e.data)
 				console.log(data)
@@ -66,22 +78,37 @@ const AlarmPage = () => {
 				source.close()
 			}
 		}
-	})
+	}, [])
+
 	return (
 		<div>
 			<Header menu={menu} func={func}></Header>
 			<div className="pt-12">
-				<AlarmItem />
-				<AlarmItem />
-				<AlarmItem />
-				<AlarmItem />
-				{alarmList &&
-					alarmList.map(() => {
-						return <AlarmItem />
-					})}
+				<div>{dummy && dummy.map((item) => <AlarmItem props={item} key={item.id} />)}</div>
 			</div>
 		</div>
 	)
 }
 
 export default AlarmPage
+
+const dummy = [
+	{
+		id: '1',
+		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+		username: '지연',
+		content: '님이 당신을 콕 찔렀어요',
+	},
+	{
+		id: '2',
+		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+		username: '냠냠',
+		content: '님이 당신을 콕 찔렀어요',
+	},
+	{
+		id: '3',
+		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+		username: '뉴상수',
+		content: '님이 당신을 팔로우해요',
+	},
+]

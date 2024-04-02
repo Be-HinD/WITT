@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 
 interface ISSEStore {
-	lastEventId: number
-	setLastEventId: (newLastEventId: number) => void
+	lastEventId: string
+	setLastEventId: (newLastEventId: string) => void
 }
 
 export const useSSEStore = create<ISSEStore>((set) => ({
-	lastEventId: 0,
+	lastEventId: '0',
 	setLastEventId: (newLastEventId) => set({ lastEventId: newLastEventId }),
 }))
