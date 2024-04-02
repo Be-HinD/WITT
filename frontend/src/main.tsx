@@ -8,7 +8,6 @@ const root = createRoot(container!)
 
 root.render(
 	<React.StrictMode>
-		{/* @ts-expect-error build */}
 		<CookiesProvider defaultSetOptions={{ path: '/' }}>
 			<App />
 		</CookiesProvider>
