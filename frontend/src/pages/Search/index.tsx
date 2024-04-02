@@ -7,7 +7,6 @@ import SearchBar from './components/search/SearchBar'
 import RecentSearch from './components/recent/RecentSearch'
 import SearchResult from './components/search/SearchResult'
 import { ISearchKeyword, ISearchUser, RecentItemType } from './search-types'
-
 /*
   해야할 것들
   (+) 1. x 누르면 로컬스토리지에서 검색 기록 삭제
@@ -22,13 +21,13 @@ const Search = () => {
 	const { goBack } = useRouter()
 	const menu: IMenu = { left: icons.BACK, center: '검색', right: undefined }
 	const func: IMenuFunc = { left_func: () => goBack(), right_func: undefined }
-
+	
 	// state
 	const [, setIsFocused] = useState(false)
 	const [input, setInput] = useState('')
 	const [recentKeywords, setRecentKeywords] = useState<ISearchKeyword[]>([])
 	const [recentUsers, setRecentUsers] = useState<ISearchUser[]>([])
-
+	
 	// 페이지가 로드될 때 로컬 스토리지에서 최근 검색 내용을 가져옴
 	useLayoutEffect(() => {
 		const keywords = localStorage.getItem(RecentItemType.KEYWORD)
@@ -65,8 +64,11 @@ const Search = () => {
 	const handleHistroyUpdate = (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => {
 		switch (type) {
 			case RecentItemType.KEYWORD:
-				if(keyword) {
-					setRecentKeywords([{ id: keyword.id, text: keyword.text }, ...recentKeywords.filter((k) => k.id != keyword.id)])
+				if (keyword) {
+					setRecentKeywords([
+						{ id: keyword.id, text: keyword.text },
+						...recentKeywords.filter((k) => k.id != keyword.id),
+					])
 					setInput(keyword.text)
 				}
 				return
@@ -78,6 +80,8 @@ const Search = () => {
 							profileImg: userInfo.profileImg,
 							userName: userInfo.userName,
 							level: userInfo.level,
+							duplicateFollower: '',
+							followCnt: 0,
 						},
 						...recentUsers.filter((user) => user.id != userInfo.id),
 					])
@@ -115,7 +119,7 @@ const Search = () => {
 				/>
 				<fieldset>
 					{input ? (
-						<SearchResult userUpdate={handleHistroyUpdate} />
+						<SearchResult input={input} userUpdate={handleHistroyUpdate} />
 					) : (
 						<RecentSearch
 							userUpdate={handleHistroyUpdate}
