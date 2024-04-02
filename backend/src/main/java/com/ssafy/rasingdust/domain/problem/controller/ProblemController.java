@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ProblemController implements ProblemControllerDocs{
 
-    private final TrashRepository trashRepository;
     private final ProblemService problemService;
 
     //
