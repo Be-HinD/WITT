@@ -4,6 +4,7 @@ import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'
 import { data } from '../../../components/StateVariables'
 import { useState } from 'react'
+// import { feedCharacter } from './API'
 
 const PlusEffectClass = `
 absolute 
