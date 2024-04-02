@@ -13,6 +13,8 @@ export interface ISearchUser {
 	profileImg: string
 	userName: string
 	level: string
+	followCnt: number
+	duplicateFollower: string
 }
 
 export interface UserInfoProp {
@@ -43,5 +45,6 @@ export interface searchProp {
 }
 
 export interface SearchResultProp {
+	input: string,
 	userUpdate: (type: RecentItemType, userInfo?: ISearchUser, keyword?: ISearchKeyword) => void
 }
