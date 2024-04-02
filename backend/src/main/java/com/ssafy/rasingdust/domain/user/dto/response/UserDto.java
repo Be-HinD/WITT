@@ -12,17 +12,19 @@ public class UserDto {
     private int solvedCnt;
     private int bottle;
     private int growthPoint;
+    private String profileImg;
     private boolean isFollow;
 
     @Builder
     public UserDto(Long id, String userName, LocalDateTime createDate, int solvedCnt, int bottle,
-        int growthPoint) {
+        int growthPoint, String profileImg) {
         this.id = id;
         this.userName = userName;
         this.createDate = createDate;
         this.solvedCnt = solvedCnt;
         this.bottle = bottle;
         this.growthPoint = growthPoint;
+        this.profileImg = profileImg;
     }
 
 }
