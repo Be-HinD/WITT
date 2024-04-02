@@ -53,6 +53,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.userName.as("userName"),
                 user.growthPoint.as("growthPoint"),
                 user.solvedCnt.as("solvedCnt"),
+                user.profileImg.as("profileImg"),
                 ExpressionUtils.as(
                     followCountSubquery, "followCnt"
                 )

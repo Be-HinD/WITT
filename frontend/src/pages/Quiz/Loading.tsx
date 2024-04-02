@@ -49,7 +49,7 @@ const Loading = ({ gptAnswer, capturedImage }: { gptAnswer: number; capturedImag
 						<img src={URL.createObjectURL(capturedImage)} className="w-[60%] mx-[20%] mt-6 mb-10 rounded-2xl" />
 					</div>
 					<div className="text-white ml-5 text-lg font-semibold">
-						<div>퀴즈를 만들고 있어요!</div>
+						<div>쓰레기를 판별 중이에요!</div>
 						<div className="mb-5">잠시만 기다려주세요...</div>
 						<div className="text-center">
 							<CircularProgress />

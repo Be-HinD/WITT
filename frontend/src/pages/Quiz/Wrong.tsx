@@ -17,7 +17,7 @@ const WrongPage = () => {
 		<div>
 			{isVisible ? (
 				<div className="w-full h-full">
-					<div className="bg-white bg-opacity-20 absolute z-10 w-full h-full" onClick={handleVisibility}></div>
+					<div className="bg-black bg-opacity-90 absolute z-10 w-full h-[110%]" onClick={handleVisibility}></div>
 					<ResultModal comment={comment} emoji={emoji} result={result} next={next} />
 				</div>
 			) : null}

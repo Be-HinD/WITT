@@ -10,5 +10,6 @@ public class UserListDto {
     private String userName;
     private int growth_point;
     private int solved_cnt;
+    private String profileImg;
 
 }
