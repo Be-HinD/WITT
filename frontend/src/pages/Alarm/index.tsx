@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import AlarmItem from './AlarmItem'
+import AlarmItem from './components/AlarmItem'
 import Header from '../../components/Header'
 import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
@@ -9,18 +9,19 @@ import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useSSEStore } from './store'
 
 interface IAlarm {
-	id: number
-	userName: string
+	id: string
+	username: string
 	content: string
+	img: string
 }
 
 const AlarmPage = () => {
 	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '알림함', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
-	const token = localStorage.getItem('token')
-	// const token =
-	// 	'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
+	// const token = localStorage.getItem('token')
+	const token =
+		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
 	const [alarmList, setAlarmList] = useState<IAlarm[]>()
 	console.log('리스트 전체', alarmList)
 	const fetchAlarmList = () => {
@@ -86,6 +87,15 @@ const AlarmPage = () => {
 			<div className="pt-12">
 				<div>{dummy && dummy.map((item) => <AlarmItem props={item} key={item.id} />)}</div>
 			</div>
+			{alarmList && alarmList.length > 0 ? (
+				<div>
+					{alarmList.map((item) => (
+						<AlarmItem props={item} key={item.id} />
+					))}
+				</div>
+			) : (
+				<div className="text-white">알림함이 비었어요</div>
+			)}
 		</div>
 	)
 }
