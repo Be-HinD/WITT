@@ -14,19 +14,16 @@ const Loading = ({ gptAnswer, capturedImage }: { gptAnswer: number; capturedImag
 	const [quizData, setQuizData] = useState<IQuizData | undefined>()
 	const { setAnswerType, setImage } = useQuizStore()
 
-	// const axiosheaders = {
-	// 	Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTY4OTc0NiwiZXhwIjoxNzExNzc2MTQ2LCJzdWIiOiIxMTE4MCIsImlkIjoxMTE4MH0.wOPT1k9tYJzkq2Q7cPhm0bGQrHobDcXkbZv2a8Nh_-U`,
-	// }
-
 	const generateQuiz = (gptAnswer: number) => {
 		axios
 			.get(`${import.meta.env.VITE_API_BASE_URL}/problem`, { params: { number: gptAnswer } })
 			.then((response) => {
 				console.log(response)
 				setQuizData(response.data.data)
-				if (quizData?.correct === '1') {
+				console.log(quizData?.correct)
+				if (quizData?.correct === '음식물쓰레기') {
 					setAnswerType(0)
-				} else if (quizData?.correct === '2') {
+				} else if (quizData?.correct === '일반쓰레기') {
 					setAnswerType(1)
 				} else {
 					setAnswerType(2)
