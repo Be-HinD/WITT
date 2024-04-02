@@ -1,12 +1,15 @@
+import { useNavigate } from 'react-router-dom'
 import { data, userstate } from '../../../components/StateVariables'
 import avatar from '../assets/avatar.gif'
 import { ImSearch } from 'react-icons/im' // 유저 검색 아이콘
 
 const UserProfile = (mydata: data) => {
+	const navigate = useNavigate()
+
 	const profileStyleClass =
 		'flex justify-center items-center z-[5] w-full h-[4.125rem] bg-[#342C3D] text-[#ffffff] font-black rounded-[15px]'
 
-	const userinfoStyleClass = 'flex-column justify-center w-3/5 mx-[30px] my-0 text-[10px]'
+	const userinfoStyleClass = 'flex-column justify-center w-1/2 mx-[30px] my-0 text-[10px]'
 
 	const levelStyleClass =
 		'flex justify-center items-center mr-0.5 w-[2.625rem] h-3.5 rounded-[5px] text-[#ffffff] text-[8px] bg-[#6DBE70]'
@@ -47,7 +50,7 @@ const UserProfile = (mydata: data) => {
 			<div
 				className="cursor-pointer"
 				onClick={() => {
-					// 유저 검색 페이지 이동
+					navigate('/search')
 				}}
 			>
 				{<ImSearch size={30} color="#ffffff" />}
