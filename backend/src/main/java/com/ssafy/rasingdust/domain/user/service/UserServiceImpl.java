@@ -179,6 +179,13 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        else {
+            //현재 로그인 한 유저와 조회하려는 유저가 같을 경우 모드 true
+            for (UserDto follow : result) {
+                follow.setFollow(true);
+            }
+        }
+
         // isFollow 기준으로 정렬
         List<UserDto> sortedList = result.getContent().stream()
             .sorted(Comparator.comparing(userDto -> userDto.isFollow() ? 0 : 1))
@@ -218,6 +225,13 @@ public class UserServiceImpl implements UserService {
                 if (currentUserFollowingList.contains(follow)) {
                     follow.setFollow(true);
                 }
+            }
+        }
+
+        else {
+            //현재 로그인 한 유저와 조회하려는 유저가 같을 경우 모드 true
+            for (UserDto follow : result) {
+                follow.setFollow(true);
             }
         }
 
