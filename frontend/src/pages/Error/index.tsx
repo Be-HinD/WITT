@@ -9,8 +9,7 @@ const Error = () => {
 				<p className="text-5xl font-bold">404</p>
 			</h1>
 			<p className="text-lg">페이지를 찾을 수 없습니다 :(</p>
-			<Link to="/search" className="hover:text-whiteText hover:underline">
-				{/* <Link to="/" className="hover:text-whiteText hover:underline"> */}
+			<Link to="/" className="hover:text-whiteText hover:underline">
 				돌아가기
 			</Link>
 		</div>
