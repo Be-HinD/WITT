@@ -21,7 +21,6 @@ const Main = () => {
 	const setNewNotice = userstate((state) => state.setNewNotice)
 
 	const characters = userstate((state) => state.characters)
-	const character = userstate((state) => state.character)
 	const setCharacter = userstate((state) => state.setCharacter)
 	const mydata = userstate((state) => state.mydata)
 	const levels = userstate((state) => state.levels)
@@ -62,7 +61,7 @@ const Main = () => {
 			setUserData(JSON.parse(localStorage.getItem('mydata')!))
 			setCharacter(~~(mydata.growthPoint / 10))
 		}
-	}, [mydata])
+	}, [localStorage.getItem('mydata')])
 
 	return (
 		<>
@@ -82,7 +81,7 @@ const Main = () => {
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img
 						style={{ filter: 'brightness(1.3)', cursor: 'pointer' }}
-						src={characters[character]}
+						src={characters[~~(mydata.growthPoint / 10)]}
 						onClick={() => {
 							getMyStatus(`${levels[~~(mydata.growthPoint / 10)]}`)
 						}}

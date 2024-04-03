@@ -14,9 +14,9 @@ const Home = () => {
 
 	useEffect(() => {
 		// 로컬 디버깅 전용
-		// if (localStorage.getItem('token')) {
-		// 	setIsLogin(true)
-		// }
+		if (localStorage.getItem('token')) {
+			setIsLogin(true)
+		}
 
 		if (cookie.get('refresh_token')) {
 			getToken(cookie.get('refresh_token')!)

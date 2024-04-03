@@ -51,7 +51,6 @@ export const otherUserData = async (accesstoken: string, id: number) => {
 }
 
 export const feedCharacter = async (accesstoken: string) => {
-	console.log(accesstoken)
 	const url = '/api/user/character'
 	const config = {
 		headers: {
@@ -61,7 +60,6 @@ export const feedCharacter = async (accesstoken: string) => {
 	return await axios
 		.put(url, {}, config)
 		.then((response) => {
-			console.log('물주기 성공')
 			return response.data
 		})
 		.catch((e) => {
@@ -81,7 +79,6 @@ export const kock = async (accesstoken: string, id: number) => {
 		.post(url, {}, config)
 		.then((response) => {
 			if (response.status == 200) {
-				console.log('찌르기 성공')
 				return true
 			} else {
 				return false
