@@ -28,8 +28,18 @@ public class SseDto {
     private LocalDateTime time;
 
     @QueryProjection
-    public SseDto(Notification notification) {
-        from(notification);
+    public SseDto(Long notificationId, Boolean readStatus, NotificationType notificationType,
+        Long receiverId, Long senderId, String senderName, String senderImg, LocalDateTime time) {
+        this.notificationId = notificationId;
+        this.readStatus = readStatus;
+        this.type = notificationType.name();
+        this.event = notificationType.getEvent();
+        this.message = notificationType.getMessage();
+        this.receiverId = receiverId;
+        this.senderId = senderId;
+        this.senderName = senderName;
+        this.senderImg = senderImg;
+        this.time = time;
     }
 
     public static SseDto of(NotificationType notificationType, Long receiverId,
