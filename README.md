@@ -102,7 +102,10 @@ WITT는 분리수거에 대한 정보를 잘 모르는 사람을 대상으로 �
 <hr>
 <h3> 😊 김지연 </h3>
 <ul>
-  <li> 추가 예정! </li>
+  <li> SSE 푸시알림 연결 </li>
+  <li> 쓰레기 분류 ChatGPT Vision AI 연결</li>
+  <li> 알림함 페이지 </li>
+  <li> 퀴즈 페이지 </li>
 </ul>
 
 <hr>
