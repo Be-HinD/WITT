@@ -22,7 +22,7 @@ function App() {
 					Connection: 'keep-alive',
 					// 'Last-Event-ID': lastEventId,
 				},
-				heartbeatTimeout: 3600000,
+				heartbeatTimeout: 36000000,
 			})
 
 			source.onopen = () => {
@@ -38,16 +38,16 @@ function App() {
 			source.addEventListener('follow', (e: any) => {
 				const data = JSON.parse(e.data)
 				setLastEventId(data.notificationId)
-				console.log(data)
-				toast(data.message)
+				const toastMessage = `${data.senderName}님이 나를 ${data.message}!`
+				toast(toastMessage)
 			})
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			source.addEventListener('kock', (e: any) => {
 				const data = JSON.parse(e.data)
 				setLastEventId(data.notificationId)
-				console.log(data)
-				toast(data.message)
+				const toastMessage = `${data.senderName}님에게 ${data.message}!`
+				toast(toastMessage)
 			})
 
 			return () => {
