@@ -37,6 +37,7 @@ const InvitorPage = () => {
 
 	const getInvitorData = async () => {
 		const token = localStorage.getItem('token')!
+
 		const userId: number = +params.id!
 		otherUserData(token, userId).then((value) => {
 			setUserData(value.data)
@@ -45,6 +46,7 @@ const InvitorPage = () => {
 
 	const makekock = async () => {
 		const token = localStorage.getItem('token')!
+
 		const userId: number = +params.id!
 		kock(token, userId).then((value) => {
 			if (value) {

@@ -33,7 +33,7 @@ export const getUserData = async (accesstoken: string) => {
 }
 
 export const otherUserData = async (accesstoken: string, id: number) => {
-	const url = `/api/user/invitor/${id}`
+	const url = `${import.meta.env.VITE_BASE_URL}/user/invitor/${id}`
 	const config = {
 		headers: {
 			Authorization: `Bearer ${accesstoken}`,
@@ -58,8 +58,9 @@ export const feedCharacter = async (accesstoken: string) => {
 		},
 	}
 	return await axios
-		.put(url, config)
+		.put(url, {}, config)
 		.then((response) => {
+			console.log('물주기 성공')
 			return response.data
 		})
 		.catch((e) => {
@@ -111,22 +112,24 @@ export const unfollow = async (accesstoken: string, id: number) => {
 }
 
 export const kock = async (accesstoken: string, id: number) => {
-	const url = `/api/user/kock/${id}`
+	const url = `${import.meta.env.VITE_BASE_URL}/user/kock/${id}`
 	const config = {
 		headers: {
 			Authorization: `Bearer ${accesstoken}`,
 		},
 	}
 	return await axios
-		.post(url, config)
+		.post(url, {}, config)
 		.then((response) => {
 			if (response.status == 200) {
+				console.log('찌르기 성공')
 				return true
 			} else {
 				return false
 			}
 		})
-		.catch(() => {
+		.catch((error: unknown) => {
+			console.error('Err', error)
 			return false
 		})
 }
