@@ -57,7 +57,7 @@ public class UserController implements UserControllerDocs {
 
     @GetMapping("/following/list/{userId}")
     public ResponseEntity<ResultResponse> getFollowingList (
-        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId, @RequestParam(name = "Pageable filter", required = false) Pageable pageable) {
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId, Pageable pageable) {
 
         SliceResponse result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()),
             userId, pageable);
@@ -66,8 +66,8 @@ public class UserController implements UserControllerDocs {
 
     @GetMapping("/follower/list/{userId}")
     public ResponseEntity<ResultResponse> getFollowerList(
-        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId, @RequestParam(name = "Pageable filter", required = false) Pageable pageable) {
-
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId,Pageable pageable) {
+        System.out.println(pageable.getPageSize());
         SliceResponse result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()),
             userId, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
