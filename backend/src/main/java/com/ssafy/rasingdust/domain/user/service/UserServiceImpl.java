@@ -1,14 +1,15 @@
 package com.ssafy.rasingdust.domain.user.service;
 
-import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
-import com.ssafy.rasingdust.domain.user.dto.response.UserListDto;
 import static com.ssafy.rasingdust.domain.notification.dto.NotificationType.KOCK_ACTION;
+
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
 import com.ssafy.rasingdust.domain.notification.service.NotificationService;
 import com.ssafy.rasingdust.domain.user.dto.request.AddUserRequest;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.UserDto;
+import com.ssafy.rasingdust.domain.user.dto.response.UserListDto;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.entity.Follow;
 import com.ssafy.rasingdust.domain.user.entity.User;
@@ -17,7 +18,6 @@ import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -61,29 +61,29 @@ public class UserServiceImpl implements UserService {
         //condition == 현재 유저의 팔로잉 리스트
         List<Long> condition = new ArrayList<>();
 
-        if(!currentUserFollowingList.isEmpty()) {
-            for(int i=0; i<currentUserFollowingList.size()-1; i++) {
+        if (!currentUserFollowingList.isEmpty()) {
+            for (int i = 0; i < currentUserFollowingList.size() - 1; i++) {
                 User user = currentUserFollowingList.get(i);
                 condition.add(user.getId());
             }
             condition.add(currentUserFollowingList.getLast().getId());
         }
 
-
-        Slice<UserListDto> result = userRepository.searchUser(condition, userName, userId, pageable);
+        Slice<UserListDto> result = userRepository.searchUser(condition, userName, userId,
+            pageable);
 
         /**
          * 현재 로그인 한 유저와 동시에 팔로우 하고있는 유저들 중 대표되는 한 유저의 닉네임 조회
          * **/
-        for(UserListDto user : result) {
-            if(user.getFollowCnt() > 0) {
+        for (UserListDto user : result) {
+            if (user.getFollowCnt() > 0) {
                 user.setDuplicateFollower(userRepository.findByCondition(condition, user.getId()));
             }
         }
 
         // 비검사 경고 제거 필요
         SliceResponse resultDto = new SliceResponse(result);
-        
+
         return resultDto;
     }
 
@@ -162,7 +162,6 @@ public class UserServiceImpl implements UserService {
         //해당 유저의 팔로잉리스트를 조회
         Slice<UserDto> result = followRepository.findByFollowing(user.get().getId(), pageable);
 
-
         /**다른 유저의 팔로잉 리스트를 조회할 경우
          * 다른 유저의 팔로워들이 현재 유저를 팔로우하고 있는지 체크
          * 다른 유저가 팔로우하고 있는 사람이 현재 로그인한 유저도 팔로우 하고있다면 true값 세팅
@@ -177,9 +176,7 @@ public class UserServiceImpl implements UserService {
                     follow.setFollow(true);
                 }
             }
-        }
-
-        else {
+        } else {
             //현재 로그인 한 유저와 조회하려는 유저가 같을 경우 모드 true
             for (UserDto follow : result) {
                 follow.setFollow(true);
@@ -218,17 +215,15 @@ public class UserServiceImpl implements UserService {
          * 팔로잉 리스트 조회 비즈니스 로직과 동일
          * */
         if (!userId.equals(myId)) {
-            List<UserDto> currentUserFollowingList = followRepository.findByFollowing(myId);   //로그인한 유저의 팔로우 리스트
-
+            List<UserDto> currentUserFollowingList = followRepository.findByFollowing(
+                myId);   //로그인한 유저의 팔로우 리스트
 
             for (UserDto follow : result.getContent()) {
                 if (currentUserFollowingList.contains(follow)) {
                     follow.setFollow(true);
                 }
             }
-        }
-
-        else {
+        } else {
             //현재 로그인 한 유저와 조회하려는 유저가 같을 경우 모드 true
             for (UserDto follow : result) {
                 follow.setFollow(true);
@@ -327,8 +322,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendKock(Long id, String userId) {
-        notificationService.saveNotice(KOCK_ACTION, Long.valueOf(userId), id);
+    public void sendKock(Long id, Long userId) {
+        notificationService.saveNotice(KOCK_ACTION, userId, id);
     }
 
 }

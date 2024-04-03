@@ -10,7 +10,6 @@ interface IAlarmProps {
 }
 const AlarmItem = ({ props }: { props: IAlarmProps }) => {
 	const token = localStorage.getItem('token')
-
 	const navigate = useNavigate()
 	const handleCheckAlarm = () => {
 		axios
@@ -23,7 +22,7 @@ const AlarmItem = ({ props }: { props: IAlarmProps }) => {
 			)
 			.then(() => {
 				// 해당 유저의 캐릭터 페이지로
-				navigate(`/${props.senderId}`)
+				navigate(`/invitor/${props.senderId}`)
 			})
 			.catch((error) => {
 				console.error('Error: ', error)

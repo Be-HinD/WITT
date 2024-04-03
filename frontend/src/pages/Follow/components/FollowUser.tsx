@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { deleteFollow, postFollow } from '../api'
 import { IFollowUser } from '../FollowerTab'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface FollowProp {
 	user: IFollowUser
@@ -20,7 +21,7 @@ const FollowUser = ({ user }: FollowProp) => {
 		setIsFollow(!isFollow)
 	}
 	return (
-		<>
+		<Link to={`/invitor/${user.id}`} className='inline-flex'>
 			<div className="size-full rounded-full overflow-hidden w-2/12 shrink-0">
 				<img
 					src={user.profileImg ? user.profileImg : `/public/dummy/random/${user.id % 7}`}
@@ -47,7 +48,7 @@ const FollowUser = ({ user }: FollowProp) => {
 					팔로잉
 				</button>
 			)}
-		</>
+		</Link>
 	)
 }
 
