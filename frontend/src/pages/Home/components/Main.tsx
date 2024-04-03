@@ -81,9 +81,9 @@ const Main = () => {
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img
 						style={{ filter: 'brightness(1.3)', cursor: 'pointer' }}
-						src={characters[~~(mydata.growthPoint / 10)]}
+						src={~~(mydata.growthPoint / 10) < 8? characters[~~(mydata.growthPoint / 10)] : characters[7]}
 						onClick={() => {
-							getMyStatus(`${levels[~~(mydata.growthPoint / 10)]}`)
+							getMyStatus(`${~~(mydata.growthPoint / 10) < 8? levels[~~(mydata.growthPoint / 10)] : levels[7]}`)
 						}}
 					/>
 				</div>
