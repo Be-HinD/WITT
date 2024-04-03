@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import { userstate } from '../../../components/StateVariables'
 import { useParams } from 'react-router'
 import { kock, otherUserData } from './API'
+import { IMenu, IMenuFunc } from '../../../components/interfaces'
+import { useRouter } from '../../../hooks/useRouter'
+import { icons } from '../../../constants/header-icons'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -28,6 +31,7 @@ text-[#ffffff] text-xs
 `
 
 const InvitorPage = () => {
+	const { goBack } = useRouter()
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
 	const [userdata, setUserData] = useState(initValue)
@@ -73,9 +77,14 @@ const InvitorPage = () => {
 				style={{ position: 'absolute', opacity: '0.3' }}
 				src={background}
 			/>
+			<div className="fixed text-whiteText top-0 z-10 flex items-center justify-between w-full max-w-screen-sm h-14 px-5 bg-background">
+				<div onClick={goBack}>{icons.BACK}</div>
+				<div className="text-lg font-bold">{userdata.userName}</div>
+				<div className="invisible">{icons.BACK}</div>
+			</div>
 			<div
 				style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}
-				className={mainStyleClass}
+				className={`${mainStyleClass} pt-16`}
 			>
 				{UserProfile(userdata)}
 				<div

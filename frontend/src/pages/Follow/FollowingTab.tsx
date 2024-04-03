@@ -7,14 +7,14 @@ import { useEffect, useState } from 'react'
 const FollowingTab = () => {
 	const userInfo = localStorage.getItem('mydata')
 	const [userId, setUserId] = useState<number | null>(null)
-
+	
 	useEffect(() => {
 		if (userInfo) {
 			const userData = JSON.parse(userInfo)
 			setUserId(userData.id)
 		}
 	})
-
+	
 	const { data: following } = useQuery<IFollowUser[]>({
 		queryKey: ['following', userId],
 		queryFn: getFollowingList,
