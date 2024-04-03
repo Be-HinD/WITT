@@ -37,6 +37,8 @@ const InvitorPage = () => {
 	const characters = userstate((state) => state.characters)
 	const [userdata, setUserData] = useState(initValue)
 	const [kockEffect, setKockEffect] = useState('brightness-[1.3] cursor-pointer')
+	const [isFollow, setIsFollow] = useState<boolean>(userdata.following)
+	const [isKock, setIsKock] = useState<boolean>(false)
 
  	const { userId } = useParams()
 
@@ -67,8 +69,7 @@ const InvitorPage = () => {
 		}
 	}, [userdata])
 
-	const [isFollow, setIsFollow] = useState<boolean>(userdata.following)
-	const [isKock, setIsKock] = useState<boolean>(false)
+	
 	const follow = useMutation({ mutationFn: postFollow })
 	const unfollow = useMutation({ mutationFn: deleteFollow })
 	const mutateKock = useMutation({ mutationFn: postKock })
