@@ -13,14 +13,15 @@ interface IAlarm {
 	event: string
 	senderId: number
 	time: string
-	img: string
-	username: string
+	senderImg: string
+	senderName: string
 }
 const AlarmPage = () => {
 	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '알림함', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	const token = localStorage.getItem('token')
+
 	const [alarmList, setAlarmList] = useState<IAlarm[]>()
 	console.log('리스트 전체', alarmList)
 	const fetchAlarmList = () => {
@@ -80,13 +81,13 @@ const AlarmPage = () => {
 		<div>
 			<Header menu={menu} func={func}></Header>
 			{alarmList && alarmList.length > 0 ? (
-				<div className="pt-12">
+				<div className="pt-16">
 					{alarmList.map((item) => (
 						<AlarmItem props={item} key={item.notificationId} />
 					))}
 				</div>
 			) : (
-				<div className="text-white pt-12 mx-5">알림함이 비었어요 💨</div>
+				<div className="text-white pt-20 mx-5 text-center">알림함이 비었어요 💨</div>
 			)}
 		</div>
 	)
