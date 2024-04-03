@@ -20,6 +20,13 @@ const initValue = {
 	following: false,
 }
 
+const followButtonStyleClass = `
+w-[80px] h-[60px] 
+rounded-[10px] 
+flex justify-center items-center 
+text-[#ffffff] text-xs 
+`
+
 const InvitorPage = () => {
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
@@ -55,12 +62,21 @@ const InvitorPage = () => {
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img style={{ filter: 'brightness(1.3)', cursor: 'pointer' }} src={characters[character]} />
 				</div>
-				<div className="flex w-[200px] h-[50px] justify-around">
-					<div className="w-[80px] h-[20px] flex justify-center items-center bg-[#ff0000] text-[#ffffff] text-xs">
-						1
+				<div className="flex w-[200px] h-[100px] justify-around">
+					<div
+						className={
+							userdata.follower ? followButtonStyleClass + 'bg-[#28edd6]' : followButtonStyleClass + 'bg-[#97bfbb]'
+						}
+						onClick={() => {}}
+					>
+						{userdata.follower ? '팔로우중' : '언팔로우'}
 					</div>
-					<div className="w-[80px] h-[20px] flex justify-center items-center bg-[#0000ff] text-[#ffffff] text-xs">
-						2
+					<div
+						className={
+							userdata.following ? followButtonStyleClass + 'bg-[#eb42d1]' : followButtonStyleClass + 'bg-[#eb42d1]'
+						}
+					>
+						{userdata.following ? '팔로잉중' : '언팔로잉'}
 					</div>
 				</div>
 			</div>
