@@ -38,7 +38,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedTime = now.format(formatter);
         log.info("API 호출 시각 : {}", formattedTime);
-
+        log.info("토큰 : {}", token);
         // 토큰 유효성 검사
         if (tokenProvider.isValidToken(token)) {
             Long userId = tokenProvider.getUserId(token);

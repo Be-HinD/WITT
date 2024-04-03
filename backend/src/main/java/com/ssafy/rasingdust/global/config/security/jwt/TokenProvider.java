@@ -58,6 +58,7 @@ public class TokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {    // 복호화 과정에서 에러나면 false
+            log.error(String.valueOf(e));
             return false;
         }
     }
