@@ -1,10 +1,11 @@
 import { RouterProvider } from 'react-router-dom'
 import router from './router'
 import { ToastContainer, toast } from 'react-toastify'
-import { EventSourcePolyfill } from 'event-source-polyfill'
+import { EventSourcePolyfill, EventSourcePolyfillInit } from 'event-source-polyfill'
 import { useSSEStore } from './pages/Alarm/store'
 import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
+import { IFollowEvent } from './pages/Alarm/constants'
 
 function App() {
 	const token = localStorage.getItem('token')
@@ -34,7 +35,16 @@ function App() {
 				source.close()
 			}
 
-			source.addEventListener('message', (e) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			source.addEventListener('follow', (e: any) => {
+				const data = JSON.parse(e.data)
+				setLastEventId(data.notificationId)
+				console.log(data)
+				toast(data.message)
+			})
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			source.addEventListener('kock', (e: any) => {
 				const data = JSON.parse(e.data)
 				setLastEventId(data.notificationId)
 				console.log(data)
