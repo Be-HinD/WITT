@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: 'invitor/:id',
+				path: 'invitor/:userId',
 				element: <InvitorPage />,
 			},
 			{
