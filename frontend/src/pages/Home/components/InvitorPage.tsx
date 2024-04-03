@@ -38,22 +38,18 @@ const InvitorPage = () => {
 	const [userdata, setUserData] = useState(initValue)
 	const [kockEffect, setKockEffect] = useState('brightness-[1.3] cursor-pointer')
 
-	const params = useParams()
+ 	const { userId } = useParams()
 
 	const getInvitorData = async () => {
 		const token = localStorage.getItem('token')!
-
-		const userId: number = +params.id!
-		otherUserData(token, userId).then((value) => {
+		otherUserData(token, parseInt(userId!)).then((value) => {
 			setUserData(value.data)
 		})
 	}
 
 	const makekock = async () => {
 		const token = localStorage.getItem('token')!
-
-		const userId: number = +params.id!
-		kock(token, userId).then((value) => {
+		kock(token, parseInt(userId!)).then((value) => {
 			if (value) {
 				setTimeout(() => {
 					setKockEffect(kockEffect.replace('brightness-[1.3]', 'brightness-[1.7]'))
@@ -66,10 +62,10 @@ const InvitorPage = () => {
 	}
 
 	useEffect(() => {
-		if (params.id) {
+		if (userId) {
 			getInvitorData()
 		}
-	}, [])
+	}, [userdata])
 
 	const [isFollow, setIsFollow] = useState<boolean>(userdata.following)
 	const [isKock, setIsKock] = useState<boolean>(false)
