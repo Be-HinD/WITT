@@ -9,27 +9,26 @@ import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useSSEStore } from './store'
 
 interface IAlarm {
-	id: string
-	username: string
-	content: string
-	img: string
+	notificationId: number
+	event: string
+	senderId: number
+	time: string
+	senderImg: string
+	senderName: string
 }
-
 const AlarmPage = () => {
 	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '알림함', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
-	// const token = localStorage.getItem('token')
-	const token =
-		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
+	const token = localStorage.getItem('token')
+
 	const [alarmList, setAlarmList] = useState<IAlarm[]>()
 	console.log('리스트 전체', alarmList)
 	const fetchAlarmList = () => {
 		axios
-			.get(`${import.meta.env.VITE_API_BASE_URL}/notices`, { headers: { authorization: `Bearer ${token}` } })
+			.get(`${import.meta.env.VITE_BASE_URL}/notices`, { headers: { authorization: `Bearer ${token}` } })
 			.then((response) => {
-				console.log('알림리스트 응답', response.data)
-				setAlarmList(response.data.data)
+				setAlarmList(response.data.data.content)
 			})
 			.catch((error: unknown) => {
 				console.error('Error:', error)
@@ -48,7 +47,7 @@ const AlarmPage = () => {
 			window.alert('로그인 후 이용이 가능한 서비스입니다.')
 			navigate('/')
 		} else {
-			const source = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/sse/subscribe`, {
+			const source = new EventSource(`${import.meta.env.VITE_BASE_URL}/sse/subscribe`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 					// 'Cache-Control': 'no-cache',
@@ -59,7 +58,7 @@ const AlarmPage = () => {
 			})
 
 			source.onopen = () => {
-				console.log('연결 성공')
+				// console.log('연결 성공')
 			}
 
 			source.onerror = (error) => {
@@ -68,11 +67,8 @@ const AlarmPage = () => {
 			}
 
 			source.addEventListener('message', (e) => {
-				console.log('SSE를 통해 온 알림')
-				console.log(e)
 				const data = JSON.parse(e.data)
-				console.log(data)
-				setLastEventId(data.id) // 응답 확인해서 수정
+				setLastEventId(data.notificationId)
 			})
 
 			return () => {
@@ -84,17 +80,14 @@ const AlarmPage = () => {
 	return (
 		<div>
 			<Header menu={menu} func={func}></Header>
-			<div className="pt-12">
-				<div>{dummy && dummy.map((item) => <AlarmItem props={item} key={item.id} />)}</div>
-			</div>
 			{alarmList && alarmList.length > 0 ? (
-				<div>
+				<div className="pt-16">
 					{alarmList.map((item) => (
-						<AlarmItem props={item} key={item.id} />
+						<AlarmItem props={item} key={item.notificationId} />
 					))}
 				</div>
 			) : (
-				<div className="text-white">알림함이 비었어요</div>
+				<div className="text-white pt-20 mx-5 text-center">알림함이 비었어요 💨</div>
 			)}
 		</div>
 	)
@@ -102,23 +95,29 @@ const AlarmPage = () => {
 
 export default AlarmPage
 
-const dummy = [
-	{
-		id: '1',
-		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
-		username: '지연',
-		content: '님이 당신을 콕 찔렀어요',
-	},
-	{
-		id: '2',
-		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
-		username: '냠냠',
-		content: '님이 당신을 콕 찔렀어요',
-	},
-	{
-		id: '3',
-		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
-		username: '뉴상수',
-		content: '님이 당신을 팔로우해요',
-	},
-]
+// const dummy = [
+// 	{
+// 		notificationId: 1,
+// 		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+// 		username: '지연',
+// 		event: 'kock',
+// 		senderId: 1,
+// 		time: '2024-04-01T20:37:02.527458',
+// 	},
+// 	{
+// 		notificationId: 2,
+// 		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+// 		username: '냠냠',
+// 		event: 'kock',
+// 		senderId: 2,
+// 		time: '2024-04-01T20:37:02.527458',
+// 	},
+// 	{
+// 		notificationId: 3,
+// 		img: 'https://avatars.githubusercontent.com/u/125720796?v=4',
+// 		username: '상수',
+// 		event: 'kock',
+// 		senderId: 3,
+// 		time: '2024-04-01T20:37:02.527458',
+// 	},
+// ]

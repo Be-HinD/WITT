@@ -11,6 +11,7 @@ import Search from './pages/Search'
 import AlarmPage from './pages/Alarm'
 import CorrectPage from './pages/Quiz/Correct'
 import WrongPage from './pages/Quiz/Wrong'
+import InvitorPage from './pages/Home/components/InvitorPage'
 
 const router = createBrowserRouter([
 	{
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 			{
 				path: '/',
 				element: <Home />,
+			},
+			{
+				path: 'invitor/:id',
+				element: <InvitorPage />,
 			},
 			{
 				path: 'follow',

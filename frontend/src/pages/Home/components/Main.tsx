@@ -8,30 +8,15 @@ import { getToken, getUserData } from './API'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
-const noticeStyleClass = {
-	zIndex: '20',
-	position: 'absolute',
-	width: '60%',
-	height: '60px',
-	top: '20%',
-	left: '15%',
-	padding: '20px 30px',
-	backgroundColor: '#1cd44d',
-	borderRadius: '50px',
-	whiteSpace: 'nowrap',
-	overflow: 'hidden',
-	textOverflow: 'ellipsis',
-	color: '#ffffff',
-	fontSize: '12px',
-	fontWeight: '900',
-	boxShadow: '0px 0px 15px 3px #F2FCFC',
-	transform: 'scaleX(0)',
-} as React.CSSProperties
+const noticeStyleClass = `
+absolute z-20 
+px-[30px] py-5 
+text-xs text-center font-semibold text-[#ffffff] 
+whitespace-pre-wrap opacity-0 bottom-1/2 
+`
 
 const Main = () => {
 	const cookie = new Cookies()
-	// const notices = userstate((state) => state.notices)
-	// const setNotices = userstate((state) => state.setNotices)
 	const newNotice = userstate((state) => state.newNotice)
 	const setNewNotice = userstate((state) => state.setNewNotice)
 
@@ -45,13 +30,17 @@ const Main = () => {
 	const [userdata, setUserData] = useState(mydata)
 
 	const getMyStatus = (state: string) => {
-		setNewNotice(`현재 캐릭터의 레벨은 ${state}입니다. 물을 주어 캐릭터를 성장시키세요!`)
+		setNewNotice(`현재 캐릭터의 레벨은 ${state}입니다.\n 물을 주어 캐릭터를 성장시키세요!`)
 		setTimeout(() => {
-			setNoticeEffect({ ...noticeEffect, transform: 'scaleX(1)', transition: 'all 0.2s ease-out' })
-		}, 500)
+			setNoticeEffect(
+				noticeEffect.replace('opacity-0 bottom-1/2', 'opacity-100 bottom-2/3 transition-all duration-300 ease-out')
+			)
+		}, 200)
 		setTimeout(() => {
-			setNoticeEffect({ ...noticeEffect, transform: 'scaleX(0)', transition: 'all 0.2s ease-out' })
-		}, 3500)
+			setNoticeEffect(
+				noticeEffect.replace('opacity-100 bottom-2/3 transition-all duration-300 ease-out', 'opacity-0 bottom-1/2')
+			)
+		}, 1800)
 	}
 
 	const getData = async () => {
@@ -82,7 +71,9 @@ const Main = () => {
 				style={{ position: 'absolute', opacity: '0.3' }}
 				src={background}
 			/>
-			<div style={noticeEffect}>{newNotice}</div>
+			<div style={{ display: 'flex', justifyContent: 'center' }}>
+				<div className={noticeEffect}>{newNotice}</div>
+			</div>
 			<div
 				style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}
 				className={mainStyleClass}

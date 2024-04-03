@@ -1,36 +1,51 @@
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 interface IAlarmProps {
-	id: string
-	img: string
-	username: string
-	content: string
+	notificationId: number
+	event: string
+	senderId: number
+	time: string
+	senderImg: string
+	senderName: string
 }
 const AlarmItem = ({ props }: { props: IAlarmProps }) => {
-	// const token = localStorage.getItem('token')
-	const token =
-		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
+	const token = localStorage.getItem('token')
+
 	const navigate = useNavigate()
 	const handleCheckAlarm = () => {
 		axios
-			.put(`${import.meta.env.VITE_API_BASE_URL}/notices/${props.id}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			})
-			.then((response) => {
-				console.log(response.data)
+			.put(
+				`${import.meta.env.VITE_BASE_URL}/notices/${props.notificationId}`,
+				{},
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			)
+			.then(() => {
 				// 해당 유저의 캐릭터 페이지로
-				navigate('/')
+				navigate(`/${props.senderId}`)
 			})
 			.catch((error) => {
 				console.error('Error: ', error)
 			})
 	}
+
 	return (
 		<div className="flex items-center hover:bg-stone-800" onClick={handleCheckAlarm}>
 			<div>
-				<img src={props.img} alt="" className="rounded-full w-12 mx-4 my-4" />
+				<img src={props.senderImg} alt="" className="rounded-full w-12 h-12 mx-4 my-4" />
 			</div>
-			<div className="text-white">{`${props.username}${props.content}`}</div>
+			{props.event === 'follow' ? (
+				<div className="text-white flex">
+					<div className="w-56">{`${props.senderName}님이 당신을 팔로우해요 `}</div>
+					<div className="">{props.time.slice(5, 10)}</div>
+				</div>
+			) : (
+				<div className="text-white flex">
+					<div className="w-56">{`${props.senderName}님에게 콕 찔렸어요!`}</div>
+					<div className="">{props.time.slice(5, 10)}</div>
+				</div>
+			)}
 		</div>
 	)
 }

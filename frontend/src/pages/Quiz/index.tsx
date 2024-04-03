@@ -70,10 +70,10 @@ const Quiz = () => {
 		axios
 			.post('https://api.openai.com/v1/chat/completions', payload, { headers })
 			.then((response) => {
-				console.log(response.data)
 				const answer = response.data.choices[0].message.content
 				setGptAnswer(answer)
 				if (answer === '0') {
+					setGptAnswer(-1)
 					window.alert('쓰레기로 분류할 수 없습니다. 다시 촬영해주세요.')
 					window.location.reload()
 				}

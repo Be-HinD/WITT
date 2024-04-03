@@ -4,7 +4,7 @@ import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'
 import { data } from '../../../components/StateVariables'
 import { useState } from 'react'
-// import { feedCharacter } from './API'
+import { feedCharacter } from './API'
 
 const PlusEffectClass = `
 absolute 
@@ -67,6 +67,14 @@ const ActionBar = (mydata: data) => {
 		</div>
 	)
 
+	const feedWater = async () => {
+		const token = localStorage.getItem('token')
+		const data = JSON.parse(localStorage.getItem('mydata')!)
+		feedCharacter(token!).then((value) => {
+			localStorage.setItem('mydata', JSON.stringify({ ...data, value }))
+		})
+	}
+
 	const popupBox = (
 		<div className={popupEffect}>
 			{comment}
@@ -76,7 +84,7 @@ const ActionBar = (mydata: data) => {
 					className={popupButtonStyleClass + 'bg-[#1cd44d]'}
 					onClick={() => {
 						if (mydata.bottle > 0) {
-							// 먹이주기 api 실행하기
+							feedWater()
 						} else {
 							setPopup(false)
 							setComment(

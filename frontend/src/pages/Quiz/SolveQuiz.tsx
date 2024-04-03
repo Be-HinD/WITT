@@ -3,6 +3,7 @@ import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
 import { useNavigate } from 'react-router-dom'
 import AnswerOption from './components/AnswerOption'
+import { useEffect, useState } from 'react'
 
 interface IQuizData {
 	correct: string
@@ -16,6 +17,11 @@ const SolveQuiz = ({ quizData, capturedImage }: { quizData: IQuizData; capturedI
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 
 	const options: string[] = Object.values(quizData)
+	const [shuffledArr, setShuffledArr] = useState<string[]>()
+	useEffect(() => {
+		const shuffled = options.sort(() => Math.random() - 0.5)
+		setShuffledArr(shuffled)
+	}, [])
 
 	return (
 		<div>
@@ -27,9 +33,9 @@ const SolveQuiz = ({ quizData, capturedImage }: { quizData: IQuizData; capturedI
 					<div>분류할까요</div>
 				</div>
 				<div className="ml-5">
-					{options.map((option) => (
-						<AnswerOption wasteType={option} correct={quizData.correct} key={option} />
-					))}
+					{shuffledArr &&
+						shuffledArr.length > 0 &&
+						shuffledArr.map((option) => <AnswerOption wasteType={option} correct={quizData.correct} key={option} />)}
 				</div>
 			</div>
 		</div>
