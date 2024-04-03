@@ -20,7 +20,6 @@ const SolveQuiz = ({ quizData, capturedImage }: { quizData: IQuizData; capturedI
 	const [shuffledArr, setShuffledArr] = useState<string[]>()
 	useEffect(() => {
 		const shuffled = options.sort(() => Math.random() - 0.5)
-		console.log(shuffled)
 		setShuffledArr(shuffled)
 	}, [])
 
