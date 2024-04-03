@@ -1,5 +1,6 @@
 package com.ssafy.rasingdust.domain.notification.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.rasingdust.domain.notification.entity.Notification;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,11 @@ public class SseDto {
     private String senderName;
     private String senderImg;
     private LocalDateTime time;
+
+    @QueryProjection
+    public SseDto(Notification notification) {
+        from(notification);
+    }
 
     public static SseDto of(NotificationType notificationType, Long receiverId,
         LocalDateTime time) {

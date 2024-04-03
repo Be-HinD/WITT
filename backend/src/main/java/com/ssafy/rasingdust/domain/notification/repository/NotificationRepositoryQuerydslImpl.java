@@ -20,19 +20,8 @@ public class NotificationRepositoryQuerydslImpl implements NotificationRepositor
 
     @Override
     public SliceResponse<SseDto> getNoticeSliceByUserId(Long userId, Pageable pageable) {
-        List<SseDto> notices = queryFactory.select(Projections.fields(
-                SseDto.class,
-                notification.id,
-                notification.readStatus,
-                notification.notificationType,
-                null,
-                null,
-                notification.receiverId,
-                notification.sender.id,
-                notification.sender.userName,
-                notification.sender.profileImg,
-                notification.time
-            ))
+        List<SseDto> notices = queryFactory.select(
+                Projections.constructor(SseDto.class, notification))
             .from(notification)
             .where(notification.receiverId.eq(userId))
             .offset(pageable.getOffset())
