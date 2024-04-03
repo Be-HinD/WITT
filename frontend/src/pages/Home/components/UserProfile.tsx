@@ -29,8 +29,8 @@ const UserProfile = (mydata: data) => {
 				src={mydata.profileImg ? mydata.profileImg : avatar}
 			/>
 			<div className={userinfoStyleClass}>
-				<div style={{ minWidth: '100px', width: '100%' }} className="flex justify-start gap-3 my-[5px]">
-					<span className={levelStyleClass}>{`${levels[~~(mydata.growthPoint / 10)]}`}</span>
+				<div style={{ minWidth: '100px', width: '100%' }} className="flex justify-around my-[5px]">
+					<span className={levelStyleClass}>{`${~~(mydata.growthPoint / 10) < 8? levels[~~(mydata.growthPoint / 10)] : levels[7]}`}</span>
 					{`${mydata.userName}`}님<span className="mx-[15px] text-[8px]">{`${mydata.rank}`}위</span>
 				</div>
 				<div className="my-[5px]">

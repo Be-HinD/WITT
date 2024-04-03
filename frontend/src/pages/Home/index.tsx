@@ -17,29 +17,10 @@ const Home = () => {
 		if (localStorage.getItem('token')) {
 			setIsLogin(true)
 		}
-
-		if (cookie.get('refresh_token')) {
-			getToken(cookie.get('refresh_token')!)
-				.then((value) => {
-					if (value) {
-						localStorage.setItem('token', value.data)
-						getUserData(value.data).then((result) => {
-							localStorage.setItem('mydata', JSON.stringify(result.data))
-							setIsLogin(true)
-						})
-					} else {
-						cookie.remove('refresh_token')
-						localStorage.clear()
-						setIsLogin(false)
-					}
-				})
-				.catch(() => {
-					cookie.remove('refresh_token')
-					localStorage.clear()
-					setIsLogin(false)
-				})
+		else {
+			setIsLogin(false)
 		}
-	}, [cookie.get('refresh_token')])
+	}, [localStorage.getItem('token')])
 
 	return <div>{isLogin ? <Main /> : <Splash />}</div>
 }
