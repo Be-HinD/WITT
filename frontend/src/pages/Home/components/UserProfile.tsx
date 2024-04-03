@@ -65,7 +65,7 @@ const UserProfile = (mydata: data) => {
 					navigate('/search')
 				}}
 			>
-				{<ImSearch size={20} color="#ffffff" />}
+				<ImSearch size={20} className="font-light" color="#ffffff" />
 			</div>
 			<div className="mx-[10px]">
 				<AlarmBell />
