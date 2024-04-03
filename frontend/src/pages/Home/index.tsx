@@ -13,19 +13,33 @@ const Home = () => {
 	}))
 
 	useEffect(() => {
-		if (cookie.get('refresh_token') || localStorage.getItem('token')) {
-			if (cookie.get('refresh_token')) {
-				getUserData(localStorage.getItem('token')!).then((value) => {
-					if (!value) {
-						getToken(cookie.get('refresh_token')!).then((value) => {
-							localStorage.setItem('token', value.data)
+		// 로컬 디버깅 전용
+		// if (localStorage.getItem('token')) {
+		// 	setIsLogin(true)
+		// }
+
+		if (cookie.get('refresh_token')) {
+			getToken(cookie.get('refresh_token')!)
+				.then((value) => {
+					if (value) {
+						localStorage.setItem('token', value.data)
+						getUserData(value.data).then((result) => {
+							localStorage.setItem('mydata', JSON.stringify(result.data))
+							setIsLogin(true)
 						})
+					} else {
+						cookie.remove('refresh_token')
+						localStorage.clear()
+						setIsLogin(false)
 					}
 				})
-			}
-			setIsLogin(true)
+				.catch(() => {
+					cookie.remove('refresh_token')
+					localStorage.clear()
+					setIsLogin(false)
+				})
 		}
-	}, [])
+	}, [cookie.get('refresh_token')])
 
 	return <div>{isLogin ? <Main /> : <Splash />}</div>
 }
