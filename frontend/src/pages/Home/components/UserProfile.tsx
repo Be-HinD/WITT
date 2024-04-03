@@ -29,7 +29,7 @@ const UserProfile = (mydata: data) => {
 				src={mydata.profileImg ? mydata.profileImg : avatar}
 			/>
 			<div className={userinfoStyleClass}>
-				<div style={{ minWidth: '100px', width: '100%' }} className="flex justify-around my-[5px]">
+				<div style={{ minWidth: '100px', width: '100%' }} className="flex justify-start gap-3 my-[5px]">
 					<span className={levelStyleClass}>{`${levels[~~(mydata.growthPoint / 10)]}`}</span>
 					{`${mydata.userName}`}님<span className="mx-[15px] text-[8px]">{`${mydata.rank}`}위</span>
 				</div>
@@ -65,7 +65,7 @@ const UserProfile = (mydata: data) => {
 					navigate('/search')
 				}}
 			>
-				{<ImSearch size={20} color="#ffffff" />}
+				<ImSearch size={20} className="font-light" color="#ffffff" />
 			</div>
 			<div className="mx-[10px]">
 				<AlarmBell />

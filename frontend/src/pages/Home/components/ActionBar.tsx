@@ -31,9 +31,10 @@ shadow-[0_4px_34px_#00000026]
 backdrop-blur-[50px] 
 backdrop-brightness-100 
 hover:scale-110
+transition
 `
 
-const actionbuttonStyleClass = 'text-[#ffffff] text-xs font-black'
+const actionbuttonStyleClass = 'text-white text-sm font-normal pt-1'
 
 const popupStyleClass = `
 absolute z-20 
