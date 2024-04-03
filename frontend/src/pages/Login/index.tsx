@@ -15,7 +15,6 @@ const Login = () => {
 	const getData = async () => {
 		if (cookie.get('refresh_token')) {
 			getToken(cookie.get('refresh_token')!).then((value) => {
-				console.log(value!.data)
 				localStorage.setItem('token', value.data)
 				getUserData(value.data).then((result) => {
 					localStorage.setItem('mydata', JSON.stringify(result.data))
