@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +34,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             HEADER_AUTHORIZATION);    // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         String token = getAccessToken(authorizationHeader);
 
-        log.info("요청 Token = " + token);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = now.format(formatter);
+        log.info("API 호출 시각 : {}", formattedTime);
 
         // 토큰 유효성 검사
         if (tokenProvider.isValidToken(token)) {
