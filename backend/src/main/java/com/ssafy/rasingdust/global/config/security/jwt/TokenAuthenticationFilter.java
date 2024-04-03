@@ -41,6 +41,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰 유효성 검사
         if (tokenProvider.isValidToken(token)) {
+            Long userId = tokenProvider.getUserId(token);
+            log.info("API 호출 유저 : {}", userId);
             // 인증서 발급
             Authentication authentication = tokenProvider.getAuthentication(token);
             // spring security에 인증서 등록
@@ -59,4 +61,5 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // 없으면 null
         return null;
     }
+
 }
