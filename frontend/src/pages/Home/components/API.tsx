@@ -51,6 +51,7 @@ export const otherUserData = async (accesstoken: string, id: number) => {
 }
 
 export const feedCharacter = async (accesstoken: string) => {
+	console.log(accesstoken)
 	const url = '/api/user/character'
 	const config = {
 		headers: {
