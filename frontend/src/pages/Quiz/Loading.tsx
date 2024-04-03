@@ -18,9 +18,7 @@ const Loading = ({ gptAnswer, capturedImage }: { gptAnswer: number; capturedImag
 		axios
 			.get(`${import.meta.env.VITE_BASE_URL}/problem`, { params: { number: gptAnswer } })
 			.then((response) => {
-				console.log(response)
 				setQuizData(response.data.data)
-				console.log(quizData?.correct)
 				if (quizData?.correct === '음식물쓰레기') {
 					setAnswerType(0)
 				} else if (quizData?.correct === '일반쓰레기') {

@@ -9,17 +9,14 @@ interface IAlarmProps {
 	username: string
 }
 const AlarmItem = ({ props }: { props: IAlarmProps }) => {
-	// const token = localStorage.getItem('token')
-	const token =
-		'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcmFpc2luZ2R1c3Qvb2lqYWZkLmNvbSIsImlhdCI6MTcxMTgwNDczMSwiZXhwIjoxNzEzMDE0MzMxLCJzdWIiOiIxMDMiLCJpZCI6MTAzfQ.GT7Jl-QFkIjQECd0ikkt3hnhuUBoyJVTFCBUwKjFEwk'
+	const token = localStorage.getItem('token')
 	const navigate = useNavigate()
 	const handleCheckAlarm = () => {
 		axios
 			.put(`${import.meta.env.VITE_BASE_URL}/notices/${props.notificationId}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
-			.then((response) => {
-				console.log(response.data)
+			.then(() => {
 				// 해당 유저의 캐릭터 페이지로
 				navigate(`/${props.senderId}`)
 			})
