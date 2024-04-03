@@ -1,8 +1,8 @@
 package com.ssafy.rasingdust.domain.user.controller;
 
-import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.FeedCharacterResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.GetUserResponse;
+import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.domain.user.dto.response.VisitUserResponse;
 import com.ssafy.rasingdust.domain.user.service.UserService;
 import com.ssafy.rasingdust.global.result.ResultCode;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,8 +56,9 @@ public class UserController implements UserControllerDocs {
     }
 
     @GetMapping("/following/list/{userId}")
-    public ResponseEntity<ResultResponse> getFollowingList (
-        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId, Pageable pageable) {
+    public ResponseEntity<ResultResponse> getFollowingList(
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId,
+        Pageable pageable) {
         SliceResponse result = userService.getFollowingList(Long.valueOf(userDetails.getUsername()),
             userId, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWINGLIST_SUCCESS, result));
@@ -66,20 +66,25 @@ public class UserController implements UserControllerDocs {
 
     @GetMapping("/follower/list/{userId}")
     public ResponseEntity<ResultResponse> getFollowerList(
-        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId,Pageable pageable) {
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId,
+        Pageable pageable) {
         SliceResponse result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()),
             userId, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
     }
 
     @PutMapping("/character")
-    public ResponseEntity<FeedCharacterResponse> feedCharacter(@AuthenticationPrincipal UserDetails userDetails) {
-        FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(Long.valueOf(userDetails.getUsername()));
+    public ResponseEntity<FeedCharacterResponse> feedCharacter(
+        @AuthenticationPrincipal UserDetails userDetails) {
+        FeedCharacterResponse feedCharacterResponse = userService.feedCharacter(
+            Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok(feedCharacterResponse);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResultResponse> getUserList(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String userName, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<ResultResponse> getUserList(
+        @AuthenticationPrincipal UserDetails userDetails, @RequestParam String userName,
+        @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         SliceResponse response = userService.findByuserNameStartsWith(
             Long.valueOf(userDetails.getUsername()), userName, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
@@ -104,7 +109,7 @@ public class UserController implements UserControllerDocs {
     @Operation(summary = "콕 찌르기")
     @PostMapping("/kock/{userId}")
     public ResponseEntity<Void> sendKock(@AuthenticationPrincipal UserDetails user,
-        @PathVariable String userId) {
+        @PathVariable Long userId) {
         userService.sendKock(Long.valueOf(user.getUsername()), userId);
         return ResponseEntity.ok().build();
     }

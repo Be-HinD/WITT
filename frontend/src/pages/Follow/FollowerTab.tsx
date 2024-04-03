@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import FollowUser from './components/FollowUser'
 import { getFollowerList } from './api'
+import { useEffect, useState } from 'react'
 
 export interface IFollowUser {
 	id: number
@@ -14,7 +15,16 @@ export interface IFollowUser {
 }
 
 const FollowerTab = () => {
-	const userId = 103
+	const userInfo = localStorage.getItem('mydata')
+	const [userId, setUserId] = useState<number | null>(null)
+
+	useEffect(() => {
+		if (userInfo) {
+			const userData = JSON.parse(userInfo)
+			setUserId(userData.id)
+		}
+	})
+
 	const { data: follower } = useQuery<IFollowUser[]>({
 		queryKey: ['follower', userId],
 		queryFn: getFollowerList,
