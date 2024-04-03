@@ -1,11 +1,11 @@
 {
-	"name": "WITT",
-	"short_name": "위트",
+	"name": "위트",
+	"short_name": "위트 WITT",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#ffffff",
-	"description": "WITT | 위트있게 버리기",
+	"description": "위트 있게 버리기 | Where Is This Trash",
 	"icons": [
 		{
 			"src": "icons/50.png",
