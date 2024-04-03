@@ -34,7 +34,16 @@ function App() {
 				source.close()
 			}
 
-			source.addEventListener('message', (e) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			source.addEventListener('follow', (e: any) => {
+				const data = JSON.parse(e.data)
+				setLastEventId(data.notificationId)
+				console.log(data)
+				toast(data.message)
+			})
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			source.addEventListener('kock', (e: any) => {
 				const data = JSON.parse(e.data)
 				setLastEventId(data.notificationId)
 				console.log(data)
