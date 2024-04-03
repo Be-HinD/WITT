@@ -4,7 +4,6 @@ import AlarmItem from './components/AlarmItem'
 import Header from '../../components/Header'
 import { IMenu, IMenuFunc } from '../../components/interfaces'
 import { icons } from '../../constants/header-icons'
-import { useNavigate } from 'react-router-dom'
 
 interface IAlarm {
 	notificationId: number
@@ -15,9 +14,8 @@ interface IAlarm {
 	senderName: string
 }
 const AlarmPage = () => {
-	const navigate = useNavigate()
 	const menu: IMenu = { left: icons.BACK, center: '알림함', right: undefined }
-	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
+	const func: IMenuFunc = { left_func: () => window.history.back(), right_func: undefined }
 	const token = localStorage.getItem('token')
 
 	const [alarmList, setAlarmList] = useState<IAlarm[]>()
