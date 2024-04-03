@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { getFollowingList } from './api'
-import FollowSkeleton from './components/FollowSkeleton'
 import FollowUser from './components/FollowUser'
 import { IFollowUser } from './FollowerTab'
 
@@ -9,7 +8,6 @@ const FollowingTab = () => {
 	const { data: following } = useQuery<IFollowUser[]>({
 		queryKey: ['following', userId],
 		queryFn: getFollowingList,
-		enabled: !!userId,
 	})
 
 	return (
@@ -21,7 +19,6 @@ const FollowingTab = () => {
 							<FollowUser user={user} />
 						</li>
 					))}
-				<FollowSkeleton />
 			</ul>
 		</div>
 	)

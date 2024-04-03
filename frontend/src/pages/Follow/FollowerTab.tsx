@@ -15,6 +15,7 @@ export interface IFollowUser {
 
 const FollowerTab = () => {
 	const userId = 103
+
 	const { data: follower } = useQuery<IFollowUser[]>({
 		queryKey: ['follower', userId],
 		queryFn: getFollowerList,

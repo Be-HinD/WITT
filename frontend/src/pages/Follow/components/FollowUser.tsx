@@ -1,26 +1,23 @@
 import { useMutation } from '@tanstack/react-query'
 import { deleteFollow, postFollow } from '../api'
 import { IFollowUser } from '../FollowerTab'
+import { useState } from 'react'
 
 interface FollowProp {
 	user: IFollowUser
 }
 
 const FollowUser = ({ user }: FollowProp) => {
-	console.log("[user]", user)
+	const [isFollow, setIsFollow] = useState<boolean>(user.follow)
 	const follow = useMutation({ mutationFn: postFollow })
 	const unfollow = useMutation({ mutationFn: deleteFollow })
 	const handleFollow = () => {
 		follow.mutate({ fromId: user.id })
-		if (follow.isSuccess) {
-			console.log(follow.data, 'success')
-		} else console.log('else')
+		setIsFollow(!isFollow)
 	}
 	const handleUnfollow = () => {
 		unfollow.mutate({ fromId: user.id })
-		if (unfollow.isSuccess) {
-			console.log(unfollow.data, 'success')
-		} else console.log('else')
+		setIsFollow(!isFollow)
 	}
 	return (
 		<>
@@ -35,7 +32,7 @@ const FollowUser = ({ user }: FollowProp) => {
 				<p>{user.userName}</p>
 				<p className="text-xs text-GrayText">Lv.{user.growthPoint / 10}</p>
 			</div>
-			{!user.follow ? (
+			{!isFollow ? (
 				<button
 					onClick={handleFollow}
 					className="text-sm hover:bg-sky-800 transition-colors bg-sky-900 rounded-xl w-2/12 py-1 shrink-0"
