@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { userstate } from '../../../components/StateVariables'
 import { useParams } from 'react-router'
 import { kock, otherUserData } from './API'
-import { IMenu, IMenuFunc } from '../../../components/interfaces'
 import { useRouter } from '../../../hooks/useRouter'
 import { icons } from '../../../constants/header-icons'
 
