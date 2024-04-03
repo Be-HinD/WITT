@@ -29,7 +29,6 @@ text-[#ffffff] text-xs
 
 const InvitorPage = () => {
 	const characters = userstate((state) => state.characters)
-	const character = userstate((state) => state.character)
 	const [userdata, setUserData] = useState(initValue)
 	const [kockEffect, setKockEffect] = useState('brightness-[1.3] cursor-pointer')
 
@@ -84,7 +83,7 @@ const InvitorPage = () => {
 						makekock()
 					}}
 				>
-					<img className={kockEffect} src={characters[character]} />
+					<img className={kockEffect} src={~~(userdata.growthPoint / 10) < 8 ? characters[~~(userdata.growthPoint / 10)] : characters[7]} />
 				</div>
 				<div className="flex w-[200px] h-[100px] justify-around">
 					<div
