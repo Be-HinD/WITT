@@ -1,6 +1,6 @@
 package com.ssafy.rasingdust.domain.notification.repository;
 
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
+import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseRepositoryImpl implements SseRepository {
 
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
-    private final Map<String, NotificationDto> eventCache = new ConcurrentHashMap<>();
+    private final Map<String, SseDto> eventCache = new ConcurrentHashMap<>();
 
     @Override
     public SseEmitter save(String emitterId, SseEmitter sseEmitter) {
@@ -23,7 +23,7 @@ public class SseRepositoryImpl implements SseRepository {
     }
 
     @Override
-    public void saveEventCache(String eventId, NotificationDto event) {
+    public void saveEventCache(String eventId, SseDto event) {
 
         eventCache.put(eventId, event);
     }
@@ -41,7 +41,7 @@ public class SseRepositoryImpl implements SseRepository {
     }
 
     @Override
-    public Map<String, NotificationDto> findAllEventCacheStartWithByUserId(String userId) {
+    public Map<String, SseDto> findAllEventCacheStartWithByUserId(String userId) {
         return eventCache.entrySet().stream()
             .filter(entry -> entry.getKey().startsWith(userId))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
