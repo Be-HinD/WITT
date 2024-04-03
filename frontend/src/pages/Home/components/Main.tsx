@@ -66,7 +66,7 @@ const Main = () => {
 	return (
 		<>
 			<img
-				className="w-full h-full max-w-screen-sm max-h-screen-sm"
+				className="w-full h-full max-w-screen-sm max-h-full"
 				style={{ position: 'absolute', opacity: '0.3' }}
 				src={background}
 			/>
