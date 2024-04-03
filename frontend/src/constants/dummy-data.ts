@@ -72,7 +72,7 @@ export const dummy: ISearchUser[] = [
 		solved_cnt: 0,
 	},
 	{
-		id: 1,
+		id: 8,
 		profileImg: '/public/dummy/턱살-탁이.jpeg',
 		userName: '턱살이 좀 나온 탁이',
 		level: 1,
