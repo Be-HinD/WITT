@@ -2,8 +2,8 @@ package com.ssafy.rasingdust.domain.notification.service;
 
 import static com.ssafy.rasingdust.domain.notification.dto.NotificationType.TEST_MSG;
 
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import com.ssafy.rasingdust.domain.notification.repository.SseRepository;
 import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import java.io.IOException;
@@ -34,9 +34,9 @@ public class SseServiceImpl implements SseService {
         checkEmitterStatus(emitter, emitterId);
 
         // 503 에러 방지 더미 이벤트 전송
-        NotificationDto notificationDto = NotificationDto.of(false, NotificationType.SSE_CONNECT,
-            Long.valueOf(userId), null, LocalDateTime.now());
-        sendSse(emitter, emitterId, emitterId, notificationDto);
+        SseDto sseDto = SseDto.of(NotificationType.SSE_CONNECT,
+            Long.valueOf(userId), LocalDateTime.now());
+        sendSse(emitter, emitterId, emitterId, sseDto);
 
         // 클라이언트가 미수신한 Event 전송
         if (hasLostData(lastEventId)) {
@@ -48,26 +48,25 @@ public class SseServiceImpl implements SseService {
 
     @Override
     public void sendTest(String userId) {
-        NotificationDto notificationDto = NotificationDto.of(false, TEST_MSG, Long.valueOf(userId),
-            null, LocalDateTime.now());
-        send(notificationDto);
+        SseDto sseDto = SseDto.of(TEST_MSG, Long.valueOf(userId), LocalDateTime.now());
+        send(sseDto);
     }
 
     @Override
     //특정 유저에게 알림 전송
-    public void send(NotificationDto notificationDto) {
+    public void send(SseDto SseDto) {
 
         // 로그인 한 유저의 SseEmitter 모두 가져오기
         Map<String, SseEmitter> sseEmitters = sseRepository.findAllEmitterStartWithByUserId(
-            String.valueOf(notificationDto.getReceiverId()));
+            String.valueOf(SseDto.getReceiverId()));
 
         sseEmitters.forEach(
             (key, emitter) -> {
                 // 데이터 캐시 저장(유실된 데이터 처리하기 위함)
-                sseRepository.saveEventCache(key, notificationDto);
+                sseRepository.saveEventCache(key, SseDto);
                 // 데이터 전송
-                sendSse(emitter, makeTimeIncludeId(String.valueOf(notificationDto.getReceiverId())),
-                    key, notificationDto);
+                sendSse(emitter, makeTimeIncludeId(String.valueOf(SseDto.getReceiverId())),
+                    key, SseDto);
             }
         );
     }
@@ -82,7 +81,7 @@ public class SseServiceImpl implements SseService {
     private void sendLostData(String lastEventId, String userId, String emitterId,
         SseEmitter emitter) {
 
-        Map<String, NotificationDto> eventCaches = sseRepository.findAllEventCacheStartWithByUserId(
+        Map<String, SseDto> eventCaches = sseRepository.findAllEventCacheStartWithByUserId(
             userId);
         eventCaches.entrySet().stream()
             .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
@@ -104,7 +103,7 @@ public class SseServiceImpl implements SseService {
     }
 
     private void sendSse(SseEmitter emitter, String eventId, String emitterId,
-        NotificationDto dto) {
+        SseDto dto) {
 
         try {
             emitter.send(SseEmitter.event()

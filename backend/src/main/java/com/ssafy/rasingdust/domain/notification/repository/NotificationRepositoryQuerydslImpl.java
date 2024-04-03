@@ -4,7 +4,8 @@ import static com.ssafy.rasingdust.domain.notification.entity.QNotification.noti
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
+import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,18 @@ public class NotificationRepositoryQuerydslImpl implements NotificationRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public SliceResponse<NotificationDto> getNoticeSliceByUserId(Long userId, Pageable pageable) {
-        List<NotificationDto> notices = queryFactory.select(Projections.fields(
-                NotificationDto.class,
+    public SliceResponse<SseDto> getNoticeSliceByUserId(Long userId, Pageable pageable) {
+        List<SseDto> notices = queryFactory.select(Projections.fields(
+                SseDto.class,
                 notification.id,
                 notification.readStatus,
-                notification.type,
-                notification.event,
-                notification.message,
+                notification.notificationType,
+                null,
+                null,
                 notification.receiverId,
-                notification.senderId,
+                notification.sender.id,
+                notification.sender.userName,
+                notification.sender.profileImg,
                 notification.time
             ))
             .from(notification)
@@ -36,13 +39,17 @@ public class NotificationRepositoryQuerydslImpl implements NotificationRepositor
             .limit(pageable.getPageSize() + 1)
             .orderBy(notification.time.desc())
             .fetch();
-
+        for (SseDto dto : notices) {
+            NotificationType type = NotificationType.valueOf(dto.getType());
+            dto.setEvent(type.getEvent());
+            dto.setMessage(type.getMessage());
+        }
         boolean hasNext = false;
         if (notices.size() > pageable.getPageSize()) {
             notices.remove(pageable.getPageSize());
             hasNext = true;
         }
-        Slice<NotificationDto> slice = new SliceImpl<>(notices, pageable, hasNext);
+        Slice<SseDto> slice = new SliceImpl<>(notices, pageable, hasNext);
         return new SliceResponse<>(slice);
     }
 }

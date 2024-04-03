@@ -1,11 +1,15 @@
 package com.ssafy.rasingdust.domain.notification.entity;
 
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.user.entity.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,39 +28,25 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean readStatus;
-    private String type;
-    private String event;
-    private String message;
+    @Enumerated(value = EnumType.STRING)
+    private NotificationType notificationType;
     private Long receiverId;
-    private Long senderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User sender;
     private LocalDateTime time;
 
     public void updateReadStatus(Boolean status) {
         this.readStatus = status;
     }
 
-    public static Notification of(NotificationType notificationType, Long receiverId, Long senderId,
+    public static Notification of(NotificationType notificationType, Long receiverId, User sender,
         LocalDateTime time) {
         return builder()
             .readStatus(false)
-            .type(notificationType.name())
-            .event(notificationType.getEvent())
-            .message(notificationType.getMessage())
+            .notificationType(notificationType)
             .receiverId(receiverId)
-            .senderId(senderId)
+            .sender(sender)
             .time(time)
-            .build();
-    }
-
-    public static Notification from(NotificationDto dto) {
-        return builder()
-            .readStatus(dto.getReadStatus())
-            .type(dto.getType())
-            .event(dto.getEvent())
-            .message(dto.getMessage())
-            .receiverId(dto.getReceiverId())
-            .senderId(dto.getSenderId())
-            .time(dto.getTime())
             .build();
     }
 }

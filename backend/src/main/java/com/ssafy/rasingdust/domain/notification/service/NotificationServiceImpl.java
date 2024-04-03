@@ -1,10 +1,12 @@
 package com.ssafy.rasingdust.domain.notification.service;
 
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
 import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
+import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import com.ssafy.rasingdust.domain.notification.entity.Notification;
 import com.ssafy.rasingdust.domain.notification.repository.NotificationRepository;
 import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
+import com.ssafy.rasingdust.domain.user.entity.User;
+import com.ssafy.rasingdust.domain.user.repository.UserRepository;
 import com.ssafy.rasingdust.global.exception.BusinessLogicException;
 import com.ssafy.rasingdust.global.exception.ErrorCode;
 import java.time.LocalDateTime;
@@ -20,21 +22,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
     private final SseService sseService;
 
     @Override
     @Transactional
     public Notification saveNotice(NotificationType notificationType, Long receiverId,
         Long senderId) {
-        Notification notification = Notification.of(notificationType, receiverId, senderId,
+        User sender = userRepository.findById(senderId).orElse(null);
+        Notification notification = Notification.of(notificationType, receiverId, sender,
             LocalDateTime.now());
         notificationRepository.save(notification);
-        sseService.send(NotificationDto.from(notification));
+        sseService.send(SseDto.from(notification));
         return notification;
     }
 
     @Override
-    public SliceResponse<NotificationDto> getNoticeList(UserDetails loginUser, Pageable pageable) {
+    public SliceResponse<SseDto> getNoticeList(UserDetails loginUser, Pageable pageable) {
 
         return notificationRepository.getNoticeSliceByUserId(
             Long.valueOf(loginUser.getUsername()), pageable);

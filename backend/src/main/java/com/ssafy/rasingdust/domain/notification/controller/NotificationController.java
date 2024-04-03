@@ -1,7 +1,7 @@
 package com.ssafy.rasingdust.domain.notification.controller;
 
 
-import com.ssafy.rasingdust.domain.notification.dto.NotificationDto;
+import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import com.ssafy.rasingdust.domain.notification.service.NotificationService;
 import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import com.ssafy.rasingdust.global.result.ResultCode;
@@ -31,7 +31,7 @@ public class NotificationController {
     @GetMapping()
     public ResponseEntity<ResultResponse> getNoticeList(
         @AuthenticationPrincipal UserDetails loginUser, Pageable pageable) {
-        SliceResponse<NotificationDto> sliceResponse = notificationService.getNoticeList(loginUser,
+        SliceResponse<SseDto> sliceResponse = notificationService.getNoticeList(loginUser,
             pageable);
         return ResponseEntity.ok(
             new ResultResponse(ResultCode.GET_NOTIFICATION_SUCCESS, sliceResponse));
