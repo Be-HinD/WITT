@@ -4,7 +4,7 @@ import background from '../assets/background_main.gif'
 import { useEffect, useState } from 'react'
 import { userstate } from '../../../components/StateVariables'
 import { useParams } from 'react-router'
-import { otherUserData } from './API'
+import { kock, otherUserData } from './API'
 
 const mainStyleClass = 'z-10 w-full h-screen px-[14px] py-[22px] bg-[#111111]'
 
@@ -31,8 +31,10 @@ const InvitorPage = () => {
 	const characters = userstate((state) => state.characters)
 	const character = userstate((state) => state.character)
 	const [userdata, setUserData] = useState(initValue)
+	const [kockEffect, setKockEffect] = useState('brightness-[1.3] cursor-pointer')
 
 	const params = useParams()
+
 	const getInvitorData = async () => {
 		const token = localStorage.getItem('token')!
 		const userId: number = +params.id!
@@ -41,11 +43,26 @@ const InvitorPage = () => {
 		})
 	}
 
+	const makekock = async () => {
+		const token = localStorage.getItem('token')!
+		const userId: number = +params.id!
+		kock(token, userId).then((value) => {
+			if (value) {
+				setTimeout(() => {
+					setKockEffect(kockEffect.replace('brightness-[1.3]', 'brightness-[1.7]'))
+				}, 300)
+				setTimeout(() => {
+					setKockEffect(kockEffect.replace('brightness-[1.7]', 'brightness-[1.3]'))
+				}, 800)
+			}
+		})
+	}
+
 	useEffect(() => {
 		if (params.id) {
 			getInvitorData()
 		}
-	}, [userdata])
+	}, [])
 
 	return (
 		<>
@@ -59,24 +76,28 @@ const InvitorPage = () => {
 				className={mainStyleClass}
 			>
 				{UserProfile(userdata)}
-				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<img style={{ filter: 'brightness(1.3)', cursor: 'pointer' }} src={characters[character]} />
+				<div
+					style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+					onClick={() => {
+						makekock()
+					}}
+				>
+					<img className={kockEffect} src={characters[character]} />
 				</div>
 				<div className="flex w-[200px] h-[100px] justify-around">
 					<div
 						className={
-							userdata.follower ? followButtonStyleClass + 'bg-[#28edd6]' : followButtonStyleClass + 'bg-[#97bfbb]'
+							userdata.follower ? followButtonStyleClass + 'bg-[#eb42d1]' : followButtonStyleClass + 'bg-[#cc99c4]'
 						}
-						onClick={() => {}}
 					>
-						{userdata.follower ? '팔로우중' : '언팔로우'}
+						{userdata.follower ? '팔로잉중' : '언팔로잉'}
 					</div>
 					<div
 						className={
-							userdata.following ? followButtonStyleClass + 'bg-[#eb42d1]' : followButtonStyleClass + 'bg-[#eb42d1]'
+							userdata.following ? followButtonStyleClass + 'bg-[#28edd6]' : followButtonStyleClass + 'bg-[#97bfbb]'
 						}
 					>
-						{userdata.following ? '팔로잉중' : '언팔로잉'}
+						{userdata.following ? '팔로우중' : '언팔로우'}
 					</div>
 				</div>
 			</div>
