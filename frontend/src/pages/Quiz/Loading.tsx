@@ -16,7 +16,7 @@ const Loading = ({ gptAnswer, capturedImage }: { gptAnswer: number; capturedImag
 
 	const generateQuiz = (gptAnswer: number) => {
 		axios
-			.get(`${import.meta.env.VITE_API_BASE_URL}/problem`, { params: { number: gptAnswer } })
+			.get(`${import.meta.env.VITE_BASE_URL}/problem`, { params: { number: gptAnswer } })
 			.then((response) => {
 				console.log(response)
 				setQuizData(response.data.data)
