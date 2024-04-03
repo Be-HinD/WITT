@@ -37,6 +37,7 @@ function App() {
 			source.addEventListener('message', (e) => {
 				const data = JSON.parse(e.data)
 				setLastEventId(data.notificationId)
+				console.log(data)
 				toast(data.message)
 			})
 
