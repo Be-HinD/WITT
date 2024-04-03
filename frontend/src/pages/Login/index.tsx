@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { IMenu, IMenuFunc } from '../../components/interfaces'
-import { icons } from '../../constants/header-icons'
 import Header from '../../components/Header'
 import { useEffect } from 'react'
 import { Cookies } from 'react-cookie'
@@ -8,7 +7,7 @@ import { getToken, getUserData } from '../Home/components/API'
 
 const Login = () => {
 	const navigate = useNavigate()
-	const menu: IMenu = { left: icons.BACK, center: '로그인', right: undefined }
+ 	const menu: IMenu = { left: undefined, center: '로그인', right: undefined }
 	const func: IMenuFunc = { left_func: () => navigate('/'), right_func: undefined }
 	const cookie = new Cookies()
 	let token = cookie.get('refresh_token')
