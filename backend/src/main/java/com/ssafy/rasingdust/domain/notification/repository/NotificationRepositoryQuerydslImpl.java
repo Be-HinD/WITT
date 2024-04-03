@@ -4,7 +4,6 @@ import static com.ssafy.rasingdust.domain.notification.entity.QNotification.noti
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.rasingdust.domain.notification.dto.NotificationType;
 import com.ssafy.rasingdust.domain.notification.dto.SseDto;
 import com.ssafy.rasingdust.domain.user.dto.response.SliceResponse;
 import java.util.List;
@@ -20,30 +19,14 @@ public class NotificationRepositoryQuerydslImpl implements NotificationRepositor
 
     @Override
     public SliceResponse<SseDto> getNoticeSliceByUserId(Long userId, Pageable pageable) {
-        List<SseDto> notices = queryFactory.select(Projections.fields(
-                SseDto.class,
-                notification.id,
-                notification.readStatus,
-                notification.notificationType,
-                null,
-                null,
-                notification.receiverId,
-                notification.sender.id,
-                notification.sender.userName,
-                notification.sender.profileImg,
-                notification.time
-            ))
+        List<SseDto> notices = queryFactory.select(
+                Projections.constructor(SseDto.class, notification))
             .from(notification)
             .where(notification.receiverId.eq(userId))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize() + 1)
             .orderBy(notification.time.desc())
             .fetch();
-        for (SseDto dto : notices) {
-            NotificationType type = NotificationType.valueOf(dto.getType());
-            dto.setEvent(type.getEvent());
-            dto.setMessage(type.getMessage());
-        }
         boolean hasNext = false;
         if (notices.size() > pageable.getPageSize()) {
             notices.remove(pageable.getPageSize());
