@@ -46,7 +46,7 @@ const UserProfile = (mydata: data) => {
 							}}
 							className={totalgaugeStyleClass}
 						>
-							<div>{(mydata.growthPoint % 10) * 10}%</div>
+							<div style={{ zIndex: '5' }}>{(mydata.growthPoint % 10) * 10}%</div>
 						</span>
 						<span
 							style={{

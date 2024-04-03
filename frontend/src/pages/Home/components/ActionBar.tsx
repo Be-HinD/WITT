@@ -3,8 +3,8 @@ import heart from '../assets/love.svg'
 import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'
 import { data } from '../../../components/StateVariables'
-import { useState } from 'react'
-import { feedCharacter } from './API'
+import { useEffect, useState } from 'react'
+import { feedCharacter, getUserData } from './API'
 
 const PlusEffectClass = `
 absolute 
@@ -69,11 +69,11 @@ const ActionBar = (mydata: data) => {
 
 	const feedWater = async () => {
 		const token = localStorage.getItem('token')
-		feedCharacter(token!).then((value) => {
-			const result = JSON.parse(value)
-			setParameter({ ...parameter, bottle: result.bottle, growthPoint: result.growthPoint, rank: result.rank })
-			localStorage.setItem('mydata', JSON.stringify(parameter))
-			setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
+		feedCharacter(token!).then(() => {
+			getUserData(token!).then((result) => {
+				localStorage.setItem('mydata', JSON.stringify(result.data))
+				setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
+			})
 		})
 	}
 
@@ -116,6 +116,13 @@ const ActionBar = (mydata: data) => {
 			</div>
 		</div>
 	)
+
+	useEffect(() => {
+		if (localStorage.getItem('mydata')) {
+			const local = JSON.parse(localStorage.getItem('mydata')!)
+			setParameter(local)
+		}
+	}, [localStorage.getItem('mydata')])
 
 	return (
 		<>
