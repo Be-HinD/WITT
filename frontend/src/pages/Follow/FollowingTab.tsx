@@ -5,7 +5,7 @@ import FollowUser from './components/FollowUser'
 import { IFollowUser } from './FollowerTab'
 
 const FollowingTab = () => {
-	const userId = 3
+	const userId = 103
 	const { data: following } = useQuery<IFollowUser[]>({
 		queryKey: ['following', userId],
 		queryFn: getFollowingList,
