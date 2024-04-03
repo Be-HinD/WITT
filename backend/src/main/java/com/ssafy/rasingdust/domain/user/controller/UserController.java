@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,8 +66,8 @@ public class UserController implements UserControllerDocs {
 
     @GetMapping("/follower/list/{userId}")
     public ResponseEntity<ResultResponse> getFollowerList(
-        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId, Pageable pageable) {
-
+        @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long userId,Pageable pageable) {
+        System.out.println(pageable.getPageSize());
         SliceResponse result = userService.getFollowerList(Long.valueOf(userDetails.getUsername()),
             userId, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_FOLLOWERLIST_SUCCESS, result));
@@ -78,7 +80,7 @@ public class UserController implements UserControllerDocs {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResultResponse> getUserList(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String userName, Pageable pageable) {
+    public ResponseEntity<ResultResponse> getUserList(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String userName, @RequestParam(name = "Pageable filter", required = false) Pageable pageable) {
         SliceResponse response = userService.findByuserNameStartsWith(
             Long.valueOf(userDetails.getUsername()), userName, pageable);
         return ResponseEntity.ok(new ResultResponse(ResultCode.GET_USERLIST_SUCCESS, response));
