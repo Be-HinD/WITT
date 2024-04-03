@@ -37,7 +37,7 @@ const UserProfile = (mydata: data) => {
 					<div>
 						<span
 							style={{
-								width: '44%',
+								width: '40%',
 								maxWidth: '320px',
 								height: '12.5px',
 								display: 'flex',
@@ -50,7 +50,7 @@ const UserProfile = (mydata: data) => {
 						</span>
 						<span
 							style={{
-								width: `${44 * ((mydata.growthPoint % 10) / 10)}%`,
+								width: `${40 * ((mydata.growthPoint % 10) / 10)}%`,
 								maxWidth: `${320 * ((mydata.growthPoint % 10) / 10)}px`,
 								height: '12.5px',
 							}}
