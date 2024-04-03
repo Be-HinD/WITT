@@ -11,7 +11,6 @@ const FollowingTab = () => {
 		queryFn: getFollowingList,
 		enabled: !!userId,
 	})
-	console.log('[Following]', following)
 
 	return (
 		<div className="pt-12 px-5">

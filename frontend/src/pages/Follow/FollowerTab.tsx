@@ -20,7 +20,6 @@ const FollowerTab = () => {
 		queryFn: getFollowerList,
 		enabled: !!userId,
 	})
-	console.log('[Follower]', follower)
 
 	return (
 		<div className="pt-12 px-5">
