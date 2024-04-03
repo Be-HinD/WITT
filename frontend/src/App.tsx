@@ -1,11 +1,10 @@
 import { RouterProvider } from 'react-router-dom'
 import router from './router'
 import { ToastContainer, toast } from 'react-toastify'
-import { EventSourcePolyfill, EventSourcePolyfillInit } from 'event-source-polyfill'
+import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useSSEStore } from './pages/Alarm/store'
 import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
-import { IFollowEvent } from './pages/Alarm/constants'
 
 function App() {
 	const token = localStorage.getItem('token')
