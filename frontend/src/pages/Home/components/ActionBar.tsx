@@ -3,8 +3,8 @@ import heart from '../assets/love.svg'
 import sun from '../assets/sun.svg'
 import water from '../assets/water.svg'
 import { data } from '../../../components/StateVariables'
-import { useState } from 'react'
-import { feedCharacter } from './API'
+import { useEffect, useState } from 'react'
+import { feedCharacter, getUserData } from './API'
 
 const PlusEffectClass = `
 absolute 
@@ -31,9 +31,10 @@ shadow-[0_4px_34px_#00000026]
 backdrop-blur-[50px] 
 backdrop-brightness-100 
 hover:scale-110
+transition
 `
 
-const actionbuttonStyleClass = 'text-[#ffffff] text-xs font-black'
+const actionbuttonStyleClass = 'text-white text-sm font-normal pt-1'
 
 const popupStyleClass = `
 absolute z-20 
@@ -57,8 +58,8 @@ text-xs text-[#777777] cursor-pointer
 const ActionBar = (mydata: data) => {
 	const navigate = useNavigate()
 
-	const [popup, setPopup] = useState(true)
 	const [popupEffect, setPopupEffect] = useState(popupStyleClass)
+	const [parameter, setParameter] = useState(mydata)
 	const [comment, setComment] = useState(
 		<div>
 			캐릭터에게 먹이를 주시겠습니까?
@@ -69,9 +70,11 @@ const ActionBar = (mydata: data) => {
 
 	const feedWater = async () => {
 		const token = localStorage.getItem('token')
-		const data = JSON.parse(localStorage.getItem('mydata')!)
-		feedCharacter(token!).then((value) => {
-			localStorage.setItem('mydata', JSON.stringify({ ...data, value }))
+		feedCharacter(token!).then(() => {
+			getUserData(token!).then((result) => {
+				localStorage.setItem('mydata', JSON.stringify(result.data))
+				setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
+			})
 		})
 	}
 
@@ -80,13 +83,12 @@ const ActionBar = (mydata: data) => {
 			{comment}
 			<div className="flex justify-around items-center">
 				<div
-					style={{ display: popup ? 'flex' : 'none' }}
+					style={{ display: 'flex' }}
 					className={popupButtonStyleClass + 'bg-[#1cd44d]'}
 					onClick={() => {
 						if (mydata.bottle > 0) {
 							feedWater()
 						} else {
-							setPopup(false)
 							setComment(
 								<div>
 									캐릭터에게 줄 물병이 없습니다.
@@ -94,19 +96,19 @@ const ActionBar = (mydata: data) => {
 									퀴즈를 풀어 물병을 획득한 후 시도해주세요.
 								</div>
 							)
-							setTimeout(() => {
+							const timer = setTimeout(() => {
 								setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
 							}, 500)
+							clearTimeout(timer)
 						}
 					}}
 				>
 					확인
 				</div>
 				<div
-					style={{ display: popup ? 'flex' : 'none' }}
+					style={{ display: 'flex' }}
 					className={popupButtonStyleClass + 'bg-[#dddddd]'}
 					onClick={() => {
-						setPopup(false)
 						setPopupEffect(popupEffect.replace('scale-100 transition-scale duration-500', 'scale-0'))
 					}}
 				>
@@ -115,6 +117,13 @@ const ActionBar = (mydata: data) => {
 			</div>
 		</div>
 	)
+
+	useEffect(() => {
+		if (localStorage.getItem('mydata')) {
+			const local = JSON.parse(localStorage.getItem('mydata')!)
+			setParameter(local)
+		}
+	}, [localStorage.getItem('mydata')])
 
 	return (
 		<>
@@ -141,13 +150,12 @@ const ActionBar = (mydata: data) => {
 							if (!popupEffect.includes(' transition-scale duration-500')) {
 								setPopupEffect(popupEffect.replace(' transition-scale duration-500', ''))
 							}
-							setPopup(true)
 							setPopupEffect(popupEffect.replace('scale-0', 'scale-100 transition-scale duration-500'))
 						}}
 					>
 						<div className={PlusEffectClass}></div>
 						<img src={water} />
-						<div className={actionbuttonStyleClass}>물 주기{`(${mydata.bottle})`}</div>
+						<div className={actionbuttonStyleClass}>물 주기{`(${parameter.bottle})`}</div>
 					</div>
 				</div>
 				<div>

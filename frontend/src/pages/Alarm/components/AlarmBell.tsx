@@ -5,6 +5,7 @@ const AlarmBell = () => {
 	return (
 		<div>
 			<PiBell
+				className="font-bold"
 				size={20}
 				onClick={() => {
 					navigate('/alarm')

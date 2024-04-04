@@ -33,7 +33,7 @@ export const getUserData = async (accesstoken: string) => {
 }
 
 export const otherUserData = async (accesstoken: string, id: number) => {
-	const url = `/api/user/invitor/${id}`
+	const url = `${import.meta.env.VITE_BASE_URL}/user/invitor/${id}`
 	const config = {
 		headers: {
 			Authorization: `Bearer ${accesstoken}`,
@@ -58,7 +58,7 @@ export const feedCharacter = async (accesstoken: string) => {
 		},
 	}
 	return await axios
-		.put(url, config)
+		.put(url, {}, config)
 		.then((response) => {
 			return response.data
 		})
@@ -68,57 +68,15 @@ export const feedCharacter = async (accesstoken: string) => {
 		})
 }
 
-export const follow = async (accesstoken: string, id: number) => {
-	const url = `/api/user/follow/${id}`
-	const config = {
-		headers: {
-			Authorization: `Bearer ${accesstoken}`,
-		},
-	}
-	return await axios
-		.post(url, config)
-		.then((response) => {
-			if (response.status == 200) {
-				return true
-			} else {
-				return false
-			}
-		})
-		.catch(() => {
-			return false
-		})
-}
-
-export const unfollow = async (accesstoken: string, id: number) => {
-	const url = `/api/user/unfollow/${id}`
-	const config = {
-		headers: {
-			Authorization: `Bearer ${accesstoken}`,
-		},
-	}
-	return await axios
-		.delete(url, config)
-		.then((response) => {
-			if (response.status == 200) {
-				return true
-			} else {
-				return false
-			}
-		})
-		.catch(() => {
-			return false
-		})
-}
-
 export const kock = async (accesstoken: string, id: number) => {
-	const url = `/api/user/kock/${id}`
+	const url = `${import.meta.env.VITE_BASE_URL}/user/kock/${id}`
 	const config = {
 		headers: {
 			Authorization: `Bearer ${accesstoken}`,
 		},
 	}
 	return await axios
-		.post(url, config)
+		.post(url, {}, config)
 		.then((response) => {
 			if (response.status == 200) {
 				return true
@@ -126,7 +84,8 @@ export const kock = async (accesstoken: string, id: number) => {
 				return false
 			}
 		})
-		.catch(() => {
+		.catch((error: unknown) => {
+			console.error('Err', error)
 			return false
 		})
 }

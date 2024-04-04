@@ -21,7 +21,6 @@ const Main = () => {
 	const setNewNotice = userstate((state) => state.setNewNotice)
 
 	const characters = userstate((state) => state.characters)
-	const character = userstate((state) => state.character)
 	const setCharacter = userstate((state) => state.setCharacter)
 	const mydata = userstate((state) => state.mydata)
 	const levels = userstate((state) => state.levels)
@@ -62,12 +61,12 @@ const Main = () => {
 			setUserData(JSON.parse(localStorage.getItem('mydata')!))
 			setCharacter(~~(mydata.growthPoint / 10))
 		}
-	}, [mydata])
+	}, [localStorage.getItem('mydata')])
 
 	return (
 		<>
 			<img
-				className="w-full h-full max-w-screen-sm max-h-screen-sm"
+				className="w-full h-full max-w-screen-sm max-h-full"
 				style={{ position: 'absolute', opacity: '0.3' }}
 				src={background}
 			/>
@@ -82,9 +81,9 @@ const Main = () => {
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<img
 						style={{ filter: 'brightness(1.3)', cursor: 'pointer' }}
-						src={characters[character]}
+						src={~~(mydata.growthPoint / 10) < 8? characters[~~(mydata.growthPoint / 10)] : characters[7]}
 						onClick={() => {
-							getMyStatus(`${levels[~~(mydata.growthPoint / 10)]}`)
+							getMyStatus(`${~~(mydata.growthPoint / 10) < 8? levels[~~(mydata.growthPoint / 10)] : levels[7]}`)
 						}}
 					/>
 				</div>

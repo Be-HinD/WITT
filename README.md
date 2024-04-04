@@ -14,6 +14,7 @@
   <li> <a herf="#section4"> 역할 분담 </a> </li>
   <li> <a herf="#section5"> 개발 기간 </a> </li>
   <li> <a herf="#section6"> 서비스 아키텍처 </a> </li>
+  <li> <a herf="#section7"> 시연 시나리오 </a> </li>
 </ol>
 
 <br>
@@ -96,19 +97,25 @@ WITT는 분리수거에 대한 정보를 잘 모르는 사람을 대상으로 �
 <hr>
 <h3> 😎 이원주 </h3>
 <ul>
-  <li> 추가 예정! </li>
+  <li> 사용자 검색 페이지 </li>
+  <li> 팔로우 상세 페이지 및 최근 검색 이력 </li>
 </ul>
 
 <hr>
 <h3> 😊 김지연 </h3>
 <ul>
-  <li> 추가 예정! </li>
+  <li> SSE 푸시알림 연결 </li>
+  <li> 쓰레기 분류 ChatGPT Vision AI 연결</li>
+  <li> 알림함 페이지 </li>
+  <li> 퀴즈 페이지 </li>
 </ul>
 
 <hr>
 <h3> 🤓 김민우 </h3>
 <ul>
-  <li> 추가 예정! </li>
+  <li> 메인 페이지 </li>
+  <li> 소셜 로그인 구현 (카카오) </li>
+  <li> 캐릭터 정보 확인 </li>
 </ul>
 
 <hr>
@@ -169,3 +176,49 @@ WITT는 분리수거에 대한 정보를 잘 모르는 사람을 대상으로 �
 <h2 id="section6">⚙️ 6. 서비스 아키텍처 </h2>
 
 ![System Architecher](./assets/system.png)
+
+<br>
+
+<h2 id="section7"> 🎥 7. 시연 시나리오</h2>
+
+<h3> 카카오 소셜 로그인 </h3>
+<div style="width:250px">
+
+![로그인](./assets/gif/로그인.gif)
+
+</div>
+
+<h3> 퀴즈 </h3>
+<div style="width:250px">
+
+![퀴즈](./assets/gif/퀴즈.gif)
+
+</div>
+
+<h3> 캐릭터 성장 </h3>
+<div style="width:250px">
+
+![캐릭터 성장](./assets/gif/캐릭터%20성장.gif)
+
+</div>
+
+<h3> 유저 검색 및 팔로우 </h3>
+<div style="width:250px">
+
+![퀴즈](./assets/gif/유저%20검색%20및%20팔로우.gif)
+
+</div>
+
+<h3> 팔로우 및 팔로워 </h3>
+<div style="width:250px">
+
+![퀴즈](./assets/gif/팔로우%20리스트%20조회.gif)
+
+</div>
+
+<h3> SSE </h3>
+<div style="width:250px">
+
+![퀴즈](./assets/gif/SSE%20콕%20찌르기.gif)
+
+</div>
