@@ -19,7 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 public class SseServiceImpl implements SseService {
 
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 5;
+    private static final Long REDIRECT_TIME = 5L * 1000;
     //    private final RedisOperations<String, NotificationDto> eventRedisOperations;
 //    private final RedisMessageListenerContainer redisMessageListenerContainer;
     final UserRepository userRepository;
@@ -108,6 +109,7 @@ public class SseServiceImpl implements SseService {
         try {
             emitter.send(SseEmitter.event()
                 .id(eventId)
+                .reconnectTime(REDIRECT_TIME)
                 .name(dto.getEvent())
                 .data(dto));
         } catch (IOException exception) {
