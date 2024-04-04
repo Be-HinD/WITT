@@ -61,7 +61,7 @@ const Main = () => {
 			setUserData(JSON.parse(localStorage.getItem('mydata')!))
 			setCharacter(~~(mydata.growthPoint / 10))
 		}
-	}, [localStorage.getItem('mydata')])
+	}, [localStorage.getItem('mydata'), mydata.bottle])
 
 	return (
 		<>
