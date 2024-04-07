@@ -4,13 +4,7 @@ services:
     container_name: dust_frontend
     image: dust_frontend
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/lib/letsencrypt:/var/lib/letsencrypt
-      # - $HOME/frontend:/app/dist/data
-      # - /home/ubuntu/nginx/sites/sites-enabled:/etc/nginx/sites-enabled
+      - "5173:5173"
     restart: unless-stopped
     
   backend:
@@ -18,10 +12,8 @@ services:
     image: dust_backend
     ports:
       - "8081:8081"
-    # volumes:
 
     environment:
-    #   SPRING_JPA_HIBERNATE_DDL_AUTO: update
         - SPRING_PROFILES_ACTIVE=server
     
     restart: unless-stopped
