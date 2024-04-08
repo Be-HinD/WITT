@@ -8,6 +8,6 @@ RUN npm install
 COPY ./ ./
 RUN npm run build
 # front 포트
-EXPOSE 5173
+EXPOSE 5174
 # front 웹서버 실행
 CMD ["npm", "run", "dev"]
