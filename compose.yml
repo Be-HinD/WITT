@@ -9,7 +9,7 @@ services:
     
   backend:
     container_name: dust_backend
-    image:  
+    image: dust_backend
     ports:
       - "8081:8081"
 
